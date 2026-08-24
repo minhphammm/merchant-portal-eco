@@ -59,6 +59,7 @@ const ViewRenderer = {
 
     mainContent.innerHTML = html;
     if (typeof i18n !== 'undefined' && i18n.updateDOM) i18n.updateDOM();
+    if (window.refreshIcons) window.refreshIcons();
   },
 
   /**

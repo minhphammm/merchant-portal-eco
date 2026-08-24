@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ecopay Merchant Portal - FinViet Platform</title>
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
-  <link rel="stylesheet" href="css/style.css?v=2.1">
+  <link rel="stylesheet" href="css/style.css?v=2.3">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons Library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -15,8 +17,8 @@
     <!-- Sidebar Navigation -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
-        <img src="https://www.finviet.com.vn/wp-content/uploads/2024/08/logo.png" alt="Ecopay Merchant Logo" class="brand-logo-img">
-        <div class="brand-title">
+        <div class="brand-logo">
+          <span class="brand-icon"><i data-lucide="shield-check"></i></span>
           <span class="brand-name">Ecopay Merchant</span>
           <span class="brand-sub">FinViet Platform</span>
         </div>
@@ -28,6 +30,7 @@
         <!-- 1. Dashboard Item -->
         <div class="nav-item active" data-tooltip="Tổng quan">
           <a href="javascript:void(0)" class="nav-link" data-page="dashboard" title="Tổng quan">
+            <i data-lucide="layout-dashboard" class="nav-icon"></i>
             <span class="nav-text" data-i18n="navDashboard">Tổng quan</span>
           </a>
         </div>
@@ -35,8 +38,9 @@
         <!-- 2. Doanh nghiệp Dropdown -->
         <div class="nav-item has-dropdown open" data-tooltip="Doanh nghiệp">
           <a href="javascript:void(0)" class="nav-link" title="Doanh nghiệp">
+            <i data-lucide="building-2" class="nav-icon"></i>
             <span class="nav-text" data-i18n="navEnterprise">Doanh nghiệp</span>
-            <span class="nav-chevron">▶</span>
+            <span class="nav-chevron"><i data-lucide="chevron-right" style="width:14px; height:14px;"></i></span>
           </a>
           <div class="nav-dropdown">
             <a href="javascript:void(0)" class="nav-dropdown-link" data-page="enterprise" data-i18n="navEnterpriseOverview">Quản trị Doanh nghiệp</a>
@@ -48,8 +52,9 @@
         <!-- 4. Payment Dropdown (Open by default) -->
         <div class="nav-item has-dropdown open" data-tooltip="Payment">
           <a href="javascript:void(0)" class="nav-link" title="Payment">
+            <i data-lucide="credit-card" class="nav-icon"></i>
             <span class="nav-text" data-i18n="navPayment">Payment</span>
-            <span class="nav-chevron">▶</span>
+            <span class="nav-chevron"><i data-lucide="chevron-right" style="width:14px; height:14px;"></i></span>
           </a>
           <div class="nav-dropdown">
             <a href="javascript:void(0)" class="nav-dropdown-link" data-page="pay-txns" data-i18n="navPayTxns">Giao dịch thanh toán</a>
@@ -61,8 +66,9 @@
         <!-- 6. Quyết toán & Đối soát Dropdown -->
         <div class="nav-item has-dropdown" data-tooltip="Quyết toán & Đối soát">
           <a href="javascript:void(0)" class="nav-link" title="Quyết toán & Đối soát">
+            <i data-lucide="file-check" class="nav-icon"></i>
             <span class="nav-text" data-i18n="navSettlement">Quyết toán & Đối soát</span>
-            <span class="nav-chevron">▶</span>
+            <span class="nav-chevron"><i data-lucide="chevron-right" style="width:14px; height:14px;"></i></span>
           </a>
           <div class="nav-dropdown">
             <a href="javascript:void(0)" class="nav-dropdown-link" data-page="reconcile" data-i18n="navReconcileReport">Báo cáo đối soát</a>
@@ -86,12 +92,15 @@
             <!-- Popover Menu Tài khoản -->
             <div id="userDropdownPopover" class="user-dropdown-popover">
               <div class="popover-item" onclick="openSettingsModal()">
+                <i data-lucide="user" style="width:15px; height:15px; margin-right:8px;"></i>
                 <span data-i18n="profileSettings">Cài đặt cá nhân</span>
               </div>
               <div class="popover-item" onclick="openSettingsModal()">
+                <i data-lucide="key" style="width:15px; height:15px; margin-right:8px;"></i>
                 <span data-i18n="changePassword">Đổi mật khẩu</span>
               </div>
               <div class="popover-item text-danger" onclick="showToast('Đã đăng xuất hệ thống')">
+                <i data-lucide="log-out" style="width:15px; height:15px; margin-right:8px;"></i>
                 <span data-i18n="logout">Đăng xuất</span>
               </div>
             </div>
@@ -99,11 +108,7 @@
 
           <!-- Nút thu gọn sidebar nằm kế bên tên tài khoản -->
           <button id="btnToggleSidebar" class="btn-toggle-sidebar-bottom" title="Thu gọn / Mở rộng thanh điều hướng">
-            <svg class="sidebar-collapse-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
-              <line x1="9" y1="3" x2="9" y2="21"/>
-              <path class="collapse-arrow-path" d="M14 9l-3 3 3 3"/>
-            </svg>
+            <i data-lucide="panel-left-close" style="width:18px; height:18px;"></i>
           </button>
         </div>
       </div>
@@ -120,12 +125,13 @@
         <div class="topbar-right">
           <!-- Thông tin Doanh nghiệp (Tĩnh, không có dropdown) -->
           <div class="topbar-merchant-compact" title="Doanh nghiệp đang quản lý: CÔNG TY TNHH ABC">
+            <i data-lucide="building" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i>
             <span class="merchant-compact-name">CÔNG TY TNHH ABC</span>
           </div>
 
           <!-- Globe Icon Language Switcher -->
           <div class="lang-dropdown-wrapper">
-            <button id="langDropdownBtn" class="lang-compact-btn" title="Đổi ngôn ngữ">🌐</button>
+            <button id="langDropdownBtn" class="lang-compact-btn" title="Đổi ngôn ngữ"><i data-lucide="globe" style="width:16px; height:16px;"></i></button>
             <div id="langDropdownPopover" class="lang-dropdown-popover">
               <div class="lang-option-item active" data-lang="vie">
                 <span>Tiếng Việt (VIE)</span>
@@ -139,7 +145,7 @@
           <!-- Notification Dropdown Wrapper -->
           <div class="notification-dropdown-wrapper">
             <button id="notificationBtn" class="icon-btn" title="Thông báo hệ thống">
-              🔔
+              <i data-lucide="bell" style="width:18px; height:18px;"></i>
               <span id="globalNotiBadge" class="notification-badge"></span>
             </button>
             

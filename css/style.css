@@ -58,6 +58,20 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Lucide Icons Styling */
+.lucide {
+  vertical-align: middle;
+  stroke-width: 2px;
+  display: inline-block;
+}
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
 #app {
   display: flex;
   min-height: 100vh;

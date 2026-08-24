@@ -18,8 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Cache Original Dashboard View HTML
   const dashboardHTML = document.getElementById('dashboardViewContainer')?.innerHTML || '';
 
-  // Initialize Dashboard
+  // Global Icon Refresh helper using Lucide Icons
+  window.refreshIcons = function() {
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    }
+  };
+
+  // Initialize Dashboard & Icons
   renderDashboard();
+  refreshIcons();
 
   // Setup Event Listeners
   setupSidebarCollapse();
@@ -238,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       ViewRenderer.renderPage(targetPage);
     }
+    if (window.refreshIcons) window.refreshIcons();
   };
 
   /**
