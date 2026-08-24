@@ -1465,7 +1465,7 @@ const ViewRenderer = {
                   <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.merchantPayTime}</td>
                   <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
                   <td style="white-space:nowrap;">
-                    <button class="btn-secondary" style="padding:3px 8px; font-size:11.5px;" onclick="showToast('Tùy chỉnh đối soát ${item.storeName}')">Tùy chỉnh</button>
+                    <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="openReconcileDetailModal(${item.stt})">Tùy chỉnh</button>
                   </td>
                 </tr>
               `).join('')}

@@ -1579,4 +1579,118 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalOverlay = document.getElementById('modalOverlay');
     if (modalOverlay) modalOverlay.classList.add('show');
   };
+
+  /**
+   * Modal Tùy Chỉnh - Hiển thị Chi Tiết Giao Dịch Đối Soát (Chi Tiết GD)
+   */
+  window.openReconcileDetailModal = function(stt) {
+    const list = MockData.getReconcileEcopayData ? MockData.getReconcileEcopayData() : [];
+    const item = list.find(r => r.stt === stt) || list[0];
+    if (!item) return;
+
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = `Chi Tiết Giao Dịch Đối Soát — ${item.storeName}`;
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Banner Header Info -->
+          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:14px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:12px; color:var(--text-muted);">Tên cửa hàng đối soát</div>
+              <div style="font-size:15px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.storeName}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px; color:var(--text-muted);">Trạng thái đối soát</div>
+              <div style="margin-top:2px;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+            </div>
+          </div>
+
+          <!-- Lưới Chi Tiết Thông Tin Giao Dịch Đối Soát (16 Fields) -->
+          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px 20px; font-size:13px;">
+            <div><span style="color:var(--text-muted);">1. Thời gian tạo đối soát:</span> <br><strong>${item.reconcileCreatedTime}</strong></div>
+            <div><span style="color:var(--text-muted);">2. Khoảng thời gian giao dịch:</span> <br><strong>${item.txnTimeRange}</strong></div>
+            <div><span style="color:var(--text-muted);">3. Tổng số tiền phải trả:</span> <br><strong style="color:var(--color-primary); font-size:15px;">${item.totalPayable}</strong></div>
+            <div><span style="color:var(--text-muted);">4. Phí Giao dịch:</span> <br><strong>${item.txnFee}</strong></div>
+            <div><span style="color:var(--text-muted);">5. Phí người dùng:</span> <br><strong>${item.userFee}</strong></div>
+            <div><span style="color:var(--text-muted);">6. Số tiền cấn trừ:</span> <br><strong style="color:var(--color-danger);">${item.deductedAmount}</strong></div>
+            <div><span style="color:var(--text-muted);">7. Người tạo:</span> <br><strong>${item.createdBy}</strong></div>
+            <div><span style="color:var(--text-muted);">8. Tổng số tiền khuyến mãi:</span> <br><strong style="color:var(--color-secondary);">${item.totalDiscount}</strong></div>
+            <div><span style="color:var(--text-muted);">9. Người phê duyệt:</span> <br><strong>${item.approvedBy}</strong></div>
+            <div><span style="color:var(--text-muted);">10. Thời gian đối tác được duyệt:</span> <br><strong>${item.partnerApprovedTime}</strong></div>
+            <div><span style="color:var(--text-muted);">11. Thời gian thanh toán DN:</span> <br><strong>${item.merchantPayTime}</strong></div>
+            <div><span style="color:var(--text-muted);">12. Trạng thái:</span> <br><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">13. Mô tả:</span> <br><span>${item.description}</span></div>
+            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">14. Lý do:</span> <br><span>${item.reason}</span></div>
+          </div>
+
+          <!-- Bảng Chi Tiết Các Giao Dịch Thành Phần (Chi tiết GD) -->
+          <div style="margin-top:6px;">
+            <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="list" style="width:16px; height:16px; color:var(--color-primary);"></i> Danh Sách Giao Dịch Thành Phần (Chi tiết GD)
+            </div>
+            <table class="portal-table" style="font-size:12.5px;">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã GD Ecopay</th>
+                  <th>Mã Đơn Hàng DN</th>
+                  <th>Nguồn Thanh Toán</th>
+                  <th>Số Tiền GD</th>
+                  <th>Phí GD</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><span class="txn-code">GD2026082200001</span></td>
+                  <td><span style="font-family:monospace;">ORD-20268891</span></td>
+                  <td>VietQR Pay (MB)</td>
+                  <td style="font-weight:700; color:var(--color-primary);">1,500,000 đ</td>
+                  <td>7,500 đ</td>
+                  <td><span class="status-badge badge-success">Thành công</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><span class="txn-code">GD2026082200002</span></td>
+                  <td><span style="font-family:monospace;">ORD-20268892</span></td>
+                  <td>Thẻ ATM Nội Địa</td>
+                  <td style="font-weight:700; color:var(--color-primary);">3,200,000 đ</td>
+                  <td>16,000 đ</td>
+                  <td><span class="status-badge badge-success">Thành công</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><span class="txn-code">GD2026082200003</span></td>
+                  <td><span style="font-family:monospace;">ORD-20268893</span></td>
+                  <td>Payment Link</td>
+                  <td style="font-weight:700; color:var(--color-primary);">10,750,000 đ</td>
+                  <td>131,000 đ</td>
+                  <td><span class="status-badge badge-success">Thành công</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.style.display = 'inline-block';
+      btnAction.textContent = 'Phê Duyệt Thanh Toán';
+      btnAction.onclick = function() {
+        showToast(`Đã phê duyệt thanh toán đối soát cho ${item.storeName}`);
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
 });
