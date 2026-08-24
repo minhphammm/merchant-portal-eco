@@ -1494,107 +1494,137 @@ const ViewRenderer = {
         </div>
       </div>
 
-      <!-- TỔNG QUAN STATS QUYẾT TOÁN V2 -->
-      <div class="txn-summary-cards-single-row" style="margin-bottom:20px; grid-template-columns: repeat(4, 1fr);">
-        <div class="txn-stat-card-compact card-total">
-          <div class="stat-label">Tổng tiền quyết toán</div>
-          <div class="stat-value" style="color:var(--color-primary);">1,220,000,000 đ</div>
-        </div>
-        <div class="txn-stat-card-compact card-success">
-          <div class="stat-label">Đã thanh toán DN</div>
-          <div class="stat-value" style="color:var(--color-secondary);">796,950,000 đ</div>
-        </div>
-        <div class="txn-stat-card-compact card-processing">
-          <div class="stat-label">Đang chờ chuyển tiền</div>
-          <div class="stat-value" style="color:var(--color-warning);">423,050,000 đ</div>
-        </div>
-        <div class="txn-stat-card-compact card-approved">
-          <div class="stat-label">Tổng số GD quyết toán</div>
-          <div class="stat-value">370 GD</div>
-        </div>
-      </div>
-
-      <!-- MỤC TÌM KIẾM BỘ LỌC QUYẾT TOÁN V2 -->
+      <!-- MỤC TÌM KIẾM BỘ LỌC QUYẾT TOÁN V2 (5 FIELDS EXACT) -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Tra Cứu Phiên Quyết Toán v2
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
         </div>
-        <div class="filter-grid-4col">
-          <div class="form-group-field">
-            <label>Mã phiên quyết toán</label>
-            <input type="text" placeholder="Nhập mã phiên QT (VD: QT-202688)">
+        <form id="reconcileV2FilterForm" onsubmit="return false;">
+          <div class="filter-grid-5col">
+            <!-- 1. Tên cửa hàng -->
+            <div class="form-group-field">
+              <label>Tên cửa hàng</label>
+              <select id="filterV2StoreName">
+                <option value="all">Tất cả cửa hàng</option>
+                <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+                <option value="storeQ3">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                <option value="storeTB">Chi nhánh Hải Châu - Đà Nẵng</option>
+              </select>
+            </div>
+
+            <!-- 2. Mã thanh toán -->
+            <div class="form-group-field">
+              <label>Mã thanh toán</label>
+              <input type="text" id="filterV2PaymentId" placeholder="Nhập mã thanh toán">
+            </div>
+
+            <!-- 3. Thời gian tạo thanh toán -->
+            <div class="form-group-field">
+              <label>Thời gian tạo thanh toán</label>
+              <div class="date-range-input-box">
+                <input type="text" id="filterV2CreatedTime" value="20-08-2026 00:00:00 — 22-08-2026 23:59:59" readonly>
+                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+              </div>
+            </div>
+
+            <!-- 4. Phương thức thanh toán -->
+            <div class="form-group-field">
+              <label>Phương thức thanh toán</label>
+              <select id="filterV2PaymentMethod">
+                <option value="all">Tất cả phương thức</option>
+                <option value="VietQR">VietQR Pay</option>
+                <option value="ATM">Thẻ ATM Nội Địa</option>
+                <option value="CARD">Thẻ Quốc Tế (Visa/Master)</option>
+                <option value="LINK">Payment Link</option>
+                <option value="QR_BANK">QR Bank</option>
+                <option value="WALLET">Ví điện tử</option>
+              </select>
+            </div>
+
+            <!-- 5. Trạng thái -->
+            <div class="form-group-field">
+              <label>Trạng thái</label>
+              <select id="filterV2Status">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="created">Khởi tạo</option>
+                <option value="processing">Đang xử lý</option>
+                <option value="approved">Đã phê duyệt</option>
+                <option value="rejected">Đã từ chối</option>
+                <option value="failed">Thất bại</option>
+                <option value="paid">Đã thanh toán</option>
+                <option value="success">Thành công</option>
+                <option value="pending">Đang chờ duyệt</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group-field">
-            <label>Chu kỳ quyết toán</label>
-            <select>
-              <option value="all">Tất cả chu kỳ</option>
-              <option value="T0">Quyết toán T+0 (Trong ngày)</option>
-              <option value="T1">Quyết toán T+1 (Ngày tiếp theo)</option>
-            </select>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+            <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc quyết toán v2')">Làm lại</button>
+            <button type="button" class="btn-primary" onclick="showToast('Đã áp dụng bộ lọc quyết toán v2')">Tìm kiếm</button>
           </div>
-          <div class="form-group-field">
-            <label>Ngân hàng nhận tiền</label>
-            <select>
-              <option value="all">Tất cả ngân hàng</option>
-              <option value="MB">MB Bank</option>
-              <option value="VCB">Vietcombank</option>
-              <option value="TCB">Techcombank</option>
-              <option value="VPB">VPBank</option>
-            </select>
-          </div>
-          <div class="form-group-field">
-            <label>Trạng thái phiên</label>
-            <select>
-              <option value="all">Tất cả trạng thái</option>
-              <option value="DONE">Đã quyết toán thành công</option>
-              <option value="PENDING">Đang chờ duyệt chuyển tiền</option>
-              <option value="PROCESSING">Đang xử lý đối soát</option>
-            </select>
-          </div>
-        </div>
+        </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH PHIÊN QUYẾT TOÁN V2 -->
+      <!-- BẢNG HIỂN THỊ THÔNG TIN QUYẾT TOÁN V2 (18 COLUMNS EXACT) -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
-          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Các Phiên Quyết Toán v2 (${list.length} phiên)</span>
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Hiển thị thông tin quyết toán v2 (${list.length} bản ghi)</span>
+          <span class="status-badge badge-success">Đã hoàn tất quyết toán gần nhất</span>
         </div>
-        <table class="portal-table">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Mã Phiên QT</th>
-              <th>Chu Kỳ</th>
-              <th>Thời Gian Tạo</th>
-              <th>Ngân Hàng Nhận</th>
-              <th>Tổng GD</th>
-              <th>Tổng Tiền QT</th>
-              <th>Phí QT</th>
-              <th>Thực Nhận</th>
-              <th>Trạng Thái</th>
-              <th>Hành Động</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${list.map(item => `
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="portal-table">
+            <thead>
               <tr>
-                <td><strong>${item.stt}</strong></td>
-                <td><span class="txn-code">${item.settlementId}</span></td>
-                <td style="font-size:12px; font-weight:600;">${item.cycle}</td>
-                <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.createdDate}</td>
-                <td style="font-weight:600; font-size:12.5px;">${item.bankName}</td>
-                <td style="font-weight:700;">${item.totalTxn} GD</td>
-                <td style="font-weight:700; color:var(--text-main); white-space:nowrap;">${item.totalAmount}</td>
-                <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.fee}</td>
-                <td style="font-weight:800; color:var(--color-primary); white-space:nowrap;">${item.netAmount}</td>
-                <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
-                <td>
-                  <button class="btn-secondary" style="padding:3px 8px; font-size:11.5px;" onclick="showToast('Xem chi tiết phiên quyết toán ${item.settlementId}')">Chi tiết</button>
-                </td>
+                <th style="white-space:nowrap;">STT</th>
+                <th style="white-space:nowrap;">Mã thanh toán</th>
+                <th style="white-space:nowrap;">Tên cửa hàng</th>
+                <th style="white-space:nowrap;">Thời gian tạo thanh toán</th>
+                <th style="white-space:nowrap;">Phương thức thanh toán</th>
+                <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
+                <th style="white-space:nowrap;">Tổng số tiền phải trả</th>
+                <th style="white-space:nowrap;">Phí Giao dịch</th>
+                <th style="white-space:nowrap;">Phí người dùng</th>
+                <th style="white-space:nowrap;">Số tiền cấn trừ</th>
+                <th style="white-space:nowrap;">Người tạo</th>
+                <th style="white-space:nowrap;">Tổng số tiền khuyến mãi</th>
+                <th style="white-space:nowrap;">Người phê duyệt</th>
+                <th style="white-space:nowrap;">Thời gian đối tác được duyệt</th>
+                <th style="white-space:nowrap;">Mô tả</th>
+                <th style="white-space:nowrap;">Lý do</th>
+                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
+                <th style="white-space:nowrap;">Trạng thái</th>
+                <th style="white-space:nowrap;">Tùy chỉnh</th>
               </tr>
-            `).join('')}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              ${list.map(item => `
+                <tr>
+                  <td><strong>${item.stt}</strong></td>
+                  <td><span class="txn-code">${item.paymentId}</span></td>
+                  <td style="font-weight:600; white-space:nowrap;">${item.storeName}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.paymentCreatedTime}</td>
+                  <td style="font-size:12.5px; white-space:nowrap;">${item.paymentMethod}</td>
+                  <td style="font-size:11.5px; color:var(--text-muted); white-space:nowrap;">${item.txnTimeRange}</td>
+                  <td style="font-weight:700; color:var(--color-primary); white-space:nowrap;">${item.totalPayable}</td>
+                  <td style="font-size:12px; white-space:nowrap;">${item.txnFee}</td>
+                  <td style="font-size:12px; white-space:nowrap;">${item.userFee}</td>
+                  <td style="font-weight:600; color:var(--color-danger); white-space:nowrap;">${item.deductedAmount}</td>
+                  <td style="font-size:12.5px; white-space:nowrap;">${item.createdBy}</td>
+                  <td style="font-weight:600; color:var(--color-secondary); white-space:nowrap;">${item.totalDiscount}</td>
+                  <td style="font-size:12.5px; white-space:nowrap;">${item.approvedBy}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.partnerApprovedTime}</td>
+                  <td style="font-size:12px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description}">${item.description}</td>
+                  <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.reason}">${item.reason}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.merchantPayTime}</td>
+                  <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
+                  <td style="white-space:nowrap;">
+                    <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="openReconcileV2DetailModal(${item.stt})">Tùy chỉnh</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   }

@@ -1693,4 +1693,101 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalOverlay) modalOverlay.classList.add('show');
     if (window.refreshIcons) window.refreshIcons();
   };
+
+  /**
+   * Modal Tùy Chỉnh - Hiển thị Chi Tiết GD Quyết Toán v2
+   */
+  window.openReconcileV2DetailModal = function(stt) {
+    const list = MockData.getReconcileV2Data ? MockData.getReconcileV2Data() : [];
+    const item = list.find(r => r.stt === stt) || list[0];
+    if (!item) return;
+
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = `Chi Tiết GD Quyết Toán v2 — ${item.paymentId}`;
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Banner Header Info -->
+          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:14px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:12px; color:var(--text-muted);">Mã thanh toán & Cửa hàng</div>
+              <div style="font-size:15px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.paymentId} — ${item.storeName}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px; color:var(--text-muted);">Trạng thái thanh toán</div>
+              <div style="margin-top:2px;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+            </div>
+          </div>
+
+          <!-- Lưới Chi Tiết Thông Tin Quyết Toán v2 (18 Fields) -->
+          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px 20px; font-size:13px;">
+            <div><span style="color:var(--text-muted);">1. Mã thanh toán:</span> <br><strong class="txn-code">${item.paymentId}</strong></div>
+            <div><span style="color:var(--text-muted);">2. Tên cửa hàng:</span> <br><strong>${item.storeName}</strong></div>
+            <div><span style="color:var(--text-muted);">3. Thời gian tạo thanh toán:</span> <br><strong>${item.paymentCreatedTime}</strong></div>
+            <div><span style="color:var(--text-muted);">4. Phương thức thanh toán:</span> <br><strong>${item.paymentMethod}</strong></div>
+            <div><span style="color:var(--text-muted);">5. Khoảng thời gian giao dịch:</span> <br><strong>${item.txnTimeRange}</strong></div>
+            <div><span style="color:var(--text-muted);">6. Tổng số tiền phải trả:</span> <br><strong style="color:var(--color-primary); font-size:15px;">${item.totalPayable}</strong></div>
+            <div><span style="color:var(--text-muted);">7. Phí Giao dịch:</span> <br><strong>${item.txnFee}</strong></div>
+            <div><span style="color:var(--text-muted);">8. Phí người dùng:</span> <br><strong>${item.userFee}</strong></div>
+            <div><span style="color:var(--text-muted);">9. Số tiền cấn trừ:</span> <br><strong style="color:var(--color-danger);">${item.deductedAmount}</strong></div>
+            <div><span style="color:var(--text-muted);">10. Người tạo:</span> <br><strong>${item.createdBy}</strong></div>
+            <div><span style="color:var(--text-muted);">11. Tổng số tiền khuyến mãi:</span> <br><strong style="color:var(--color-secondary);">${item.totalDiscount}</strong></div>
+            <div><span style="color:var(--text-muted);">12. Người phê duyệt:</span> <br><strong>${item.approvedBy}</strong></div>
+            <div><span style="color:var(--text-muted);">13. Thời gian đối tác được duyệt:</span> <br><strong>${item.partnerApprovedTime}</strong></div>
+            <div><span style="color:var(--text-muted);">14. Thời gian thanh toán DN:</span> <br><strong>${item.merchantPayTime}</strong></div>
+            <div><span style="color:var(--text-muted);">15. Trạng thái:</span> <br><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">16. Mô tả:</span> <br><span>${item.description}</span></div>
+            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">17. Lý do:</span> <br><span>${item.reason}</span></div>
+          </div>
+
+          <!-- Bảng Chi Tiết Giao Dịch Quyết Toán v2 -->
+          <div style="margin-top:6px;">
+            <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="layers" style="width:16px; height:16px; color:var(--color-primary);"></i> Danh Sách Giao Dịch Trong Phiên Quyết Toán v2
+            </div>
+            <table class="portal-table" style="font-size:12.5px;">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã Phiên QT</th>
+                  <th>Cổng Thanh Toán</th>
+                  <th>Số Lượng GD</th>
+                  <th>Tổng Tiền</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><span class="txn-code">${item.paymentId}-01</span></td>
+                  <td>Cổng VietQR / Bank Transfer</td>
+                  <td>142 GD</td>
+                  <td style="font-weight:700; color:var(--color-primary);">${item.totalPayable}</td>
+                  <td><span class="status-badge badge-success">Đã đối soát</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.style.display = 'inline-block';
+      btnAction.textContent = 'Xác Nhận Giải Ngân';
+      btnAction.onclick = function() {
+        showToast(`Đã xác nhận giải ngân thành công mã thanh toán ${item.paymentId}`);
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
 });
