@@ -1581,7 +1581,376 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /**
-   * Modal Tùy Chỉnh - Hiển thị Chi Tiết Giao Dịch Đối Soát (Chi Tiết GD)
+   * Generates exact HTML layout as requested in user screenshots for Tùy chỉnh modals
+   */
+  function getReconcileCustomDetailViewHTML(item) {
+    const storeName = item.storeName || 'Kamura';
+    const paymentMethod = item.paymentMethod || 'Quẹt thẻ';
+    const createdTime = item.reconcileCreatedTime || item.paymentCreatedTime || '24-08-2026 16:00:52';
+    const approvedTime = item.partnerApprovedTime || '24-08-2026 16:01:29';
+    const totalPayable = item.totalPayable || '8.126.948,03 đ';
+    const txnFee = item.txnFee || '172.571,974 đ';
+    const statusText = item.statusText || 'Từ chối';
+
+    return `
+      <div class="reconcile-custom-detail-view" style="display:flex; flex-direction:column; gap:20px; font-family:inherit; text-align:left;">
+        
+        <!-- 1. THÔNG TIN THANH TOÁN CARD -->
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+          <div style="font-size:15px; font-weight:700; color:#1E293B; margin-bottom:16px;">Thông tin thanh toán</div>
+          
+          <!-- Thông tin doanh nghiệp -->
+          <div style="margin-bottom:16px;">
+            <div style="font-size:13.5px; font-weight:700; color:#334155; margin-bottom:10px;">Thông tin doanh nghiệp</div>
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:24px; font-size:13px;">
+              <div>
+                <span style="color:#64748B;">Mã doanh nghiệp:</span> 
+                <span style="background:#f6ffed; border:1px solid #b7eb8f; color:#52c41a; font-weight:700; padding:2px 8px; border-radius:4px; font-size:12px; margin-left:4px;">GFCAPITAL</span>
+              </div>
+              <div>
+                <span style="color:#64748B;">Tên doanh nghiệp:</span> 
+                <span style="background:#F8FAFC; border:1px solid #E2E8F0; padding:3px 10px; border-radius:4px; font-weight:600; color:#1E293B; margin-left:4px;">Công ty TNHH GF Capital Việt Nam</span>
+              </div>
+              <div>
+                <span style="color:#64748B;">Phương thức thanh toán:</span> 
+                <span style="background:#e6f7ff; border:1px solid #91d5ff; color:#1890ff; font-weight:600; padding:2px 8px; border-radius:4px; font-size:12px; margin-left:4px;">${paymentMethod}</span>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border:0; border-top:1px solid #F1F5F9; margin:14px 0;">
+
+          <!-- Thông tin cửa hàng -->
+          <div>
+            <div style="font-size:13.5px; font-weight:700; color:#334155; margin-bottom:12px;">Thông tin cửa hàng</div>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px 24px; font-size:12.5px; color:#334155;">
+              <div><span style="color:#64748B;">Mã cửa hàng:</span> <strong>GFCAPITAL5</strong></div>
+              <div><span style="color:#64748B;">Tên cửa hàng:</span> <strong>${storeName}</strong></div>
+              <div><span style="color:#64748B;">Ví ECO:</span> <span>-</span></div>
+
+              <div><span style="color:#64748B;">Tên chủ tài khoản:</span> <strong>DDKD CT TNHH GF CAPITAL (VIET NAM)</strong></div>
+              <div><span style="color:#64748B;">Số tài khoản:</span> <strong style="font-family:monospace;">1038834115</strong></div>
+              <div><span style="color:#64748B;">Ngân hàng:</span> <strong>Vietcombank</strong></div>
+
+              <div><span style="color:#64748B;">Chi nhánh:</span> <strong>Hồ Chí Minh</strong></div>
+              <div><span style="color:#64748B;">Mã sao kê:</span> <span>-</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. LƯỚI 24 Ô CHỈ SỐ TÀI CHÍNH (4 Columns Grid) -->
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1px; background:#CBD5E1; border:1px solid #CBD5E1; border-radius:8px; overflow:hidden;">
+          
+          <!-- Row 1 -->
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Thời gian thanh toán được tạo</div>
+            <div style="font-size:11px; background:#F8FAFC; border:1px solid #E2E8F0; padding:2px 6px; border-radius:4px; display:inline-block; margin-top:4px; color:#334155;">${createdTime}</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Thời gian thanh toán được duyệt</div>
+            <div style="font-size:11px; background:#F8FAFC; border:1px solid #E2E8F0; padding:2px 6px; border-radius:4px; display:inline-block; margin-top:4px; color:#334155;">${approvedTime}</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Thời gian từ chối duyệt thanh toán</div>
+            <div style="font-size:11px; background:#F8FAFC; border:1px solid #E2E8F0; padding:2px 6px; border-radius:4px; display:inline-block; margin-top:4px; color:#334155;">${approvedTime}</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Tổng số giao dịch</div>
+            <div style="font-size:13px; font-weight:800; color:#1E293B; margin-top:4px;">11</div>
+          </div>
+
+          <!-- Row 2 -->
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Tổng số tiền giao dịch gốc</div>
+            <div style="font-size:13.5px; font-weight:800; color:#52C41A; margin-top:4px;">8.299.520 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Tổng số tiền đơn hàng</div>
+            <div style="font-size:13.5px; font-weight:800; color:#52C41A; margin-top:4px;">8.299.520 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Tổng số tiền hoàn</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí người dùng</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+
+          <!-- Row 3 -->
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí hoàn</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí giao dịch</div>
+            <div style="font-size:13.5px; font-weight:800; color:#FF4D4F; margin-top:4px;">${txnFee}</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí trả sau áp dụng cho doanh nghiệp</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí dịch vụ trả sau áp dụng cho doanh nghiệp</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+
+          <!-- Row 4 -->
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí trả sau áp dụng cho người dùng</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí dịch vụ trả sau áp dụng cho người dùng</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí BNPL áp dụng cho doanh nghiệp</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí BNPL áp dụng cho người dùng</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+
+          <!-- Row 5 -->
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí dịch vụ BNPL áp dụng cho người dùng</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Số tiền hoàn cấn trừ</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí hoàn cấn trừ</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Tổng số tiền phải trả</div>
+            <div style="font-size:14px; font-weight:800; color:#52C41A; margin-top:4px;">${totalPayable}</div>
+          </div>
+
+          <!-- Row 6 -->
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Tổng số tiền khuyến mãi</div>
+            <div style="font-size:13px; font-weight:700; color:#FF4D4F; margin-top:4px;">0 đ</div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Trạng thái</div>
+            <div style="margin-top:4px;"><span style="background:#fff2f0; border:1px solid #ffccc7; color:#ff4d4f; font-weight:700; font-size:11px; padding:2px 8px; border-radius:4px;">${statusText}</span></div>
+          </div>
+          <div style="background:#fff; padding:12px 8px; text-align:center; grid-column: span 2;">
+            <div style="font-size:11.5px; font-weight:700; color:#475569;">Phí bổ sung</div>
+            <div style="font-size:13px; color:#64748B; margin-top:4px;">-</div>
+          </div>
+        </div>
+
+        <!-- Mô tả field -->
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:14px;">
+          <div style="font-size:13px; font-weight:700; color:#334155; margin-bottom:6px;">Mô tả</div>
+          <input type="text" placeholder="Vui lòng nhập mô tả" value="Vui lòng nhập mô tả" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid #CBD5E1; font-size:12.5px; color:#334155;">
+        </div>
+
+        <!-- 3. DANH SÁCH GIAO DỊCH THANH TOÁN (Blue Header Table) -->
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+          <div style="padding:14px 16px; font-size:14px; font-weight:700; color:#1E293B; border-bottom:1px solid #F1F5F9;">
+            Danh sách giao dịch thanh toán
+          </div>
+
+          <!-- Filter Bar -->
+          <div style="padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0; display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:12.5px;">
+            <div style="flex:1; min-width:160px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Mã GD ⓘ</label>
+              <input type="text" placeholder="Nhập mã giao dịch" style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+            </div>
+            <div style="flex:1; min-width:180px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Mã đơn hàng DN ⓘ</label>
+              <input type="text" placeholder="Vui lòng nhập mã đơn hàng doanh nghiệp" style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+            </div>
+            <div style="flex:1; min-width:180px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Mã GD của đối tác ⓘ</label>
+              <input type="text" placeholder="Nhập mã giao dịch của đối tác" style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+            </div>
+            <div style="display:flex; gap:8px; align-self:flex-end;">
+              <button class="btn-secondary" style="padding:6px 12px; font-size:12px;" onclick="showToast('Đã làm lại bộ lọc giao dịch thanh toán')">Làm lại</button>
+              <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="showToast('Đã lọc danh sách giao dịch thanh toán')">Tìm kiếm</button>
+              <span style="color:#1890ff; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:2px; margin-left:4px;">Mở rộng ∨</span>
+            </div>
+          </div>
+
+          <!-- Blue Header Data Table -->
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="background:#4B86CF; color:#FFF; font-weight:700;">
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">STT</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã GD ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã đơn hàng DN ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã đối soát với đối tác</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã GD của đối tác ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên doanh nghiệp</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã doanh nghiệp</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên khách hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Số điện thoại/Tài khoản khách hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên cửa hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã cửa hàng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #E2E8F0;">
+                  <td style="padding:10px 12px;">1</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-weight:600; color:#1E293B;">7391421483599660</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-size:11.5px;">GFCAPITAL5_KMR20260822_0011_Tqr9yzBoZF</td>
+                  <td style="padding:10px 12px; font-family:monospace;">EP623499DD34A</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-size:11.5px;">20260822163701_1493707797</td>
+                  <td style="padding:10px 12px;">Công ty TNHH GF Capital Việt Nam</td>
+                  <td style="padding:10px 12px; font-weight:700;">GFCAPITAL</td>
+                  <td style="padding:10px 12px;">-</td>
+                  <td style="padding:10px 12px; font-family:monospace;">458761******9295</td>
+                  <td style="padding:10px 12px; font-weight:600;">${storeName}</td>
+                  <td style="padding:10px 12px; font-weight:600;">GFCAPITAL5</td>
+                </tr>
+                <tr style="border-bottom:1px solid #E2E8F0; background:#F8FAFC;">
+                  <td style="padding:10px 12px;">2</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-weight:600; color:#1E293B;">7391128709700648</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-size:11.5px;">GFCAPITAL5_KMR20260822_0012_TZAgpZTQMa</td>
+                  <td style="padding:10px 12px; font-family:monospace;">EP62348F600FE</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-size:11.5px;">20260822163208_1493707797</td>
+                  <td style="padding:10px 12px;">Công ty TNHH GF Capital Việt Nam</td>
+                  <td style="padding:10px 12px; font-weight:700;">GFCAPITAL</td>
+                  <td style="padding:10px 12px;">-</td>
+                  <td style="padding:10px 12px; font-family:monospace;">444418******7116</td>
+                  <td style="padding:10px 12px; font-weight:600;">${storeName}</td>
+                  <td style="padding:10px 12px; font-weight:600;">GFCAPITAL5</td>
+                </tr>
+                <tr style="border-bottom:1px solid #E2E8F0;">
+                  <td style="padding:10px 12px;">3</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-weight:600; color:#1E293B;">7388824517216825</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-size:11.5px;">GFCAPITAL5_KMR20260822_0010_THDk0JRolX</td>
+                  <td style="padding:10px 12px; font-family:monospace;">EP62341D3C10E</td>
+                  <td style="padding:10px 12px; font-family:monospace; font-size:11.5px;">20260822155344_1493707797</td>
+                  <td style="padding:10px 12px;">Công ty TNHH GF Capital Việt Nam</td>
+                  <td style="padding:10px 12px; font-weight:700;">GFCAPITAL</td>
+                  <td style="padding:10px 12px;">-</td>
+                  <td style="padding:10px 12px; font-family:monospace;">532750******3293</td>
+                  <td style="padding:10px 12px; font-weight:600;">${storeName}</td>
+                  <td style="padding:10px 12px; font-weight:600;">GFCAPITAL5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. DANH SÁCH GIAO DỊCH BỔ SUNG ⓘ -->
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+          <div style="padding:14px 16px; font-size:14px; font-weight:700; color:#1E293B; border-bottom:1px solid #F1F5F9; display:flex; align-items:center; gap:4px;">
+            Danh sách giao dịch bổ sung <span style="color:#64748B; font-weight:400; font-size:12px;">ⓘ</span>
+          </div>
+
+          <!-- Filter Bar -->
+          <div style="padding:12px 16px; background:#F8FAFC; border-bottom:1px solid #E2E8F0; display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:12.5px;">
+            <div style="flex:1; min-width:140px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Mã GD ⓘ</label>
+              <input type="text" placeholder="Nhập mã giao dịch" style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+            </div>
+            <div style="flex:1; min-width:160px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Mã đơn hàng DN ⓘ</label>
+              <input type="text" placeholder="Vui lòng nhập mã đơn hàng doanh nghiệp" style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+            </div>
+            <div style="flex:1; min-width:160px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Mã GD của đối tác ⓘ</label>
+              <input type="text" placeholder="Nhập mã giao dịch của đối tác" style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+            </div>
+            <div style="flex:1; min-width:160px;">
+              <label style="font-size:11.5px; color:#64748B; display:block; margin-bottom:2px;">Phương thức thanh toán</label>
+              <select style="width:100%; padding:6px 10px; border-radius:4px; border:1px solid #CBD5E1;">
+                <option value="">Vui lòng chọn</option>
+              </select>
+            </div>
+            <div style="display:flex; gap:8px; align-self:flex-end;">
+              <button class="btn-secondary" style="padding:6px 12px; font-size:12px;">Làm lại</button>
+              <button class="btn-primary" style="padding:6px 14px; font-size:12px;">Tìm kiếm</button>
+              <span style="color:#1890ff; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:2px; margin-left:4px;">Thu gọn ∧</span>
+            </div>
+          </div>
+
+          <!-- Empty Table -->
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="background:#4B86CF; color:#FFF; font-weight:700;">
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">STT</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã GD ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã đơn hàng DN ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã đối soát với đối tác</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã GD của đối tác ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên doanh nghiệp</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã doanh nghiệp</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên khách hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Số điện thoại/Tài khoản khách hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên cửa hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã cửa hàng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="11" style="padding:30px; text-align:center; color:#94A3B8;">
+                    <div style="font-size:28px; margin-bottom:6px;">📥</div>
+                    <div>Trống</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 5. DANH SÁCH GIAO DỊCH HOÀN CÓ CẤN TRỪ -->
+        <div style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+          <div style="padding:14px 16px; font-size:14px; font-weight:700; color:#1E293B; border-bottom:1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center;">
+            <span>Danh sách giao dịch hoàn có cấn trừ</span>
+            <div style="display:flex; gap:10px; color:#64748B; font-size:14px; cursor:pointer;">
+              <span>🔄</span> <span>⚙️</span> <span>⛶</span>
+            </div>
+          </div>
+
+          <!-- Empty Table -->
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left;">
+              <thead>
+                <tr style="background:#4B86CF; color:#FFF; font-weight:700;">
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">STT</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã hoàn tiền</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã GD gốc ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã đối soát hoàn tiền với đối tác</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã GD gốc của đối tác ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên khách hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">SĐT/TK GD ⓘ</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Số tiền hoàn</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên cửa hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Mã cửa hàng</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Tên doanh nghiệp</th>
+                  <th style="padding:10px 12px; border:1px solid #3B74BD; white-space:nowrap;">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="12" style="padding:30px; text-align:center; color:#94A3B8;">
+                    <div style="font-size:28px; margin-bottom:6px;">📥</div>
+                    <div>Trống</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  /**
+   * Modal Tùy Chỉnh - Hiển thị Chi Tiết Giao Dịch Đối Soát Ecopay
    */
   window.openReconcileDetailModal = function(stt) {
     const list = MockData.getReconcileEcopayData ? MockData.getReconcileEcopayData() : [];
@@ -1592,92 +1961,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalBody = document.getElementById('modalBodyContent');
     const btnAction = document.getElementById('btnFooterAction');
 
-    if (modalTitle) modalTitle.textContent = `Chi Tiết Giao Dịch Đối Soát — ${item.storeName}`;
-
-    if (modalBody) {
-      modalBody.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <!-- Banner Header Info -->
-          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:14px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:12px; color:var(--text-muted);">Tên cửa hàng đối soát</div>
-              <div style="font-size:15px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.storeName}</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:12px; color:var(--text-muted);">Trạng thái đối soát</div>
-              <div style="margin-top:2px;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
-            </div>
-          </div>
-
-          <!-- Lưới Chi Tiết Thông Tin Giao Dịch Đối Soát (16 Fields) -->
-          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px 20px; font-size:13px;">
-            <div><span style="color:var(--text-muted);">1. Thời gian tạo đối soát:</span> <br><strong>${item.reconcileCreatedTime}</strong></div>
-            <div><span style="color:var(--text-muted);">2. Khoảng thời gian giao dịch:</span> <br><strong>${item.txnTimeRange}</strong></div>
-            <div><span style="color:var(--text-muted);">3. Tổng số tiền phải trả:</span> <br><strong style="color:var(--color-primary); font-size:15px;">${item.totalPayable}</strong></div>
-            <div><span style="color:var(--text-muted);">4. Phí Giao dịch:</span> <br><strong>${item.txnFee}</strong></div>
-            <div><span style="color:var(--text-muted);">5. Phí người dùng:</span> <br><strong>${item.userFee}</strong></div>
-            <div><span style="color:var(--text-muted);">6. Số tiền cấn trừ:</span> <br><strong style="color:var(--color-danger);">${item.deductedAmount}</strong></div>
-            <div><span style="color:var(--text-muted);">7. Người tạo:</span> <br><strong>${item.createdBy}</strong></div>
-            <div><span style="color:var(--text-muted);">8. Tổng số tiền khuyến mãi:</span> <br><strong style="color:var(--color-secondary);">${item.totalDiscount}</strong></div>
-            <div><span style="color:var(--text-muted);">9. Người phê duyệt:</span> <br><strong>${item.approvedBy}</strong></div>
-            <div><span style="color:var(--text-muted);">10. Thời gian đối tác được duyệt:</span> <br><strong>${item.partnerApprovedTime}</strong></div>
-            <div><span style="color:var(--text-muted);">11. Thời gian thanh toán DN:</span> <br><strong>${item.merchantPayTime}</strong></div>
-            <div><span style="color:var(--text-muted);">12. Trạng thái:</span> <br><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
-            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">13. Mô tả:</span> <br><span>${item.description}</span></div>
-            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">14. Lý do:</span> <br><span>${item.reason}</span></div>
-          </div>
-
-          <!-- Bảng Chi Tiết Các Giao Dịch Thành Phần (Chi tiết GD) -->
-          <div style="margin-top:6px;">
-            <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i data-lucide="list" style="width:16px; height:16px; color:var(--color-primary);"></i> Danh Sách Giao Dịch Thành Phần (Chi tiết GD)
-            </div>
-            <table class="portal-table" style="font-size:12.5px;">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Mã GD Ecopay</th>
-                  <th>Mã Đơn Hàng DN</th>
-                  <th>Nguồn Thanh Toán</th>
-                  <th>Số Tiền GD</th>
-                  <th>Phí GD</th>
-                  <th>Trạng Thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><span class="txn-code">GD2026082200001</span></td>
-                  <td><span style="font-family:monospace;">ORD-20268891</span></td>
-                  <td>VietQR Pay (MB)</td>
-                  <td style="font-weight:700; color:var(--color-primary);">1,500,000 đ</td>
-                  <td>7,500 đ</td>
-                  <td><span class="status-badge badge-success">Thành công</span></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td><span class="txn-code">GD2026082200002</span></td>
-                  <td><span style="font-family:monospace;">ORD-20268892</span></td>
-                  <td>Thẻ ATM Nội Địa</td>
-                  <td style="font-weight:700; color:var(--color-primary);">3,200,000 đ</td>
-                  <td>16,000 đ</td>
-                  <td><span class="status-badge badge-success">Thành công</span></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td><span class="txn-code">GD2026082200003</span></td>
-                  <td><span style="font-family:monospace;">ORD-20268893</span></td>
-                  <td>Payment Link</td>
-                  <td style="font-weight:700; color:var(--color-primary);">10,750,000 đ</td>
-                  <td>131,000 đ</td>
-                  <td><span class="status-badge badge-success">Thành công</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    }
+    if (modalTitle) modalTitle.textContent = `Chi Tiết Giao Dịch Đối Soát Ecopay — ${item.storeName}`;
+    if (modalBody) modalBody.innerHTML = getReconcileCustomDetailViewHTML(item);
 
     if (btnAction) {
       btnAction.style.display = 'inline-block';
@@ -1706,81 +1991,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalBody = document.getElementById('modalBodyContent');
     const btnAction = document.getElementById('btnFooterAction');
 
-    if (modalTitle) modalTitle.textContent = `Chi Tiết GD Quyết Toán v2 — ${item.paymentId}`;
-
-    if (modalBody) {
-      modalBody.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <!-- Banner Header Info -->
-          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:14px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:12px; color:var(--text-muted);">Mã thanh toán & Cửa hàng</div>
-              <div style="font-size:15px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.paymentId} — ${item.storeName}</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:12px; color:var(--text-muted);">Trạng thái thanh toán</div>
-              <div style="margin-top:2px;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
-            </div>
-          </div>
-
-          <!-- Lưới Chi Tiết Thông Tin Quyết Toán v2 (18 Fields) -->
-          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px 20px; font-size:13px;">
-            <div><span style="color:var(--text-muted);">1. Mã thanh toán:</span> <br><strong class="txn-code">${item.paymentId}</strong></div>
-            <div><span style="color:var(--text-muted);">2. Tên cửa hàng:</span> <br><strong>${item.storeName}</strong></div>
-            <div><span style="color:var(--text-muted);">3. Thời gian tạo thanh toán:</span> <br><strong>${item.paymentCreatedTime}</strong></div>
-            <div><span style="color:var(--text-muted);">4. Phương thức thanh toán:</span> <br><strong>${item.paymentMethod}</strong></div>
-            <div><span style="color:var(--text-muted);">5. Khoảng thời gian giao dịch:</span> <br><strong>${item.txnTimeRange}</strong></div>
-            <div><span style="color:var(--text-muted);">6. Tổng số tiền phải trả:</span> <br><strong style="color:var(--color-primary); font-size:15px;">${item.totalPayable}</strong></div>
-            <div><span style="color:var(--text-muted);">7. Phí Giao dịch:</span> <br><strong>${item.txnFee}</strong></div>
-            <div><span style="color:var(--text-muted);">8. Phí người dùng:</span> <br><strong>${item.userFee}</strong></div>
-            <div><span style="color:var(--text-muted);">9. Số tiền cấn trừ:</span> <br><strong style="color:var(--color-danger);">${item.deductedAmount}</strong></div>
-            <div><span style="color:var(--text-muted);">10. Người tạo:</span> <br><strong>${item.createdBy}</strong></div>
-            <div><span style="color:var(--text-muted);">11. Tổng số tiền khuyến mãi:</span> <br><strong style="color:var(--color-secondary);">${item.totalDiscount}</strong></div>
-            <div><span style="color:var(--text-muted);">12. Người phê duyệt:</span> <br><strong>${item.approvedBy}</strong></div>
-            <div><span style="color:var(--text-muted);">13. Thời gian đối tác được duyệt:</span> <br><strong>${item.partnerApprovedTime}</strong></div>
-            <div><span style="color:var(--text-muted);">14. Thời gian thanh toán DN:</span> <br><strong>${item.merchantPayTime}</strong></div>
-            <div><span style="color:var(--text-muted);">15. Trạng thái:</span> <br><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
-            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">16. Mô tả:</span> <br><span>${item.description}</span></div>
-            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">17. Lý do:</span> <br><span>${item.reason}</span></div>
-          </div>
-
-          <!-- Bảng Chi Tiết Giao Dịch Quyết Toán v2 -->
-          <div style="margin-top:6px;">
-            <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-              <i data-lucide="layers" style="width:16px; height:16px; color:var(--color-primary);"></i> Danh Sách Giao Dịch Trong Phiên Quyết Toán v2
-            </div>
-            <table class="portal-table" style="font-size:12.5px;">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Mã Phiên QT</th>
-                  <th>Cổng Thanh Toán</th>
-                  <th>Số Lượng GD</th>
-                  <th>Tổng Tiền</th>
-                  <th>Trạng Thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><span class="txn-code">${item.paymentId}-01</span></td>
-                  <td>Cổng VietQR / Bank Transfer</td>
-                  <td>142 GD</td>
-                  <td style="font-weight:700; color:var(--color-primary);">${item.totalPayable}</td>
-                  <td><span class="status-badge badge-success">Đã đối soát</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    }
+    if (modalTitle) modalTitle.textContent = `Chi Tiết GD Quyết Toán v2 — ${item.paymentId || item.storeName}`;
+    if (modalBody) modalBody.innerHTML = getReconcileCustomDetailViewHTML(item);
 
     if (btnAction) {
       btnAction.style.display = 'inline-block';
       btnAction.textContent = 'Xác Nhận Giải Ngân';
       btnAction.onclick = function() {
-        showToast(`Đã xác nhận giải ngân thành công mã thanh toán ${item.paymentId}`);
+        showToast(`Đã xác nhận giải ngân thành công mã thanh toán ${item.paymentId || item.storeName}`);
         const modalOverlay = document.getElementById('modalOverlay');
         if (modalOverlay) modalOverlay.classList.remove('show');
       };

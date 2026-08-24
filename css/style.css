@@ -1848,12 +1848,15 @@ body {
 
 .modal-container {
   background: var(--bg-card);
-  width: 90%;
-  max-width: 620px;
+  width: 95%;
+  max-width: 1200px;
+  max-height: 92vh;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-color);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transform: translateY(20px);
   transition: transform 0.3s ease;
 }
