@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecopay Merchant Portal - FinViet Platform</title>
+  <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
+  <link rel="stylesheet" href="css/style.css?v=2.1">
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div id="app">
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <img src="https://www.finviet.com.vn/wp-content/uploads/2024/08/logo.png" alt="Ecopay Merchant Logo" class="brand-logo-img">
+        <div class="brand-title">
+          <span class="brand-name">Ecopay Merchant</span>
+          <span class="brand-sub">FinViet Platform</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Menu Điều Hướng</div>
+        
+        <!-- 1. Dashboard Item -->
+        <div class="nav-item active" data-tooltip="Tổng quan">
+          <a href="javascript:void(0)" class="nav-link" data-page="dashboard" title="Tổng quan">
+            <span class="nav-text" data-i18n="navDashboard">Tổng quan</span>
+          </a>
+        </div>
+
+        <!-- 2. Doanh nghiệp Dropdown -->
+        <div class="nav-item has-dropdown open" data-tooltip="Doanh nghiệp">
+          <a href="javascript:void(0)" class="nav-link" title="Doanh nghiệp">
+            <span class="nav-text" data-i18n="navEnterprise">Doanh nghiệp</span>
+            <span class="nav-chevron">▶</span>
+          </a>
+          <div class="nav-dropdown">
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="enterprise" data-i18n="navEnterpriseOverview">Quản trị Doanh nghiệp</a>
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="stores" data-i18n="navStoresMgmt">Quản trị cửa hàng</a>
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="hr-mgmt" data-i18n="navHrMgmt">Quản trị nhân lực</a>
+          </div>
+        </div>
+
+        <!-- 4. Payment Dropdown (Open by default) -->
+        <div class="nav-item has-dropdown open" data-tooltip="Payment">
+          <a href="javascript:void(0)" class="nav-link" title="Payment">
+            <span class="nav-text" data-i18n="navPayment">Payment</span>
+            <span class="nav-chevron">▶</span>
+          </a>
+          <div class="nav-dropdown">
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="pay-txns" data-i18n="navPayTxns">Giao dịch thanh toán</a>
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="refund-txns" data-i18n="navRefundTxns">Giao dịch hoàn tiền</a>
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="pay-requests" data-i18n="navPayRequests">Quản lý yêu cầu thanh toán</a>
+          </div>
+        </div>
+
+        <!-- 6. Quyết toán & Đối soát Dropdown -->
+        <div class="nav-item has-dropdown" data-tooltip="Quyết toán & Đối soát">
+          <a href="javascript:void(0)" class="nav-link" title="Quyết toán & Đối soát">
+            <span class="nav-text" data-i18n="navSettlement">Quyết toán & Đối soát</span>
+            <span class="nav-chevron">▶</span>
+          </a>
+          <div class="nav-dropdown">
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="reconcile" data-i18n="navReconcileReport">Báo cáo đối soát</a>
+            <a href="javascript:void(0)" class="nav-dropdown-link" data-page="fee-diff" data-i18n="navFeeDiffReport">Báo cáo chênh lệch phí</a>
+          </div>
+        </div>
+
+      </nav>
+
+      <!-- Sidebar Footer: Thông tin tài khoản đăng nhập & Nút thu gọn nằm kế bên nhau -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user-row">
+          <!-- Thông tin tài khoản (Nhấp vào bật popover lên trên) -->
+          <div id="userProfileMenu" class="user-profile-menu" title="Tài khoản cá nhân">
+            <div class="user-avatar">PM</div>
+            <div class="user-info">
+              <span class="user-name" data-i18n="userName">Phạm Văn Minh</span>
+              <span class="user-role" data-i18n="userRole">Quản lý Doanh nghiệp</span>
+            </div>
+
+            <!-- Popover Menu Tài khoản -->
+            <div id="userDropdownPopover" class="user-dropdown-popover">
+              <div class="popover-item" onclick="openSettingsModal()">
+                <span data-i18n="profileSettings">Cài đặt cá nhân</span>
+              </div>
+              <div class="popover-item" onclick="openSettingsModal()">
+                <span data-i18n="changePassword">Đổi mật khẩu</span>
+              </div>
+              <div class="popover-item text-danger" onclick="showToast('Đã đăng xuất hệ thống')">
+                <span data-i18n="logout">Đăng xuất</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nút thu gọn sidebar nằm kế bên tên tài khoản -->
+          <button id="btnToggleSidebar" class="btn-toggle-sidebar-bottom" title="Thu gọn / Mở rộng thanh điều hướng">
+            <svg class="sidebar-collapse-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+              <path class="collapse-arrow-path" d="M14 9l-3 3 3 3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <!-- Left: Clean Topbar Left -->
+        <div class="topbar-left"></div>
+
+        <!-- Right: Thông tin Doanh nghiệp & Noti & Ngôn ngữ -->
+        <div class="topbar-right">
+          <!-- Thông tin Doanh nghiệp (Tĩnh, không có dropdown) -->
+          <div class="topbar-merchant-compact" title="Doanh nghiệp đang quản lý: CÔNG TY TNHH ABC">
+            <span class="merchant-compact-name">CÔNG TY TNHH ABC</span>
+          </div>
+
+          <!-- Globe Icon Language Switcher -->
+          <div class="lang-dropdown-wrapper">
+            <button id="langDropdownBtn" class="lang-compact-btn" title="Đổi ngôn ngữ">🌐</button>
+            <div id="langDropdownPopover" class="lang-dropdown-popover">
+              <div class="lang-option-item active" data-lang="vie">
+                <span>Tiếng Việt (VIE)</span>
+              </div>
+              <div class="lang-option-item" data-lang="en">
+                <span>English (EN)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notification Dropdown Wrapper -->
+          <div class="notification-dropdown-wrapper">
+            <button id="notificationBtn" class="icon-btn" title="Thông báo hệ thống">
+              🔔
+              <span id="globalNotiBadge" class="notification-badge"></span>
+            </button>
+            
+            <!-- Popover Panel 2 Tabs -->
+            <div id="notificationPopover" class="notification-popover">
+              <div class="noti-popover-header">
+                <div class="noti-title-bar">
+                  <span class="noti-header-title">Thông Báo</span>
+                  <button class="noti-mark-read-btn" onclick="markAllNotificationsRead()">Đánh dấu đã đọc</button>
+                </div>
+                <div class="noti-tabs-nav">
+                  <button class="noti-tab-btn active" onclick="switchNotiTab('finviet')">🌐 Cập nhật từ Finviet <span class="noti-tab-badge">2</span></button>
+                  <button class="noti-tab-btn" onclick="switchNotiTab('enterprise')">🏢 Doanh nghiệp <span class="noti-tab-badge">1</span></button>
+                </div>
+              </div>
+
+              <!-- Tab 1 Content: Cập nhật từ Finviet -->
+              <div id="notiTabFinviet" class="noti-tab-content active">
+                <div class="noti-item unread">
+                  <div class="noti-item-icon blue">📢</div>
+                  <div class="noti-item-body">
+                    <div class="noti-item-title">Cập nhật đặc tả Payment Link & VietQR Global 2.0</div>
+                    <div class="noti-item-desc">Finviet vừa nâng cấp tính năng phát hành Payment Link đơn lẻ & hàng loạt với hạn mức SMS tự động.</div>
+                    <div class="noti-item-time">10 phút trước</div>
+                  </div>
+                </div>
+                <div class="noti-item unread">
+                  <div class="noti-item-icon green">🎁</div>
+                  <div class="noti-item-body">
+                    <div class="noti-item-title">Chương trình ưu đãi phí giao dịch VietQR 0%</div>
+                    <div class="noti-item-desc">Áp dụng ưu đãi miễn phí giao dịch quét mã VietQR cho toàn bộ các chi nhánh thuộc CÔNG TY TNHH ABC.</div>
+                    <div class="noti-item-time">2 giờ trước</div>
+                  </div>
+                </div>
+                <div class="noti-item">
+                  <div class="noti-item-icon purple">🔧</div>
+                  <div class="noti-item-body">
+                    <div class="noti-item-title">Thông báo bảo trì cổng thanh toán Napas</div>
+                    <div class="noti-item-desc">Hệ thống Napas bảo trì định kỳ từ 02:00 đến 03:00 ngày 22/08/2026. Các giao dịch VietQR vẫn hoạt động bình thường.</div>
+                    <div class="noti-item-time">Hôm qua</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2 Content: Doanh nghiệp -->
+              <div id="notiTabEnterprise" class="noti-tab-content" style="display:none;">
+                <div class="noti-item unread">
+                  <div class="noti-item-icon orange">⚠️</div>
+                  <div class="noti-item-body">
+                    <div class="noti-item-title">Cảnh báo Hạn mức SMS tại Chi nhánh Quận 1</div>
+                    <div class="noti-item-desc">Số dư Quota SMS tại Chi nhánh Quận 1 sắp hết (còn lại 380 tin). Vui lòng điều chuyển hạn mức.</div>
+                    <div class="noti-item-time">30 phút trước</div>
+                  </div>
+                </div>
+                <div class="noti-item">
+                  <div class="noti-item-icon green">💰</div>
+                  <div class="noti-item-body">
+                    <div class="noti-item-title">Giao dịch giá trị lớn phát sinh (1.500.000 VNĐ)</div>
+                    <div class="noti-item-desc">Chi nhánh Hải Châu vừa hoàn tất giao dịch thanh toán qua thẻ Visa/Mastercard.</div>
+                    <div class="noti-item-time">3 giờ trước</div>
+                  </div>
+                </div>
+                <div class="noti-item">
+                  <div class="noti-item-icon blue">🏪</div>
+                  <div class="noti-item-body">
+                    <div class="noti-item-title">Chi nhánh Hoàn Kiếm hoàn tất kết ca</div>
+                    <div class="noti-item-desc">Cửa hàng trưởng Trần Văn Nam đã chốt két ca thành công. Số dư két: 5.450.000 VNĐ.</div>
+                    <div class="noti-item-time">18/08/2026</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="noti-popover-footer">
+                <a href="javascript:void(0)" onclick="showToast('Mở trang xem toàn bộ lịch sử thông báo hệ thống')">Xem tất cả thông báo ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Renderer Container -->
+      <main class="content-area">
+        <div id="dashboardViewContainer">
+          <!-- Dashboard Header -->
+          <div class="dashboard-header-bar">
+            <div class="dashboard-title-group">
+              <h1 data-i18n="dashboardTitle">Hiệu Suất Kinh Doanh Doanh Nghiệp</h1>
+              <div class="merchant-subtitle">Cập nhật lúc: 20/08/2026 14:00 🔄</div>
+            </div>
+
+            <!-- Toolbar Filters & Actions -->
+            <div class="dashboard-toolbar">
+              <button id="btnCreatePaylinkOverview" class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="display:inline-flex; align-items:center; font-weight:700; padding:8px 16px;">
+                <span>Tạo Yêu Cầu Thanh Toán</span>
+              </button>
+
+              <div class="refresh-group">
+                <button id="btnRefresh" class="btn-refresh" title="Làm mới dữ liệu">
+                  <span data-i18n="btnRefresh">Làm mới</span>
+                </button>
+              </div>
+
+              <!-- Filter thời gian toolbar -->
+              <div class="time-filter-buttons">
+                <button class="time-btn" data-period="today" data-i18n="filterToday">Hôm nay</button>
+                <button class="time-btn active" data-period="thisWeek" data-i18n="filterThisWeek">Tuần này</button>
+                <button class="time-btn" data-period="thisMonth" data-i18n="filterThisMonth">Tháng này</button>
+                <button id="btnDateFilter" class="time-btn" title="Chọn khoảng thời gian mong muốn">Tùy chọn</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI Metric Cards Grid -->
+          <div class="kpi-cards-grid">
+            <!-- 1. Doanh thu tổng -->
+            <div class="kpi-card card-revenue">
+              <div class="kpi-content">
+                <span id="kpiRevenueTitleText" class="kpi-title" data-i18n="kpiRevenueTitle">Doanh Thu Tuần Này</span>
+                <span id="kpiRevenueVal" class="kpi-value">1,245,000,000 đ</span>
+                <div class="kpi-delta-row">
+                  <span id="kpiRevenueDelta" class="delta-badge up-green">▲ +12.5%</span>
+                  <span class="delta-label" data-i18n="vsPreviousPeriod">so với kỳ trước</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Giao dịch thành công -->
+            <div class="kpi-card card-success">
+              <div class="kpi-content">
+                <span class="kpi-title" data-i18n="kpiSuccessTitle">Giao Dịch Thành Công</span>
+                <span id="kpiSuccessVal" class="kpi-value">12,458</span>
+                <div class="kpi-delta-row">
+                  <span id="kpiSuccessDelta" class="delta-badge up-green">▲ +10.4%</span>
+                  <span class="delta-label" data-i18n="vsPreviousPeriod">so với kỳ trước</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Giao dịch thất bại -->
+            <div class="kpi-card card-failed">
+              <div class="kpi-content">
+                <span class="kpi-title" data-i18n="kpiFailedTitle">Giao Dịch Thất Bại</span>
+                <span id="kpiFailedVal" class="kpi-value">8,752</span>
+                <div class="kpi-delta-row">
+                  <span id="kpiFailedDelta" class="delta-badge up-green">▼ 10.8%</span>
+                  <span class="delta-label" data-i18n="vsPreviousPeriod">so với kỳ trước</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Layout Grid -->
+          <div class="charts-grid-main">
+            <!-- Left: Biểu đồ doanh thu 7 ngày / 30 ngày -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <h2 class="chart-title" data-i18n="chartRevenueTitle">Xu Hướng Doanh Thu Theo Thời Gian</h2>
+                <div class="chart-toggle-group">
+                  <button class="chart-toggle-btn active" data-days="7" data-i18n="chart7Days">7 ngày</button>
+                  <button class="chart-toggle-btn" data-days="30" data-i18n="chart30Days">30 ngày</button>
+                </div>
+              </div>
+              <div class="chart-body-wrapper">
+                <canvas id="revenueTrendChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Right: Phân Bổ Doanh Thu Theo Kênh Thanh Toán -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <h2 class="chart-title" data-i18n="chartChannelTitle">Phân Bổ Doanh Thu Theo Kênh</h2>
+              </div>
+              <div class="donut-container">
+                <canvas id="channelDonutChart"></canvas>
+                <div class="donut-center-info">
+                  <div class="center-label" data-i18n="centerTotalGmv">Tổng GMV</div>
+                  <div id="donutCenterAmount" class="center-amount">1.24 Tỷ</div>
+                </div>
+              </div>
+              <div id="channelLegendContainer" class="channel-legend-container"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Widgets Row (UC-DB-06, UC-DB-11) -->
+          <div class="tables-grid-row">
+            <!-- Left: Giao Dịch Gần Đây -->
+            <div class="table-card">
+              <div class="table-header">
+                <h2 class="table-title" data-i18n="recentTxnsTitle">Giao Dịch Gần Đây</h2>
+                <a href="javascript:void(0)" class="link-view-all" onclick="navigateToPage('pay-txns'); return false;" data-i18n="viewAll">Xem tất cả ></a>
+              </div>
+              <table class="portal-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="colTime">THỜI GIAN</th>
+                    <th data-i18n="colTxnId">MÃ GIAO DỊCH</th>
+                    <th data-i18n="colMethod">PHƯƠNG THỨC</th>
+                    <th data-i18n="colAmount">SỐ TIỀN</th>
+                  </tr>
+                </thead>
+                <tbody id="recentTxnsTbody"></tbody>
+              </table>
+            </div>
+
+            <!-- Right: Top Cửa Hàng Theo Doanh Thu (UC-DB-11) -->
+            <div class="table-card">
+              <div class="table-header">
+                <h2 class="table-title" data-i18n="topStoresTitle">Top Cửa Hàng Theo Doanh Thu</h2>
+                <a href="javascript:void(0)" class="link-view-all" onclick="navigateToPage('stores'); return false;" data-i18n="viewAll">Xem tất cả ></a>
+              </div>
+              <div id="topStoresListContainer" class="top-stores-list"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Yêu cầu điều chỉnh thông tin (UC-DN-006) & Date Range Picker & Txn Details -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="modalTitleText" class="modal-title">Chi Tiết Giao Dịch</h3>
+        <button id="btnCloseModal" class="btn-close-modal">&times;</button>
+      </div>
+      <div id="modalBodyContent" class="modal-body"></div>
+      <div class="modal-footer">
+        <button id="btnFooterClose" class="btn-secondary" data-i18n="btnClose">Đóng</button>
+        <button id="btnFooterAction" class="btn-primary" data-i18n="applyFilter">Áp dụng</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- App Scripts -->
+  <script src="js/i18n.js?v=2.3"></script>
+  <script src="js/mockData.js?v=2.3"></script>
+  <script src="js/charts.js?v=2.3"></script>
+  <script src="js/viewRenderer.js?v=2.3"></script>
+  <script src="js/app.js?v=2.3"></script>
+</body>
+</html>
