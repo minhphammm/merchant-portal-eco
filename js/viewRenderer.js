@@ -113,7 +113,7 @@ const ViewRenderer = {
 
         <div class="enterprise-cards-grid">
           <div class="table-card">
-            <h3 class="card-section-title">🏢 Thông Tin Doanh Nghiệp (Pháp Nhân)</h3>
+            <h3 class="card-section-title"><i data-lucide="building-2" style="width:16px; height:16px; margin-right:6px; color:var(--color-primary);"></i> Thông Tin Doanh Nghiệp (Pháp Nhân)</h3>
             <div class="detail-row"><span class="detail-label">Loại hình doanh nghiệp:</span><span class="detail-val">Công ty TNHH 2 TV trở lên</span></div>
             <div class="detail-row"><span class="detail-label">Mã số thuế:</span><span class="detail-val">0101234567</span></div>
             <div class="detail-row"><span class="detail-label">Vốn điều lệ:</span><span class="detail-val" style="color:var(--color-primary);">810,000,000,000 VNĐ</span></div>
@@ -122,12 +122,12 @@ const ViewRenderer = {
             <div class="detail-row"><span class="detail-label">Ngày thành lập:</span><span class="detail-val">15/03/2022</span></div>
 
             <div class="info-banner-blue">
-              ℹ️ Thông tin doanh nghiệp được quản lý bởi Finviet. Để cập nhật, vui lòng gửi yêu cầu điều chỉnh thông tin.
+              <i data-lucide="info" style="width:16px; height:16px; margin-right:6px; color:var(--color-primary); flex-shrink:0;"></i> Thông tin doanh nghiệp được quản lý bởi Finviet. Để cập nhật, vui lòng gửi yêu cầu điều chỉnh thông tin.
             </div>
           </div>
 
           <div class="table-card">
-            <h3 class="card-section-title">👤 Người Liên Hệ Chính</h3>
+            <h3 class="card-section-title"><i data-lucide="user-check" style="width:16px; height:16px; margin-right:6px; color:var(--color-primary);"></i> Người Liên Hệ Chính</h3>
             <div class="detail-row"><span class="detail-label">Họ và tên:</span><span class="detail-val">Nguyễn Văn A</span></div>
             <div class="detail-row"><span class="detail-label">Chức vụ:</span><span class="detail-val">Giám đốc</span></div>
             <div class="detail-row"><span class="detail-label">Số điện thoại:</span><span class="detail-val">0901234567</span></div>
@@ -135,30 +135,30 @@ const ViewRenderer = {
           </div>
 
           <div class="table-card">
-            <h3 class="card-section-title">📄 Hồ Sơ Pháp Lý</h3>
+            <h3 class="card-section-title"><i data-lucide="file-text" style="width:16px; height:16px; margin-right:6px; color:var(--color-primary);"></i> Hồ Sơ Pháp Lý</h3>
             <div class="legal-docs-list">
               <div class="doc-file-item">
-                <span class="file-icon">📄</span>
+                <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">1. Giấy chứng nhận đăng ký doanh nghiệp</span>
                 <a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Xem file Giấy chứng nhận ĐKDN'); return false;">Xem</a>
               </div>
               <div class="doc-file-item">
-                <span class="file-icon">📄</span>
+                <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">2. Giấy chứng nhận mã số thuế</span>
                 <a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Xem file Giấy chứng nhận MST'); return false;">Xem</a>
               </div>
               <div class="doc-file-item">
-                <span class="file-icon">📄</span>
+                <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">3. Điều lệ công ty</span>
                 <a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Xem file Điều lệ công ty'); return false;">Xem</a>
               </div>
               <div class="doc-file-item">
-                <span class="file-icon">📄</span>
+                <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">4. Giấy ủy quyền (nếu có)</span>
                 <a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Xem file Giấy ủy quyền'); return false;">Xem</a>
               </div>
               <div class="doc-file-item">
-                <span class="file-icon">📄</span>
+                <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">5. CMND/CCCD người đại diện</span>
                 <a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Xem file CMND/CCCD'); return false;">Xem</a>
               </div>
@@ -168,7 +168,7 @@ const ViewRenderer = {
 
         <div class="table-card" style="margin-top:20px;">
           <div class="table-header">
-            <h3 class="table-title">🏦 Tài Khoản Nhận Tiền</h3>
+            <h3 class="table-title"><i data-lucide="landmark" style="width:16px; height:16px; margin-right:6px; color:var(--color-primary);"></i> Tài Khoản Nhận Tiền</h3>
           </div>
           <table class="portal-table">
             <thead>
@@ -183,13 +183,13 @@ const ViewRenderer = {
               <tr>
                 <td><strong>TK chính - Techcombank</strong></td>
                 <td><span class="txn-code">1905 **** **** 1234</span></td>
-                <td>🏦 Ngân hàng TMCP Kỹ thương Việt Nam (Techcombank)</td>
+                <td><i data-lucide="building" style="width:14px; height:14px; margin-right:4px; color:var(--text-muted);"></i> Ngân hàng TMCP Kỹ thương Việt Nam (Techcombank)</td>
                 <td><span class="status-badge badge-success">Mặc định</span></td>
               </tr>
               <tr>
                 <td><strong>TK phụ - Vietcombank</strong></td>
                 <td><span class="txn-code">0011 **** **** 5678</span></td>
-                <td>🏦 Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)</td>
+                <td><i data-lucide="building" style="width:14px; height:14px; margin-right:4px; color:var(--text-muted);"></i> Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)</td>
                 <td><span class="status-badge badge-processing">Tài khoản phụ</span></td>
               </tr>
             </tbody>
@@ -656,14 +656,14 @@ const ViewRenderer = {
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý và tra cứu chi tiết danh sách các giao dịch thanh toán thuộc hệ thống Ecopay FinViet.</p>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo giao dịch thanh toán Excel...')">📥 Xuất Excel</button>
+          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo giao dịch thanh toán Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel</button>
         </div>
       </div>
 
       <!-- MỤC TÌM KIẾM -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          🔍 Mục Tìm Kiếm
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
         </div>
         <form id="txnFilterForm" onsubmit="return false;">
           <!-- 5 Primary Search Fields (1 Full Row - 5 Columns) -->
@@ -770,7 +770,7 @@ const ViewRenderer = {
               <label>Ngày tạo</label>
               <div class="date-range-input-box">
                 <input type="text" id="filterCreatedDate" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                <span>📅</span>
+                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -779,7 +779,7 @@ const ViewRenderer = {
               <label>Thời gian đối tác thanh toán</label>
               <div class="date-range-input-box">
                 <input type="text" id="filterPartnerPayTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                <span>📅</span>
+                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -788,7 +788,7 @@ const ViewRenderer = {
               <label>Thời gian thanh toán doanh nghiệp</label>
               <div class="date-range-input-box">
                 <input type="text" id="filterMerchantPayTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                <span>📅</span>
+                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
           </div>
@@ -934,14 +934,14 @@ const ViewRenderer = {
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý và tra cứu thông tin chi tiết các yêu cầu hoàn tiền trong hệ thống.</p>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo giao dịch hoàn tiền Excel...')">📥 Xuất Excel</button>
+          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo giao dịch hoàn tiền Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel</button>
         </div>
       </div>
 
       <!-- MỤC TÌM KIẾM -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          🔍 Mục Tìm Kiếm
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
         </div>
         <form id="refundFilterForm" onsubmit="return false;">
           <!-- HÀNG 1: 5 PRIMARY SEARCH FIELDS (CHƯA DROPDOWN - LƯỚI 5 CỘT) -->
@@ -1061,7 +1061,7 @@ const ViewRenderer = {
                 <label>Ngày tạo</label>
                 <div class="date-range-input-box">
                   <input type="text" id="filterRefundCreatedDate" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                  <span>📅</span>
+                  <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
                 </div>
               </div>
 
@@ -1070,7 +1070,7 @@ const ViewRenderer = {
                 <label>Thời gian phê duyệt</label>
                 <div class="date-range-input-box">
                   <input type="text" id="filterRefundApprovedTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                  <span>📅</span>
+                  <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
                 </div>
               </div>
 
@@ -1079,7 +1079,7 @@ const ViewRenderer = {
                 <label>Thời gian thanh toán doanh nghiệp</label>
                 <div class="date-range-input-box">
                   <input type="text" id="filterRefundMerchantPayTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                  <span>📅</span>
+                  <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
                 </div>
               </div>
             </div>
