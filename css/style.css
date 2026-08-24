@@ -320,10 +320,18 @@ body {
   color: #F8FAFC;
 }
 
-.nav-item.active > .nav-link {
+.nav-item.active:not(.has-dropdown) > .nav-link {
   background-color: var(--color-primary);
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.35);
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.35);
+}
+
+.nav-item.has-dropdown.active > .nav-link {
+  background-color: rgba(22, 119, 255, 0.14);
+  color: #60A5FA;
+  font-weight: 600;
+  box-shadow: none;
+  border-left: 3px solid var(--color-primary);
 }
 
 .nav-icon {
@@ -378,6 +386,7 @@ body {
   color: #FFFFFF;
   background-color: var(--color-primary);
   font-weight: 700;
+  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.3);
 }
 
 /* Tooltip on Collapsed Sidebar Module Hover */
