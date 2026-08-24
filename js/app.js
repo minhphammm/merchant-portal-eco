@@ -2090,23 +2090,23 @@ document.addEventListener('DOMContentLoaded', () => {
           <div id="storeTabBasicContent" style="display:block;">
             <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
               <div class="form-group-field" style="grid-column: 1 / -1;">
-                <label style="font-weight:700;">1. Tên doanh nghiệp (🔒 Mặc định)</label>
-                <input type="text" id="editStoreEnterprise" value="Công ty TNHH GF Capital Việt Nam" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:#F1F5F9; color:#475569; cursor:not-allowed;" title="Mặc định Tên doanh nghiệp hiện tại">
+                <label style="font-weight:700;">Tên doanh nghiệp *</label>
+                <input type="text" id="editStoreEnterprise" value="Công ty TNHH GF Capital Việt Nam" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:#F1F5F9; color:#475569; cursor:not-allowed;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">2. Mã cửa hàng (🔒 Chỉ đọc)</label>
-                <input type="text" id="editStoreCode" value="${item.storeCode}" readonly style="background:#F1F5F9; font-weight:700; color:var(--color-primary); cursor:not-allowed;" title="Chỉ trừ trường Mã cửa hàng, còn lại đều được phép chỉnh sửa">
+                <label style="font-weight:700;">Mã cửa hàng</label>
+                <input type="text" id="editStoreCode" value="${item.storeCode}" readonly style="background:#F1F5F9; font-weight:700; color:var(--color-primary); cursor:not-allowed;">
               </div>
               <div class="form-group-field" style="grid-column: 1 / -1;">
-                <label style="font-weight:700;">3. Tên cửa hàng *</label>
+                <label style="font-weight:700;">Tên cửa hàng *</label>
                 <input type="text" id="editStoreName" value="${item.storeName}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">4. Số điện thoại quản lý cửa hàng</label>
+                <label style="font-weight:700;">Số điện thoại quản lý cửa hàng</label>
                 <input type="text" id="editStorePhone" value="${item.storePhone}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">5. Tỉnh / Thành phố *</label>
+                <label style="font-weight:700;">Tỉnh / Thành phố *</label>
                 <select id="editStoreProvince" onchange="handleEditProvinceChange(this.value)" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
                   <option value="HCM" selected>Thành phố Hồ Chí Minh</option>
                   <option value="HN">Thành phố Hà Nội</option>
@@ -2115,7 +2115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </select>
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">6. Phường / Xã *</label>
+                <label style="font-weight:700;">Phường / Xã *</label>
                 <select id="editStoreWard" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
                   <option value="BenThanh" selected>Phường Bến Thành (Quận 1)</option>
                   <option value="BenNghe">Phường Bến Nghé (Quận 1)</option>
@@ -2123,44 +2123,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 </select>
               </div>
               <div class="form-group-field" style="grid-column: 1 / -1;">
-                <label style="font-weight:700;">7. Địa chỉ chi tiết *</label>
+                <label style="font-weight:700;">Địa chỉ chi tiết *</label>
                 <input type="text" id="editStoreAddress" value="${item.address}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">8. Mã định danh QR code</label>
+                <label style="font-weight:700;">Mã định danh QR code</label>
                 <input type="text" id="editStoreQr" value="${item.qrIdentifierCode}" style="font-family:monospace; width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">9. Mã thiết bị POS/EDC</label>
+                <label style="font-weight:700;">Mã thiết bị POS/EDC</label>
                 <input type="text" id="editStoreDevice" value="${item.deviceCode}" style="font-family:monospace; width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">10. Loại hình kinh doanh</label>
+                <label style="font-weight:700;">Loại hình kinh doanh</label>
                 <input type="text" id="editStoreBizType" value="${item.businessType}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">11. Hình thức thanh toán</label>
+                <label style="font-weight:700;">Hình thức thanh toán</label>
                 <input type="text" id="editStorePayMethod" value="${item.paymentMethodType}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">12. Tài khoản thanh toán</label>
+                <label style="font-weight:700;">Tài khoản thanh toán</label>
                 <input type="text" id="editStorePayAccount" value="${item.paymentAccount}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">13. Số ví ECO</label>
+                <label style="font-weight:700;">Số ví ECO</label>
                 <input type="text" id="editStoreEcoWallet" value="${item.ecoWalletNumber}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">14. Số điện thoại sale phụ trách</label>
+                <label style="font-weight:700;">Số điện thoại sale phụ trách</label>
                 <input type="text" id="editStoreSalesPhone" value="${item.salesPhone}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label style="font-weight:700;">15. Phương thức đối soát</label>
+                <label style="font-weight:700;">Phương thức đối soát</label>
                 <input type="text" id="editStoreReconcileMethod" value="${item.reconciliationMethod}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
-            </div>
-            <div style="font-size:11.5px; color:var(--text-muted); margin-top:8px;">
-              💡 <em>Lưu ý (PRD UC-3 Update Rule): Tất cả thông tin của cửa hàng đều được phép chỉnh sửa ngoại trừ <strong>Mã cửa hàng (${item.storeCode})</strong>.</em>
             </div>
           </div>
 
@@ -2329,22 +2326,22 @@ document.addEventListener('DOMContentLoaded', () => {
           <!-- Form Fields Grid -->
           <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:18px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
             <div class="form-group-field" style="grid-column: 1 / -1;">
-              <label style="font-weight:700;">1. Tên doanh nghiệp (🔒 Mặc định)</label>
-              <input type="text" id="createStoreEnterprise" value="Công ty TNHH GF Capital Việt Nam" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:#F1F5F9; color:#475569; cursor:not-allowed;" title="Mặc định Tên doanh nghiệp hiện tại">
+              <label style="font-weight:700;">Tên doanh nghiệp <span style="color:#FF4D4F;">*</span></label>
+              <input type="text" id="createStoreEnterprise" value="Công ty TNHH GF Capital Việt Nam" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:#F1F5F9; color:#475569; cursor:not-allowed;">
             </div>
 
             <div class="form-group-field">
-              <label style="font-weight:700;">2. Tên cửa hàng <span style="color:#FF4D4F;">*</span></label>
+              <label style="font-weight:700;">Tên cửa hàng <span style="color:#FF4D4F;">*</span></label>
               <input type="text" id="createStoreName" placeholder="Vui lòng nhập tên cửa hàng" maxlength="200" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
             </div>
 
             <div class="form-group-field">
-              <label style="font-weight:700;">3. Số điện thoại quản lý</label>
+              <label style="font-weight:700;">Số điện thoại quản lý</label>
               <input type="text" id="createStoreManagerPhone" placeholder="Vui lòng nhập số điện thoại" maxlength="11" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
             </div>
 
             <div class="form-group-field">
-              <label style="font-weight:700;">4. Tỉnh / Thành phố <span style="color:#FF4D4F;">*</span></label>
+              <label style="font-weight:700;">Tỉnh / Thành phố <span style="color:#FF4D4F;">*</span></label>
               <select id="createStoreProvince" onchange="handleProvinceChange(this.value)" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
                 <option value="">Vui lòng tìm và chọn tỉnh/thành phố</option>
                 <option value="HCM">Thành phố Hồ Chí Minh</option>
@@ -2355,20 +2352,16 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <div class="form-group-field">
-              <label style="font-weight:700;">5. Phường / Xã <span style="color:#FF4D4F;">*</span></label>
+              <label style="font-weight:700;">Phường / Xã <span style="color:#FF4D4F;">*</span></label>
               <select id="createStoreWard" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
                 <option value="">Vui lòng tìm và chọn phường/xã</option>
               </select>
             </div>
 
             <div class="form-group-field" style="grid-column: 1 / -1;">
-              <label style="font-weight:700;">6. Địa chỉ chi tiết <span style="color:#FF4D4F;">*</span></label>
+              <label style="font-weight:700;">Địa chỉ chi tiết <span style="color:#FF4D4F;">*</span></label>
               <input type="text" id="createStoreAddress" placeholder="VD: tên tòa nhà, số nhà, tên đường" maxlength="200" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
             </div>
-          </div>
-
-          <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
-            💡 <em>Lưu ý (PRD UC-3): Khi tạo mới thành công, Cửa hàng được tự động khởi tạo ở trạng thái <strong>Không hoạt động</strong>. Bán hàng/Admin có thể phê duyệt kích hoạt sau.</em>
           </div>
         </div>
       `;
