@@ -2031,6 +2031,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  window.handleEditProvinceChange = function(provinceVal) {
+    const wardSelect = document.getElementById('editStoreWard');
+    if (!wardSelect) return;
+    
+    if (!provinceVal) {
+      wardSelect.innerHTML = '<option value="">Vui lòng tìm và chọn phường/xã</option>';
+      return;
+    }
+
+    if (provinceVal === 'HCM') {
+      wardSelect.innerHTML = `
+        <option value="BenThanh" selected>Phường Bến Thành (Quận 1)</option>
+        <option value="BenNghe">Phường Bến Nghé (Quận 1)</option>
+        <option value="Phuong6Q3">Phường 6 (Quận 3)</option>
+        <option value="Phuong11Q10">Phường 11 (Quận 10)</option>
+      `;
+    } else if (provinceVal === 'HN') {
+      wardSelect.innerHTML = `
+        <option value="HangBac" selected>Phường Hàng Bạc (Q. Hoàn Kiếm)</option>
+        <option value="TrangTien">Phường Tràng Tiền (Q. Hoàn Kiếm)</option>
+        <option value="KimLien">Phường Kim Liên (Q. Đống Đa)</option>
+      `;
+    } else if (provinceVal === 'DN') {
+      wardSelect.innerHTML = `
+        <option value="HaiChau1" selected>Phường Hải Châu 1 (Q. Hải Châu)</option>
+        <option value="PhuocNinh">Phường Phước Ninh (Q. Hải Châu)</option>
+      `;
+    } else {
+      wardSelect.innerHTML = `
+        <option value="TanAn" selected>Phường Tân An (Q. Ninh Kiều)</option>
+        <option value="AnCu">Phường An Cư (Q. Ninh Kiều)</option>
+      `;
+    }
+  };
+
   window.openStoreDetailModal = function(stt) {
     const list = MockData.getStoresData ? MockData.getStoresData() : [];
     const item = list.find(r => r.stt === stt) || list[0];
@@ -2067,82 +2102,80 @@ document.addEventListener('DOMContentLoaded', () => {
           <div id="storeTabBasicContent" style="display:block;">
             <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
               <div class="form-group-field">
-                <label>Tên doanh nghiệp *</label>
-                <input type="text" value="Công ty TNHH GF Capital Việt Nam (GFCAPITAL)" readonly style="background:#FFF;">
-              </div>
-              <div class="form-group-field">
-                <label>Tên cửa hàng *</label>
-                <input type="text" value="${item.storeName}">
-              </div>
-              <div class="form-group-field">
-                <label>Mã cửa hàng</label>
-                <input type="text" value="${item.storeCode}" readonly style="background:#FFF; font-weight:700; color:var(--color-primary);">
-              </div>
-              <div class="form-group-field">
-                <label>Số điện thoại quản lý cửa hàng</label>
-                <input type="text" value="${item.storePhone}">
-              </div>
-              <div class="form-group-field">
-                <label>Tỉnh / Thành phố *</label>
-                <select>
-                  <option selected>Thành phố Hồ Chí Minh</option>
-                  <option>Thành phố Hà Nội</option>
-                  <option>Thành phố Đà Nẵng</option>
-                  <option>Thành phố Cần Thơ</option>
+                <label style="font-weight:700;">1. Tên doanh nghiệp *</label>
+                <select id="editStoreEnterprise" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+                  <option value="GFCAPITAL" selected>Công ty TNHH GF Capital Việt Nam (GFCAPITAL)</option>
+                  <option value="ECOPAY">Công ty Cổ phần ECOPAY Việt Nam (ECOPAY)</option>
                 </select>
               </div>
               <div class="form-group-field">
-                <label>Phường / Xã *</label>
-                <select>
-                  <option selected>Phường Bến Thành</option>
-                  <option>Phường Hàng Bạc</option>
-                  <option>Phường Hải Châu 1</option>
+                <label style="font-weight:700;">2. Mã cửa hàng (🔒 Chỉ đọc)</label>
+                <input type="text" id="editStoreCode" value="${item.storeCode}" readonly style="background:#F1F5F9; font-weight:700; color:var(--color-primary); cursor:not-allowed;" title="Chỉ trừ trường Mã cửa hàng, còn lại đều được phép chỉnh sửa">
+              </div>
+              <div class="form-group-field" style="grid-column: 1 / -1;">
+                <label style="font-weight:700;">3. Tên cửa hàng *</label>
+                <input type="text" id="editStoreName" value="${item.storeName}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+              </div>
+              <div class="form-group-field">
+                <label style="font-weight:700;">4. Số điện thoại quản lý cửa hàng</label>
+                <input type="text" id="editStorePhone" value="${item.storePhone}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+              </div>
+              <div class="form-group-field">
+                <label style="font-weight:700;">5. Tỉnh / Thành phố *</label>
+                <select id="editStoreProvince" onchange="handleEditProvinceChange(this.value)" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+                  <option value="HCM" selected>Thành phố Hồ Chí Minh</option>
+                  <option value="HN">Thành phố Hà Nội</option>
+                  <option value="DN">Thành phố Đà Nẵng</option>
+                  <option value="CT">Thành phố Cần Thơ</option>
+                </select>
+              </div>
+              <div class="form-group-field">
+                <label style="font-weight:700;">6. Phường / Xã *</label>
+                <select id="editStoreWard" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+                  <option value="BenThanh" selected>Phường Bến Thành (Quận 1)</option>
+                  <option value="BenNghe">Phường Bến Nghé (Quận 1)</option>
+                  <option value="Phuong6Q3">Phường 6 (Quận 3)</option>
                 </select>
               </div>
               <div class="form-group-field" style="grid-column: 1 / -1;">
-                <label>Địa chỉ chi tiết *</label>
-                <input type="text" value="${item.address}">
+                <label style="font-weight:700;">7. Địa chỉ chi tiết *</label>
+                <input type="text" id="editStoreAddress" value="${item.address}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Mã định danh QR code</label>
-                <input type="text" value="${item.qrIdentifierCode}" style="font-family:monospace;">
+                <label style="font-weight:700;">8. Mã định danh QR code</label>
+                <input type="text" id="editStoreQr" value="${item.qrIdentifierCode}" style="font-family:monospace; width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Mã thiết bị POS/EDC</label>
-                <input type="text" value="${item.deviceCode}" style="font-family:monospace;">
+                <label style="font-weight:700;">9. Mã thiết bị POS/EDC</label>
+                <input type="text" id="editStoreDevice" value="${item.deviceCode}" style="font-family:monospace; width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Loại hình kinh doanh</label>
-                <input type="text" value="${item.businessType}">
+                <label style="font-weight:700;">10. Loại hình kinh doanh</label>
+                <input type="text" id="editStoreBizType" value="${item.businessType}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Hình thức thanh toán</label>
-                <input type="text" value="${item.paymentMethodType}">
+                <label style="font-weight:700;">11. Hình thức thanh toán</label>
+                <input type="text" id="editStorePayMethod" value="${item.paymentMethodType}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Tài khoản thanh toán</label>
-                <input type="text" value="${item.paymentAccount}">
+                <label style="font-weight:700;">12. Tài khoản thanh toán</label>
+                <input type="text" id="editStorePayAccount" value="${item.paymentAccount}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Số ví ECO</label>
-                <input type="text" value="${item.ecoWalletNumber}">
+                <label style="font-weight:700;">13. Số ví ECO</label>
+                <input type="text" id="editStoreEcoWallet" value="${item.ecoWalletNumber}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Số điện thoại sale phụ trách</label>
-                <input type="text" value="${item.salesPhone}">
+                <label style="font-weight:700;">14. Số điện thoại sale phụ trách</label>
+                <input type="text" id="editStoreSalesPhone" value="${item.salesPhone}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
               <div class="form-group-field">
-                <label>Phương thức đối soát</label>
-                <input type="text" value="${item.reconciliationMethod}">
+                <label style="font-weight:700;">15. Phương thức đối soát</label>
+                <input type="text" id="editStoreReconcileMethod" value="${item.reconciliationMethod}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
               </div>
-              <div class="form-group-field">
-                <label>Ngày tạo</label>
-                <input type="text" value="${item.createdDate}" readonly style="background:#FFF;">
-              </div>
-              <div class="form-group-field">
-                <label>Ngày duyệt</label>
-                <input type="text" value="${item.approvedDate}" readonly style="background:#FFF;">
-              </div>
+            </div>
+            <div style="font-size:11.5px; color:var(--text-muted); margin-top:8px;">
+              💡 <em>Lưu ý (PRD UC-3 Update Rule): Tất cả thông tin của cửa hàng đều được phép chỉnh sửa ngoại trừ <strong>Mã cửa hàng (${item.storeCode})</strong>.</em>
             </div>
           </div>
 
@@ -2217,9 +2250,35 @@ document.addEventListener('DOMContentLoaded', () => {
       btnAction.style.display = 'inline-block';
       btnAction.textContent = 'Lưu Cập Nhật Thông Tin & Cấu Hình';
       btnAction.onclick = function() {
-        showToast(`Đã lưu cập nhật thông tin & cấu hình cửa hàng ${item.storeName} thành công!`);
+        const newName = document.getElementById('editStoreName')?.value?.trim();
+        const newPhone = document.getElementById('editStorePhone')?.value?.trim();
+        const newAddress = document.getElementById('editStoreAddress')?.value?.trim();
+        const newQr = document.getElementById('editStoreQr')?.value?.trim();
+        const newDevice = document.getElementById('editStoreDevice')?.value?.trim();
+        const newBizType = document.getElementById('editStoreBizType')?.value?.trim();
+        const newPayMethod = document.getElementById('editStorePayMethod')?.value?.trim();
+        const newPayAccount = document.getElementById('editStorePayAccount')?.value?.trim();
+        const newEcoWallet = document.getElementById('editStoreEcoWallet')?.value?.trim();
+        const newSalesPhone = document.getElementById('editStoreSalesPhone')?.value?.trim();
+        const newReconcileMethod = document.getElementById('editStoreReconcileMethod')?.value?.trim();
+
+        if (newName) item.storeName = newName;
+        if (newPhone) item.storePhone = newPhone;
+        if (newAddress) item.address = newAddress;
+        if (newQr) item.qrIdentifierCode = newQr;
+        if (newDevice) item.deviceCode = newDevice;
+        if (newBizType) item.businessType = newBizType;
+        if (newPayMethod) item.paymentMethodType = newPayMethod;
+        if (newPayAccount) item.paymentAccount = newPayAccount;
+        if (newEcoWallet) item.ecoWalletNumber = newEcoWallet;
+        if (newSalesPhone) item.salesPhone = newSalesPhone;
+        if (newReconcileMethod) item.reconciliationMethod = newReconcileMethod;
+
         const modalOverlay = document.getElementById('modalOverlay');
         if (modalOverlay) modalOverlay.classList.remove('show');
+
+        showToast(`🎉 Đã lưu cập nhật thông tin cửa hàng "${item.storeName}" thành công!`);
+        if (window.renderPage) window.renderPage('stores');
       };
     }
 
