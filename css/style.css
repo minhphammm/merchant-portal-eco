@@ -72,6 +72,60 @@ body {
   flex-shrink: 0;
 }
 
+/* Ant Design Form Controls & Dropdown Select Styling */
+.form-group-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #595959;
+}
+
+.form-group-field input,
+.form-group-field select,
+select {
+  height: 36px;
+  padding: 5px 11px;
+  font-size: 13.5px;
+  color: rgba(0, 0, 0, 0.88);
+  background-color: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  width: 100%;
+}
+
+.form-group-field select,
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238c8c8c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-size: 14px;
+  padding-right: 32px !important;
+  cursor: pointer !important;
+}
+
+.form-group-field select:hover,
+select:hover {
+  border-color: #4096ff !important;
+}
+
+.form-group-field select:focus,
+select:focus,
+.form-group-field input:focus,
+input:focus {
+  border-color: #1677ff !important;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1) !important;
+  outline: none !important;
+}
+
 #app {
   display: flex;
   min-height: 100vh;
