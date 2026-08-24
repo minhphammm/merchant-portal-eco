@@ -2080,18 +2080,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalBody) {
       modalBody.innerHTML = `
         <div style="display:flex; flex-direction:column; gap:16px; text-align:left; font-size:13px;">
-          <!-- Banner Header Info -->
-          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:12px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:12px; color:var(--text-muted);">Mã cửa hàng & Tên cửa hàng</div>
-              <div style="font-size:15px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.storeCode} — ${item.storeName}</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:12px; color:var(--text-muted);">Trạng thái cửa hàng</div>
-              <div style="margin-top:2px;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
-            </div>
-          </div>
-
           <!-- TAB SWITCHER NAVIGATION (PRD UC-3 Specs) -->
           <div style="display:flex; gap:20px; border-bottom:1px solid var(--border-color); padding-bottom:2px;">
             <button id="btnStoreTabBasic" style="background:none; border:none; padding:8px 12px; cursor:pointer; font-size:13.5px; border-bottom:2px solid var(--color-primary); color:var(--color-primary); font-weight:700;" onclick="switchStoreModalTab('basic')">🏪 Thông Tin Cơ Bản Cửa Hàng</button>
@@ -2101,12 +2089,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <!-- TAB 1: THÔNG TIN CƠ BẢN CỬA HÀNG -->
           <div id="storeTabBasicContent" style="display:block;">
             <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
-              <div class="form-group-field">
-                <label style="font-weight:700;">1. Tên doanh nghiệp *</label>
-                <select id="editStoreEnterprise" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
-                  <option value="GFCAPITAL" selected>Công ty TNHH GF Capital Việt Nam (GFCAPITAL)</option>
-                  <option value="ECOPAY">Công ty Cổ phần ECOPAY Việt Nam (ECOPAY)</option>
-                </select>
+              <div class="form-group-field" style="grid-column: 1 / -1;">
+                <label style="font-weight:700;">1. Tên doanh nghiệp (🔒 Mặc định)</label>
+                <input type="text" id="editStoreEnterprise" value="Công ty TNHH GF Capital Việt Nam" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:#F1F5F9; color:#475569; cursor:not-allowed;" title="Mặc định Tên doanh nghiệp hiện tại">
               </div>
               <div class="form-group-field">
                 <label style="font-weight:700;">2. Mã cửa hàng (🔒 Chỉ đọc)</label>
@@ -2341,24 +2326,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalBody) {
       modalBody.innerHTML = `
         <div style="display:flex; flex-direction:column; gap:16px; text-align:left; font-size:13px;">
-          <!-- Banner Header Note -->
-          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:12px 16px; border-radius:10px; display:flex; align-items:center; justify-content:space-between;">
-            <div>
-              <div style="font-size:14px; font-weight:800; color:var(--color-primary);">Tạo Mới Cửa Hàng Sử Dụng Dịch Vụ Agent Banking</div>
-              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Vị trí: Màn hình Popup tạo mới / Tab Thông tin cơ bản (PRD UC-3)</div>
-            </div>
-            <span class="status-badge badge-warning">Khởi tạo: Không hoạt động</span>
-          </div>
-
           <!-- Form Fields Grid -->
           <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:18px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
             <div class="form-group-field" style="grid-column: 1 / -1;">
-              <label style="font-weight:700;">1. Tên doanh nghiệp <span style="color:#FF4D4F;">*</span></label>
-              <select id="createStoreEnterprise" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
-                <option value="">Tìm và chọn doanh nghiệp</option>
-                <option value="GFCAPITAL" selected>Công ty TNHH GF Capital Việt Nam (GFCAPITAL)</option>
-                <option value="ECOPAY">Công ty Cổ phần ECOPAY Việt Nam (ECOPAY)</option>
-              </select>
+              <label style="font-weight:700;">1. Tên doanh nghiệp (🔒 Mặc định)</label>
+              <input type="text" id="createStoreEnterprise" value="Công ty TNHH GF Capital Việt Nam" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px; background:#F1F5F9; color:#475569; cursor:not-allowed;" title="Mặc định Tên doanh nghiệp hiện tại">
             </div>
 
             <div class="form-group-field">
