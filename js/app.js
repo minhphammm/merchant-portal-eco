@@ -2227,4 +2227,193 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalOverlay) modalOverlay.classList.add('show');
     if (window.refreshIcons) window.refreshIcons();
   };
+
+  /**
+   * Modal Tạo Mới Cửa Hàng - Chuẩn PRD UC-3 Specs (Màn hình tạo cửa hàng)
+   */
+  window.handleProvinceChange = function(provinceVal) {
+    const wardSelect = document.getElementById('createStoreWard');
+    if (!wardSelect) return;
+    
+    if (!provinceVal) {
+      wardSelect.innerHTML = '<option value="">Vui lòng tìm và chọn phường/xã</option>';
+      wardSelect.disabled = true;
+      return;
+    }
+
+    wardSelect.disabled = false;
+    if (provinceVal === 'HCM') {
+      wardSelect.innerHTML = `
+        <option value="">Vui lòng tìm và chọn phường/xã</option>
+        <option value="BenThanh" selected>Phường Bến Thành (Quận 1)</option>
+        <option value="BenNghe">Phường Bến Nghé (Quận 1)</option>
+        <option value="Phuong6Q3">Phường 6 (Quận 3)</option>
+        <option value="Phuong11Q10">Phường 11 (Quận 10)</option>
+      `;
+    } else if (provinceVal === 'HN') {
+      wardSelect.innerHTML = `
+        <option value="">Vui lòng tìm và chọn phường/xã</option>
+        <option value="HangBac" selected>Phường Hàng Bạc (Q. Hoàn Kiếm)</option>
+        <option value="TrangTien">Phường Tràng Tiền (Q. Hoàn Kiếm)</option>
+        <option value="KimLien">Phường Kim Liên (Q. Đống Đa)</option>
+      `;
+    } else if (provinceVal === 'DN') {
+      wardSelect.innerHTML = `
+        <option value="">Vui lòng tìm và chọn phường/xã</option>
+        <option value="HaiChau1" selected>Phường Hải Châu 1 (Q. Hải Châu)</option>
+        <option value="PhuocNinh">Phường Phước Ninh (Q. Hải Châu)</option>
+      `;
+    } else {
+      wardSelect.innerHTML = `
+        <option value="">Vui lòng tìm và chọn phường/xã</option>
+        <option value="TanAn" selected>Phường Tân An (Q. Ninh Kiều)</option>
+        <option value="AnCu">Phường An Cư (Q. Ninh Kiều)</option>
+      `;
+    }
+  };
+
+  window.openCreateStoreModal = function() {
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = 'Tạo mới cửa hàng';
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px; text-align:left; font-size:13px;">
+          <!-- Banner Header Note -->
+          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:12px 16px; border-radius:10px; display:flex; align-items:center; justify-content:space-between;">
+            <div>
+              <div style="font-size:14px; font-weight:800; color:var(--color-primary);">Tạo Mới Cửa Hàng Sử Dụng Dịch Vụ Agent Banking</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Vị trí: Màn hình Popup tạo mới / Tab Thông tin cơ bản (PRD UC-3)</div>
+            </div>
+            <span class="status-badge badge-warning">Khởi tạo: Không hoạt động</span>
+          </div>
+
+          <!-- Form Fields Grid -->
+          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:18px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+            <div class="form-group-field" style="grid-column: 1 / -1;">
+              <label style="font-weight:700;">1. Tên doanh nghiệp <span style="color:#FF4D4F;">*</span></label>
+              <select id="createStoreEnterprise" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+                <option value="">Tìm và chọn doanh nghiệp</option>
+                <option value="GFCAPITAL" selected>Công ty TNHH GF Capital Việt Nam (GFCAPITAL)</option>
+                <option value="ECOPAY">Công ty Cổ phần ECOPAY Việt Nam (ECOPAY)</option>
+              </select>
+            </div>
+
+            <div class="form-group-field">
+              <label style="font-weight:700;">2. Tên cửa hàng <span style="color:#FF4D4F;">*</span></label>
+              <input type="text" id="createStoreName" placeholder="Vui lòng nhập tên cửa hàng" maxlength="200" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+            </div>
+
+            <div class="form-group-field">
+              <label style="font-weight:700;">3. Số điện thoại quản lý</label>
+              <input type="text" id="createStoreManagerPhone" placeholder="Vui lòng nhập số điện thoại" maxlength="11" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+            </div>
+
+            <div class="form-group-field">
+              <label style="font-weight:700;">4. Tỉnh / Thành phố <span style="color:#FF4D4F;">*</span></label>
+              <select id="createStoreProvince" onchange="handleProvinceChange(this.value)" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+                <option value="">Vui lòng tìm và chọn tỉnh/thành phố</option>
+                <option value="HCM">Thành phố Hồ Chí Minh</option>
+                <option value="HN">Thành phố Hà Nội</option>
+                <option value="DN">Thành phố Đà Nẵng</option>
+                <option value="CT">Thành phố Cần Thơ</option>
+              </select>
+            </div>
+
+            <div class="form-group-field">
+              <label style="font-weight:700;">5. Phường / Xã <span style="color:#FF4D4F;">*</span></label>
+              <select id="createStoreWard" disabled style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+                <option value="">Vui lòng tìm và chọn phường/xã</option>
+              </select>
+            </div>
+
+            <div class="form-group-field" style="grid-column: 1 / -1;">
+              <label style="font-weight:700;">6. Địa chỉ chi tiết <span style="color:#FF4D4F;">*</span></label>
+              <input type="text" id="createStoreAddress" placeholder="VD: tên tòa nhà, số nhà, tên đường" maxlength="200" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+            </div>
+          </div>
+
+          <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+            💡 <em>Lưu ý (PRD UC-3): Khi tạo mới thành công, Cửa hàng được tự động khởi tạo ở trạng thái <strong>Không hoạt động</strong>. Bán hàng/Admin có thể phê duyệt kích hoạt sau.</em>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.style.display = 'inline-block';
+      btnAction.textContent = 'Tạo mới';
+      btnAction.onclick = function() {
+        const enterprise = document.getElementById('createStoreEnterprise')?.value;
+        const storeName = document.getElementById('createStoreName')?.value?.trim();
+        const managerPhone = document.getElementById('createStoreManagerPhone')?.value?.trim() || '0903 123 456';
+        const province = document.getElementById('createStoreProvince')?.value;
+        const ward = document.getElementById('createStoreWard')?.value;
+        const address = document.getElementById('createStoreAddress')?.value?.trim();
+
+        if (!enterprise) {
+          showToast('⚠️ Vui lòng chọn Tên doanh nghiệp!');
+          return;
+        }
+        if (!storeName) {
+          showToast('⚠️ Vui lòng nhập Tên cửa hàng!');
+          return;
+        }
+        if (!province) {
+          showToast('⚠️ Vui lòng chọn Tỉnh/Thành phố!');
+          return;
+        }
+        if (!ward) {
+          showToast('⚠️ Vui lòng chọn Phường/Xã!');
+          return;
+        }
+        if (!address) {
+          showToast('⚠️ Vui lòng nhập Địa chỉ chi tiết!');
+          return;
+        }
+
+        // Add new store into MockData with status 'Không hoạt động'
+        const list = MockData.getStoresData();
+        const newStt = list.length + 1;
+        const storeCodeNum = (newStt < 10 ? '00' : '0') + newStt;
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN');
+
+        const newStoreItem = {
+          stt: newStt,
+          storeName: storeName,
+          storeCode: `ST-NEW-${storeCodeNum}`,
+          qrIdentifierCode: `QR-GFCAPITAL5-N${newStt}`,
+          deviceCode: `EDC-POS-900${newStt}`,
+          businessType: 'Nhà hàng & F&B',
+          storePhone: managerPhone,
+          paymentMethodType: 'VietQR / Thẻ ATM / QR Bank',
+          paymentAccount: '1905 8888 9999 (Techcombank)',
+          address: address,
+          ecoWalletNumber: managerPhone.replace(/\s+/g, ''),
+          salesPhone: '0988 777 666 (Nguyễn Văn Nam)',
+          createdDate: dateStr,
+          approvedDate: '—',
+          reconciliationMethod: 'T+1 Tự động (MB Bank)',
+          statusText: 'Không hoạt động',
+          statusClass: 'badge-warning'
+        };
+
+        list.unshift(newStoreItem);
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+
+        showToast(`🎉 Tạo mới cửa hàng "${storeName}" thành công! Trạng thái: Không hoạt động`);
+        if (window.renderPage) window.renderPage('stores');
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
 });

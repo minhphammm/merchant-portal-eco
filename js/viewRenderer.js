@@ -246,7 +246,7 @@ const ViewRenderer = {
           <h1 class="subpage-title">Quản Trị Cửa Hàng</h1>
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Danh sách cửa hàng, điểm bán và quản lý cấu hình thanh toán trong hệ thống Doanh nghiệp.</p>
         </div>
-        <button class="btn-primary" onclick="showToast('Mở form khởi tạo thêm cửa hàng mới...')">+ Thêm Cửa Hàng Mới</button>
+        <button class="btn-primary" onclick="openCreateStoreModal()">+ Thêm Cửa Hàng Mới</button>
       </div>
 
       <!-- BẢNG HIỂN THỊ DANH SÁCH CỬA HÀNG (17 COLUMNS EXACT) -->
