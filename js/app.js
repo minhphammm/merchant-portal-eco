@@ -2008,4 +2008,70 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalOverlay) modalOverlay.classList.add('show');
     if (window.refreshIcons) window.refreshIcons();
   };
+
+  /**
+   * Modal Tùy Chỉnh - Hiển thị Chi Tiết & Cấu Hình Cửa Hàng (Quản trị cửa hàng)
+   */
+  window.openStoreDetailModal = function(stt) {
+    const list = MockData.getStoresData ? MockData.getStoresData() : [];
+    const item = list.find(r => r.stt === stt) || list[0];
+    if (!item) return;
+
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = `Tùy Chỉnh Cửa Hàng — ${item.storeName}`;
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:18px; text-align:left;">
+          <!-- Banner Header Info -->
+          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:14px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:12px; color:var(--text-muted);">Mã cửa hàng</div>
+              <div style="font-size:16px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.storeCode} — ${item.storeName}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px; color:var(--text-muted);">Trạng thái cửa hàng</div>
+              <div style="margin-top:2px;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+            </div>
+          </div>
+
+          <!-- Lưới 16 Thông Tin Cửa Hàng -->
+          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px 20px; font-size:13px;">
+            <div><span style="color:var(--text-muted);">1. Tên cửa hàng:</span> <br><strong>${item.storeName}</strong></div>
+            <div><span style="color:var(--text-muted);">2. Mã cửa hàng:</span> <br><strong class="txn-code">${item.storeCode}</strong></div>
+            <div><span style="color:var(--text-muted);">3. Mã định danh QR code:</span> <br><strong style="color:var(--color-primary); font-family:monospace;">${item.qrIdentifierCode}</strong></div>
+            <div><span style="color:var(--text-muted);">4. Mã thiết bị:</span> <br><strong style="font-family:monospace;">${item.deviceCode}</strong></div>
+            <div><span style="color:var(--text-muted);">5. Loại hình kinh doanh:</span> <br><strong>${item.businessType}</strong></div>
+            <div><span style="color:var(--text-muted);">6. Số điện thoại cửa hàng:</span> <br><strong style="font-family:monospace;">${item.storePhone}</strong></div>
+            <div><span style="color:var(--text-muted);">7. Hình thức thanh toán:</span> <br><strong>${item.paymentMethodType}</strong></div>
+            <div><span style="color:var(--text-muted);">8. Tài khoản thanh toán:</span> <br><strong>${item.paymentAccount}</strong></div>
+            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">9. Địa chỉ cửa hàng:</span> <br><strong>${item.address}</strong></div>
+            <div><span style="color:var(--text-muted);">10. Số ví Eco:</span> <br><strong style="font-family:monospace;">${item.ecoWalletNumber}</strong></div>
+            <div><span style="color:var(--text-muted);">11. Số điện thoại sale:</span> <br><strong>${item.salesPhone}</strong></div>
+            <div><span style="color:var(--text-muted);">12. Ngày tạo:</span> <br><strong>${item.createdDate}</strong></div>
+            <div><span style="color:var(--text-muted);">13. Ngày duyệt:</span> <br><strong>${item.approvedDate}</strong></div>
+            <div><span style="color:var(--text-muted);">14. Phương thức đối soát:</span> <br><strong style="color:var(--color-secondary);">${item.reconciliationMethod}</strong></div>
+            <div><span style="color:var(--text-muted);">15. Trạng thái hoạt động:</span> <br><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.style.display = 'inline-block';
+      btnAction.textContent = 'Lưu Cập Nhật Cửa Hàng';
+      btnAction.onclick = function() {
+        showToast(`Đã lưu tùy chỉnh cấu hình cửa hàng ${item.storeName}`);
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
 });

@@ -1049,5 +1049,87 @@ const MockData = {
         statusClass: 'badge-success'
       }
     ];
+  },
+
+  // Danh Sách Cửa Hàng (Quản trị cửa hàng) Data - 17 Fields Exact
+  getStoresData() {
+    return [
+      {
+        stt: 1,
+        storeName: 'Chi nhánh Quận 1 - Hồ Chí Minh',
+        storeCode: 'ST-Q1-001',
+        qrIdentifierCode: 'QR-GFCAPITAL5-Q1',
+        deviceCode: 'EDC-POS-8891',
+        businessType: 'Nhà hàng & F&B',
+        storePhone: '0903 123 456',
+        paymentMethodType: 'VietQR / Thẻ ATM / Payment Link',
+        paymentAccount: '1905 8888 9999 (Techcombank)',
+        address: 'Chợ Bến Thành, Quận 1, TP. Hồ Chí Minh',
+        ecoWalletNumber: '0903123456',
+        salesPhone: '0988 777 666 (Nguyễn Văn Nam)',
+        createdDate: '15/01/2026 09:00:00',
+        approvedDate: '15/01/2026 14:30:00',
+        reconciliationMethod: 'T+1 Tự động (MB Bank)',
+        statusText: 'Đang hoạt động',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 2,
+        storeName: 'Chi nhánh Hoàn Kiếm - Hà Nội',
+        storeCode: 'ST-HK-002',
+        qrIdentifierCode: 'QR-GFCAPITAL5-HK',
+        deviceCode: 'EDC-POS-8892',
+        businessType: 'Bán lẻ & Siêu thị mini',
+        storePhone: '0912 345 678',
+        paymentMethodType: 'VietQR / QR Bank',
+        paymentAccount: '0011 2233 4455 (Vietcombank)',
+        address: 'Phố Cổ, Q. Hoàn Kiếm, Hà Nội',
+        ecoWalletNumber: '0912345678',
+        salesPhone: '0977 112 233 (Lê Thu Hà)',
+        createdDate: '20/02/2026 10:15:00',
+        approvedDate: '20/02/2026 15:00:00',
+        reconciliationMethod: 'T+0 Tức thì (Vietcombank)',
+        statusText: 'Đang hoạt động',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 3,
+        storeName: 'Chi nhánh Hải Châu - Đà Nẵng',
+        storeCode: 'ST-HC-003',
+        qrIdentifierCode: 'QR-GFCAPITAL5-HC',
+        deviceCode: 'EDC-POS-8893',
+        businessType: 'Khách sạn & Du lịch',
+        storePhone: '0935 999 888',
+        paymentMethodType: 'Thẻ Quốc Tế (Visa/Master)',
+        paymentAccount: '0400 5566 7788 (Sacombank)',
+        address: 'Đường Bạch Đằng, Q. Hải Châu, Đà Nẵng',
+        ecoWalletNumber: '0935999888',
+        salesPhone: '0905 443 322 (Trần Quốc Bảo)',
+        createdDate: '10/03/2026 08:30:00',
+        approvedDate: '10/03/2026 11:45:00',
+        reconciliationMethod: 'T+1 Tự động (VPBank)',
+        statusText: 'Đang hoạt động',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 4,
+        storeName: 'Chi nhánh Ninh Kiều - Cần Thơ',
+        storeCode: 'ST-NK-004',
+        qrIdentifierCode: 'QR-GFCAPITAL5-NK',
+        deviceCode: 'EDC-POS-8894',
+        businessType: 'Dịch vụ Spa & Làm đẹp',
+        storePhone: '0949 111 222',
+        paymentMethodType: 'VietQR / Payment Link',
+        paymentAccount: '1020 3040 5060 (MB Bank)',
+        address: 'Đại lộ Hòa Bình, Q. Ninh Kiều, Cần Thơ',
+        ecoWalletNumber: '0949111222',
+        salesPhone: '0939 887 766 (Đặng Văn Hùng)',
+        createdDate: '05/04/2026 14:00:00',
+        approvedDate: '05/04/2026 16:30:00',
+        reconciliationMethod: 'T+1 Tự động (Techcombank)',
+        statusText: 'Đang chờ duyệt',
+        statusClass: 'badge-warning'
+      }
+    ];
   }
 };

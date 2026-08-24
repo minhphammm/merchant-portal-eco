@@ -238,61 +238,111 @@ const ViewRenderer = {
    * Stores View
    */
   getStoresView() {
+    const list = MockData.getStoresData ? MockData.getStoresData() : [];
     return `
       <div class="subpage-header">
         <div>
           <div class="subpage-breadcrumb">Doanh nghiệp / <strong>Quản trị cửa hàng</strong></div>
           <h1 class="subpage-title">Quản Trị Cửa Hàng</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Danh sách cửa hàng, điểm bán và quản lý cấu hình thanh toán trong hệ thống Doanh nghiệp.</p>
         </div>
-        <button class="btn-primary" onclick="showToast('Mở form tạo cửa hàng mới')">+ Thêm Cửa Hàng Mới</button>
+        <button class="btn-primary" onclick="showToast('Mở form khởi tạo thêm cửa hàng mới...')">+ Thêm Cửa Hàng Mới</button>
       </div>
 
-      <div class="table-card">
-        <div class="table-header">
-          <input type="text" placeholder="Tìm kiếm cửa hàng theo tên, mã..." style="padding:8px 14px; border-radius:6px; border:1px solid var(--border-color); width:300px;">
+      <!-- MỤC TÌM KIẾM BỘ LỌC CỬA HÀNG -->
+      <div class="table-card" style="margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Tìm Kiếm Cửa Hàng
         </div>
-        <table class="portal-table">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Mã cửa hàng</th>
-              <th>Tên cửa hàng</th>
-              <th>Địa chỉ</th>
-              <th>Số thiết bị</th>
-              <th>Doanh thu tháng</th>
-              <th>Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>1</strong></td>
-              <td><span class="txn-code">ST-Q1-001</span></td>
-              <td><strong>Chi nhánh Quận 1 - Hồ Chí Minh</strong></td>
-              <td>Chợ Bến Thành, Q1, TP.HCM</td>
-              <td>12 thiết bị</td>
-              <td style="font-weight:700; color:var(--color-primary);">450,000,000 đ</td>
-              <td><span class="status-badge badge-success">Đang hoạt động</span></td>
-            </tr>
-            <tr>
-              <td><strong>2</strong></td>
-              <td><span class="txn-code">ST-HK-002</span></td>
-              <td><strong>Chi nhánh Hoàn Kiếm - Hà Nội</strong></td>
-              <td>Phố Cổ, Hoàn Kiếm, Hà Nội</td>
-              <td>8 thiết bị</td>
-              <td style="font-weight:700; color:var(--color-primary);">320,000,000 đ</td>
-              <td><span class="status-badge badge-success">Đang hoạt động</span></td>
-            </tr>
-            <tr>
-              <td><strong>3</strong></td>
-              <td><span class="txn-code">ST-HC-003</span></td>
-              <td><strong>Chi nhánh Hải Châu - Đà Nẵng</strong></td>
-              <td>Đường Bạch Đằng, Hải Châu, Đà Nẵng</td>
-              <td>6 thiết bị</td>
-              <td style="font-weight:700; color:var(--color-primary);">210,000,000 đ</td>
-              <td><span class="status-badge badge-success">Đang hoạt động</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <form id="storeFilterForm" onsubmit="return false;">
+          <div class="filter-grid-4col">
+            <div class="form-group-field">
+              <label>Tên cửa hàng / Mã cửa hàng</label>
+              <input type="text" id="filterStoreKeyword" placeholder="Nhập tên hoặc mã cửa hàng...">
+            </div>
+            <div class="form-group-field">
+              <label>Loại hình kinh doanh</label>
+              <select id="filterStoreBizType">
+                <option value="all">Tất cả loại hình</option>
+                <option value="FNB">Nhà hàng & F&B</option>
+                <option value="RETAIL">Bán lẻ & Siêu thị mini</option>
+                <option value="HOTEL">Khách sạn & Du lịch</option>
+                <option value="SPA">Dịch vụ Spa & Làm đẹp</option>
+              </select>
+            </div>
+            <div class="form-group-field">
+              <label>Trạng thái cửa hàng</label>
+              <select id="filterStoreStatus">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="ACTIVE">Đang hoạt động</option>
+                <option value="PENDING">Đang chờ duyệt</option>
+                <option value="PAUSED">Tạm ngưng</option>
+              </select>
+            </div>
+            <div class="form-group-field" style="display:flex; align-items:flex-end; gap:10px;">
+              <button type="button" class="btn-secondary" style="flex:1;" onclick="showToast('Đã làm lại bộ lọc tìm kiếm cửa hàng')">Làm lại</button>
+              <button type="button" class="btn-primary" style="flex:1;" onclick="showToast('Đã lọc danh sách cửa hàng')">Tìm kiếm</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- BẢNG HIỂN THỊ DANH SÁCH CỬA HÀNG (17 COLUMNS EXACT) -->
+      <div class="table-card">
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Hiển thị Danh sách cửa hàng (${list.length} cửa hàng)</span>
+          <span class="status-badge badge-success">Đang hoạt động ổn định</span>
+        </div>
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap;">stt</th>
+                <th style="white-space:nowrap;">tên cửa hàng</th>
+                <th style="white-space:nowrap;">mã cửa hàng</th>
+                <th style="white-space:nowrap;">Mã định danh QR code</th>
+                <th style="white-space:nowrap;">Mã thiết bị</th>
+                <th style="white-space:nowrap;">Loại hình kinh doanh</th>
+                <th style="white-space:nowrap;">Số điện thoại cửa hàng</th>
+                <th style="white-space:nowrap;">Hình thức thanh toán</th>
+                <th style="white-space:nowrap;">Tài khoản thanh toán</th>
+                <th style="white-space:nowrap;">Địa chỉ</th>
+                <th style="white-space:nowrap;">số ví Eco</th>
+                <th style="white-space:nowrap;">Số điện thoại sale</th>
+                <th style="white-space:nowrap;">Ngày tạo</th>
+                <th style="white-space:nowrap;">ngày duyệt</th>
+                <th style="white-space:nowrap;">Phương thức đối soát</th>
+                <th style="white-space:nowrap;">Trạng thái</th>
+                <th style="white-space:nowrap;">tùy chỉnh</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map(item => `
+                <tr>
+                  <td><strong>${item.stt}</strong></td>
+                  <td style="font-weight:700; color:var(--text-main); white-space:nowrap;">${item.storeName}</td>
+                  <td><span class="txn-code">${item.storeCode}</span></td>
+                  <td><span style="font-family:monospace; font-weight:600; color:var(--color-primary);">${item.qrIdentifierCode}</span></td>
+                  <td><span style="font-family:monospace;">${item.deviceCode}</span></td>
+                  <td style="font-size:12.5px; white-space:nowrap;">${item.businessType}</td>
+                  <td style="font-family:monospace; white-space:nowrap;">${item.storePhone}</td>
+                  <td style="font-size:12px; white-space:nowrap;">${item.paymentMethodType}</td>
+                  <td style="font-size:12px; font-weight:600; white-space:nowrap;">${item.paymentAccount}</td>
+                  <td style="font-size:12px; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.address}">${item.address}</td>
+                  <td style="font-family:monospace; white-space:nowrap;">${item.ecoWalletNumber}</td>
+                  <td style="font-size:12px; white-space:nowrap;">${item.salesPhone}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.createdDate}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.approvedDate}</td>
+                  <td style="font-size:12px; font-weight:600; color:var(--color-secondary); white-space:nowrap;">${item.reconciliationMethod}</td>
+                  <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
+                  <td style="white-space:nowrap;">
+                    <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="openStoreDetailModal(${item.stt})">Tùy chỉnh</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   },
