@@ -25,8 +25,106 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Initialize Dashboard & Icons
+  // Global Ant Design Custom Select Component Enhancer
+  window.initAntdSelects = function(container = document) {
+    const nativeSelects = container.querySelectorAll('select:not(.ant-select-enhanced)');
+    nativeSelects.forEach(select => {
+      select.classList.add('ant-select-enhanced');
+      select.style.display = 'none';
+
+      // Create Custom Ant Design Wrapper
+      const wrapper = document.createElement('div');
+      wrapper.className = 'ant-select-custom-wrapper';
+
+      const selectedOption = select.options[select.selectedIndex] || select.options[0];
+      const selectedText = selectedOption ? selectedOption.text : '';
+
+      wrapper.innerHTML = `
+        <div class="ant-select-custom-trigger">
+          <span class="ant-select-custom-value">${selectedText}</span>
+          <span class="ant-select-custom-arrow"><i data-lucide="chevron-down" style="width:14px; height:14px;"></i></span>
+        </div>
+        <div class="ant-select-custom-dropdown" style="display:none;"></div>
+      `;
+
+      const dropdown = wrapper.querySelector('.ant-select-custom-dropdown');
+      Array.from(select.options).forEach(opt => {
+        const item = document.createElement('div');
+        item.className = 'ant-select-custom-option' + (opt.selected ? ' selected' : '');
+        item.setAttribute('data-value', opt.value);
+        item.innerHTML = `<span>${opt.text}</span>` + (opt.selected ? '<i data-lucide="check" style="width:14px; height:14px; color:#1677ff;"></i>' : '');
+        
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          select.value = opt.value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+
+          // Update trigger label
+          wrapper.querySelector('.ant-select-custom-value').innerText = opt.text;
+
+          // Update selected item highlighting
+          dropdown.querySelectorAll('.ant-select-custom-option').forEach(el => {
+            el.classList.remove('selected');
+            const check = el.querySelector('[data-lucide="check"]');
+            if (check) check.remove();
+          });
+          item.classList.add('selected');
+
+          // Close panel
+          wrapper.classList.remove('open');
+          dropdown.style.display = 'none';
+
+          if (window.refreshIcons) window.refreshIcons();
+        });
+
+        dropdown.appendChild(item);
+      });
+
+      // Toggle dropdown open
+      const trigger = wrapper.querySelector('.ant-select-custom-trigger');
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = wrapper.classList.contains('open');
+
+        // Close all other open antd selects
+        document.querySelectorAll('.ant-select-custom-wrapper.open').forEach(w => {
+          if (w !== wrapper) {
+            w.classList.remove('open');
+            w.querySelector('.ant-select-custom-dropdown').style.display = 'none';
+          }
+        });
+
+        if (isOpen) {
+          wrapper.classList.remove('open');
+          dropdown.style.display = 'none';
+        } else {
+          wrapper.classList.add('open');
+          dropdown.style.display = 'block';
+        }
+
+        if (window.refreshIcons) window.refreshIcons();
+      });
+
+      select.parentNode.insertBefore(wrapper, select);
+    });
+
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
+  // Close all antd select dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.ant-select-custom-wrapper')) {
+      document.querySelectorAll('.ant-select-custom-wrapper.open').forEach(w => {
+        w.classList.remove('open');
+        const dd = w.querySelector('.ant-select-custom-dropdown');
+        if (dd) dd.style.display = 'none';
+      });
+    }
+  });
+
+  // Initialize Dashboard, Icons & Ant Design Selects
   renderDashboard();
+  initAntdSelects();
   refreshIcons();
 
   // Setup Event Listeners
@@ -824,6 +922,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn) {
         btn.innerHTML = isHidden ? 'Thu gọn ∧' : 'Mở rộng tìm kiếm ∨';
       }
+      if (isHidden && window.initAntdSelects) {
+        window.initAntdSelects(extraDiv);
+      }
     }
   };
 
@@ -929,6 +1030,9 @@ document.addEventListener('DOMContentLoaded', () => {
       extraDiv.style.display = isHidden ? 'block' : 'none';
       if (btn) {
         btn.innerHTML = isHidden ? 'Thu gọn ∧' : 'Mở rộng tìm kiếm ∨';
+      }
+      if (isHidden && window.initAntdSelects) {
+        window.initAntdSelects(extraDiv);
       }
     }
   };
