@@ -1347,94 +1347,131 @@ const ViewRenderer = {
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Đối soát / <strong>Đối soát Ecopay (Đối soát Giao dịch)</strong></div>
-          <h1 class="subpage-title">Đối Soát Ecopay (Đối Soát Giao Dịch)</h1>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu, quản lý và kiểm tra đối soát khớp dữ liệu từng giao dịch giữa Ecopay FinViet và Đối tác.</p>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Đối soát Ecopay (Đối soát GD)</strong></div>
+          <h1 class="subpage-title">Đối Soát Ecopay (Đối Soát GD)</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu, quản lý và kiểm tra đối soát khớp dữ liệu từng giao dịch giữa Ecopay FinViet và Doanh nghiệp / Cửa hàng.</p>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-secondary" onclick="showToast('Xuất báo cáo đối soát giao dịch Ecopay Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Báo Cáo Excel</button>
+          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo đối soát Ecopay Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel</button>
         </div>
       </div>
 
-      <!-- MỤC TÌM KIẾM BỘ LỌC ĐỐI SOÁT ECOPAY -->
+      <!-- MỤC TÌM KIẾM BỘ LỌC ĐỐI SOÁT ECOPAY (4 FIELDS EXACT) -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Tìm Kiếm Giao Dịch Đối Soát
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
         </div>
-        <div class="filter-grid-4col">
-          <div class="form-group-field">
-            <label>Kỳ / Ngày đối soát</label>
-            <div class="date-range-input-box">
-              <input type="text" value="22/08/2026" readonly>
-              <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+        <form id="reconcileEcopayFilterForm" onsubmit="return false;">
+          <div class="filter-grid-4col">
+            <!-- 1. Tên cửa hàng -->
+            <div class="form-group-field">
+              <label>Tên cửa hàng</label>
+              <select id="filterReconcileStoreName">
+                <option value="all">Tất cả cửa hàng</option>
+                <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+                <option value="storeQ3">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                <option value="storeTB">Chi nhánh Hải Châu - Đà Nẵng</option>
+              </select>
+            </div>
+
+            <!-- 2. Thời gian tạo đối soát -->
+            <div class="form-group-field">
+              <label>Thời gian tạo đối soát</label>
+              <div class="date-range-input-box">
+                <input type="text" id="filterReconcileCreatedTime" value="20-08-2026 00:00:00 — 22-08-2026 23:59:59" readonly>
+                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+              </div>
+            </div>
+
+            <!-- 3. Thời gian thanh toán DN -->
+            <div class="form-group-field">
+              <label>Thời gian thanh toán DN</label>
+              <div class="date-range-input-box">
+                <input type="text" id="filterReconcileMerchantPayTime" value="20-08-2026 00:00:00 — 22-08-2026 23:59:59" readonly>
+                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+              </div>
+            </div>
+
+            <!-- 4. Trạng thái -->
+            <div class="form-group-field">
+              <label>Trạng thái</label>
+              <select id="filterReconcileStatus">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="created">Khởi tạo</option>
+                <option value="processing">Đang xử lý</option>
+                <option value="approved">Đã phê duyệt</option>
+                <option value="rejected">Đã từ chối</option>
+                <option value="failed">Thất bại</option>
+                <option value="paid">Đã thanh toán</option>
+                <option value="success">Thành công</option>
+                <option value="pending">Đang chờ duyệt</option>
+              </select>
             </div>
           </div>
-          <div class="form-group-field">
-            <label>Mã giao dịch Ecopay</label>
-            <input type="text" placeholder="Nhập mã GD Ecopay">
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+            <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc tìm kiếm đối soát')">Làm lại</button>
+            <button type="button" class="btn-primary" onclick="showToast('Đã áp dụng bộ lọc đối soát Ecopay')">Tìm kiếm</button>
           </div>
-          <div class="form-group-field">
-            <label>Phương thức thanh toán</label>
-            <select>
-              <option value="all">Tất cả phương thức</option>
-              <option value="VietQR">VietQR Pay</option>
-              <option value="ATM">Thẻ ATM Nội Địa</option>
-              <option value="CARD">Thẻ Quốc Tế (Visa/Master)</option>
-              <option value="LINK">Payment Link</option>
-            </select>
-          </div>
-          <div class="form-group-field">
-            <label>Trạng thái đối soát</label>
-            <select>
-              <option value="all">Tất cả trạng thái</option>
-              <option value="MATCHED">Khớp giao dịch</option>
-              <option value="DIFF_AMT">Lệch số tiền</option>
-              <option value="MISSING_PARTNER">Thiếu GD đối tác</option>
-            </select>
-          </div>
-        </div>
+        </form>
       </div>
 
-      <!-- BẢNG DỮ LIỆU ĐỐI SOÁT ECOPAY -->
+      <!-- BẢNG HIỂN THỊ THÔNG TIN ĐỐI SOÁT ECOPAY (16 COLUMNS EXACT) -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
-          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Chi Tiết Giao Dịch Đối Soát (${list.length} bản ghi)</span>
-          <span class="status-badge badge-success">Đã hoàn tất đối soát kỳ gần nhất</span>
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Hiển thị thông tin đối soát Ecopay (${list.length} bản ghi)</span>
+          <span class="status-badge badge-success">Cập nhật kỳ đối soát mới nhất</span>
         </div>
-        <table class="portal-table">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Ngày GD</th>
-              <th>Mã GD Ecopay</th>
-              <th>Mã GD Đối Tác</th>
-              <th>Phương Thức</th>
-              <th>Số Tiền Ecopay</th>
-              <th>Số Tiền Đối Tác</th>
-              <th>Chênh Lệch</th>
-              <th>Trạng Thái Đối Soát</th>
-              <th>Thao Tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${list.map(item => `
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="portal-table">
+            <thead>
               <tr>
-                <td><strong>${item.stt}</strong></td>
-                <td style="white-space:nowrap; font-size:12px; color:var(--text-muted);">${item.period}</td>
-                <td><span class="txn-code">${item.ecopayTxnId}</span></td>
-                <td><span style="font-family:monospace; color:var(--text-muted); font-size:12px;">${item.partnerTxnId}</span></td>
-                <td style="font-size:12.5px;">${item.paymentMethod}</td>
-                <td style="font-weight:700; color:var(--color-primary);">${item.ecopayAmount}</td>
-                <td style="font-weight:600;">${item.partnerAmount}</td>
-                <td style="font-weight:700; color:${item.diffAmount !== '0 đ' ? 'var(--color-danger)' : 'var(--text-muted)'};">${item.diffAmount}</td>
-                <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
-                <td>
-                  <button class="btn-secondary" style="padding:3px 8px; font-size:11.5px;" onclick="showToast('Xem chi tiết đối soát ${item.ecopayTxnId}')">Chi tiết</button>
-                </td>
+                <th style="white-space:nowrap;">STT</th>
+                <th style="white-space:nowrap;">Tên cửa hàng</th>
+                <th style="white-space:nowrap;">Thời gian tạo đối soát</th>
+                <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
+                <th style="white-space:nowrap;">Tổng số tiền phải trả</th>
+                <th style="white-space:nowrap;">Phí Giao dịch</th>
+                <th style="white-space:nowrap;">Phí người dùng</th>
+                <th style="white-space:nowrap;">Số tiền cấn trừ</th>
+                <th style="white-space:nowrap;">Người tạo</th>
+                <th style="white-space:nowrap;">Tổng số tiền khuyến mãi</th>
+                <th style="white-space:nowrap;">Người phê duyệt</th>
+                <th style="white-space:nowrap;">Thời gian đối tác được duyệt</th>
+                <th style="white-space:nowrap;">Mô tả</th>
+                <th style="white-space:nowrap;">Lý do</th>
+                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
+                <th style="white-space:nowrap;">Trạng thái</th>
+                <th style="white-space:nowrap;">Tùy chỉnh</th>
               </tr>
-            `).join('')}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              ${list.map(item => `
+                <tr>
+                  <td><strong>${item.stt}</strong></td>
+                  <td style="font-weight:600; white-space:nowrap;">${item.storeName}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.reconcileCreatedTime}</td>
+                  <td style="font-size:11.5px; color:var(--text-muted); white-space:nowrap;">${item.txnTimeRange}</td>
+                  <td style="font-weight:700; color:var(--color-primary); white-space:nowrap;">${item.totalPayable}</td>
+                  <td style="font-size:12px; white-space:nowrap;">${item.txnFee}</td>
+                  <td style="font-size:12px; white-space:nowrap;">${item.userFee}</td>
+                  <td style="font-weight:600; color:var(--color-danger); white-space:nowrap;">${item.deductedAmount}</td>
+                  <td style="font-size:12.5px; white-space:nowrap;">${item.createdBy}</td>
+                  <td style="font-weight:600; color:var(--color-secondary); white-space:nowrap;">${item.totalDiscount}</td>
+                  <td style="font-size:12.5px; white-space:nowrap;">${item.approvedBy}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.partnerApprovedTime}</td>
+                  <td style="font-size:12px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description}">${item.description}</td>
+                  <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.reason}">${item.reason}</td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.merchantPayTime}</td>
+                  <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
+                  <td style="white-space:nowrap;">
+                    <button class="btn-secondary" style="padding:3px 8px; font-size:11.5px;" onclick="showToast('Tùy chỉnh đối soát ${item.storeName}')">Tùy chỉnh</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   },
