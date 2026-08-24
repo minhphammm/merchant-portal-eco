@@ -44,6 +44,12 @@ const ViewRenderer = {
       case 'ab-shift':
         html = this.getAgentBankingView();
         break;
+      case 'reconcile-ecopay':
+        html = this.getReconcileEcopayView();
+        break;
+      case 'reconcile-v2':
+        html = this.getReconcileV2View();
+        break;
       case 'reconcile':
       case 'fee-diff':
       case 'balance-rpt':
@@ -1327,8 +1333,231 @@ const ViewRenderer = {
         </div>
       </div>
       <div class="table-card" style="padding:30px; text-align:center;">
-        <h2>📊 Công cụ phân tích xu hướng kinh doanh & hành vi khách hàng</h2>
+        <h2><i data-lucide="bar-chart-2" style="width:24px; height:24px; color:var(--color-primary);"></i> Công cụ phân tích xu hướng kinh doanh & hành vi khách hàng</h2>
         <p style="color:var(--text-muted); margin-top:10px;">Dữ liệu truy cập và hiệu suất kinh doanh đang hoạt động ổn định 100%.</p>
+      </div>
+    `;
+  },
+
+  /**
+   * Đối soát Ecopay (Đối soát Giao dịch) View
+   */
+  getReconcileEcopayView() {
+    const list = MockData.getReconcileEcopayData ? MockData.getReconcileEcopayData() : [];
+    return `
+      <div class="subpage-header">
+        <div>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Đối soát Ecopay (Đối soát Giao dịch)</strong></div>
+          <h1 class="subpage-title">Đối Soát Ecopay (Đối Soát Giao Dịch)</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu, quản lý và kiểm tra đối soát khớp dữ liệu từng giao dịch giữa Ecopay FinViet và Đối tác.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-secondary" onclick="showToast('Xuất báo cáo đối soát giao dịch Ecopay Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Báo Cáo Excel</button>
+        </div>
+      </div>
+
+      <!-- MỤC TÌM KIẾM BỘ LỌC ĐỐI SOÁT ECOPAY -->
+      <div class="table-card" style="margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Tìm Kiếm Giao Dịch Đối Soát
+        </div>
+        <div class="filter-grid-4col">
+          <div class="form-group-field">
+            <label>Kỳ / Ngày đối soát</label>
+            <div class="date-range-input-box">
+              <input type="text" value="22/08/2026" readonly>
+              <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+            </div>
+          </div>
+          <div class="form-group-field">
+            <label>Mã giao dịch Ecopay</label>
+            <input type="text" placeholder="Nhập mã GD Ecopay">
+          </div>
+          <div class="form-group-field">
+            <label>Phương thức thanh toán</label>
+            <select>
+              <option value="all">Tất cả phương thức</option>
+              <option value="VietQR">VietQR Pay</option>
+              <option value="ATM">Thẻ ATM Nội Địa</option>
+              <option value="CARD">Thẻ Quốc Tế (Visa/Master)</option>
+              <option value="LINK">Payment Link</option>
+            </select>
+          </div>
+          <div class="form-group-field">
+            <label>Trạng thái đối soát</label>
+            <select>
+              <option value="all">Tất cả trạng thái</option>
+              <option value="MATCHED">Khớp giao dịch</option>
+              <option value="DIFF_AMT">Lệch số tiền</option>
+              <option value="MISSING_PARTNER">Thiếu GD đối tác</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- BẢNG DỮ LIỆU ĐỐI SOÁT ECOPAY -->
+      <div class="table-card">
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Chi Tiết Giao Dịch Đối Soát (${list.length} bản ghi)</span>
+          <span class="status-badge badge-success">Đã hoàn tất đối soát kỳ gần nhất</span>
+        </div>
+        <table class="portal-table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Ngày GD</th>
+              <th>Mã GD Ecopay</th>
+              <th>Mã GD Đối Tác</th>
+              <th>Phương Thức</th>
+              <th>Số Tiền Ecopay</th>
+              <th>Số Tiền Đối Tác</th>
+              <th>Chênh Lệch</th>
+              <th>Trạng Thái Đối Soát</th>
+              <th>Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(item => `
+              <tr>
+                <td><strong>${item.stt}</strong></td>
+                <td style="white-space:nowrap; font-size:12px; color:var(--text-muted);">${item.period}</td>
+                <td><span class="txn-code">${item.ecopayTxnId}</span></td>
+                <td><span style="font-family:monospace; color:var(--text-muted); font-size:12px;">${item.partnerTxnId}</span></td>
+                <td style="font-size:12.5px;">${item.paymentMethod}</td>
+                <td style="font-weight:700; color:var(--color-primary);">${item.ecopayAmount}</td>
+                <td style="font-weight:600;">${item.partnerAmount}</td>
+                <td style="font-weight:700; color:${item.diffAmount !== '0 đ' ? 'var(--color-danger)' : 'var(--text-muted)'};">${item.diffAmount}</td>
+                <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
+                <td>
+                  <button class="btn-secondary" style="padding:3px 8px; font-size:11.5px;" onclick="showToast('Xem chi tiết đối soát ${item.ecopayTxnId}')">Chi tiết</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  /**
+   * Đối soát v2 (Quản lý quyết toán) View
+   */
+  getReconcileV2View() {
+    const list = MockData.getReconcileV2Data ? MockData.getReconcileV2Data() : [];
+    return `
+      <div class="subpage-header">
+        <div>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Đối soát v2 (Quản lý quyết toán)</strong></div>
+          <h1 class="subpage-title">Đối Soát v2 (Quản Lý Quyết Toán)</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý phiên quyết toán doanh thu T+0 / T+1, số dư giải ngân và theo dõi luồng tiền chuyển về ngân hàng của Doanh nghiệp.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" onclick="showToast('Yêu cầu tạo phiên quyết toán mới...')">+ Tạo Phiên Quyết Toán</button>
+          <button class="btn-secondary" onclick="showToast('Tải file báo cáo tổng hợp quyết toán v2...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất PDF/Excel</button>
+        </div>
+      </div>
+
+      <!-- TỔNG QUAN STATS QUYẾT TOÁN V2 -->
+      <div class="txn-summary-cards-single-row" style="margin-bottom:20px; grid-template-columns: repeat(4, 1fr);">
+        <div class="txn-stat-card-compact card-total">
+          <div class="stat-label">Tổng tiền quyết toán</div>
+          <div class="stat-value" style="color:var(--color-primary);">1,220,000,000 đ</div>
+        </div>
+        <div class="txn-stat-card-compact card-success">
+          <div class="stat-label">Đã thanh toán DN</div>
+          <div class="stat-value" style="color:var(--color-secondary);">796,950,000 đ</div>
+        </div>
+        <div class="txn-stat-card-compact card-processing">
+          <div class="stat-label">Đang chờ chuyển tiền</div>
+          <div class="stat-value" style="color:var(--color-warning);">423,050,000 đ</div>
+        </div>
+        <div class="txn-stat-card-compact card-approved">
+          <div class="stat-label">Tổng số GD quyết toán</div>
+          <div class="stat-value">370 GD</div>
+        </div>
+      </div>
+
+      <!-- MỤC TÌM KIẾM BỘ LỌC QUYẾT TOÁN V2 -->
+      <div class="table-card" style="margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Tra Cứu Phiên Quyết Toán v2
+        </div>
+        <div class="filter-grid-4col">
+          <div class="form-group-field">
+            <label>Mã phiên quyết toán</label>
+            <input type="text" placeholder="Nhập mã phiên QT (VD: QT-202688)">
+          </div>
+          <div class="form-group-field">
+            <label>Chu kỳ quyết toán</label>
+            <select>
+              <option value="all">Tất cả chu kỳ</option>
+              <option value="T0">Quyết toán T+0 (Trong ngày)</option>
+              <option value="T1">Quyết toán T+1 (Ngày tiếp theo)</option>
+            </select>
+          </div>
+          <div class="form-group-field">
+            <label>Ngân hàng nhận tiền</label>
+            <select>
+              <option value="all">Tất cả ngân hàng</option>
+              <option value="MB">MB Bank</option>
+              <option value="VCB">Vietcombank</option>
+              <option value="TCB">Techcombank</option>
+              <option value="VPB">VPBank</option>
+            </select>
+          </div>
+          <div class="form-group-field">
+            <label>Trạng thái phiên</label>
+            <select>
+              <option value="all">Tất cả trạng thái</option>
+              <option value="DONE">Đã quyết toán thành công</option>
+              <option value="PENDING">Đang chờ duyệt chuyển tiền</option>
+              <option value="PROCESSING">Đang xử lý đối soát</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- BẢNG DANH SÁCH PHIÊN QUYẾT TOÁN V2 -->
+      <div class="table-card">
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Các Phiên Quyết Toán v2 (${list.length} phiên)</span>
+        </div>
+        <table class="portal-table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã Phiên QT</th>
+              <th>Chu Kỳ</th>
+              <th>Thời Gian Tạo</th>
+              <th>Ngân Hàng Nhận</th>
+              <th>Tổng GD</th>
+              <th>Tổng Tiền QT</th>
+              <th>Phí QT</th>
+              <th>Thực Nhận</th>
+              <th>Trạng Thái</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(item => `
+              <tr>
+                <td><strong>${item.stt}</strong></td>
+                <td><span class="txn-code">${item.settlementId}</span></td>
+                <td style="font-size:12px; font-weight:600;">${item.cycle}</td>
+                <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.createdDate}</td>
+                <td style="font-weight:600; font-size:12.5px;">${item.bankName}</td>
+                <td style="font-weight:700;">${item.totalTxn} GD</td>
+                <td style="font-weight:700; color:var(--text-main); white-space:nowrap;">${item.totalAmount}</td>
+                <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.fee}</td>
+                <td style="font-weight:800; color:var(--color-primary); white-space:nowrap;">${item.netAmount}</td>
+                <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
+                <td>
+                  <button class="btn-secondary" style="padding:3px 8px; font-size:11.5px;" onclick="showToast('Xem chi tiết phiên quyết toán ${item.settlementId}')">Chi tiết</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
       </div>
     `;
   }

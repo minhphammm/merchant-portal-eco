@@ -837,5 +837,129 @@ const MockData = {
         statusClass: 'badge-processing'
       }
     ];
+  },
+
+  // Reconcile Ecopay (Đối soát Giao dịch) Data
+  getReconcileEcopayData() {
+    return [
+      {
+        stt: 1,
+        period: '22/08/2026',
+        ecopayTxnId: 'GD2026082200001',
+        partnerTxnId: 'MB2026082299001',
+        paymentMethod: 'VietQR Pay (MB)',
+        ecopayAmount: '1,500,000 đ',
+        partnerAmount: '1,500,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp giao dịch',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 2,
+        period: '22/08/2026',
+        ecopayTxnId: 'GD2026082200002',
+        partnerTxnId: 'VCB2026082288012',
+        paymentMethod: 'Thẻ ATM Nội địa',
+        ecopayAmount: '3,200,000 đ',
+        partnerAmount: '3,200,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp giao dịch',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 3,
+        period: '21/08/2026',
+        ecopayTxnId: 'GD2026082100045',
+        partnerTxnId: 'VPB2026082177005',
+        paymentMethod: 'Thẻ Visa/Master',
+        ecopayAmount: '500,000 đ',
+        partnerAmount: '450,000 đ',
+        diffAmount: '+50,000 đ',
+        statusText: 'Lệch số tiền',
+        statusClass: 'badge-warning'
+      },
+      {
+        stt: 4,
+        period: '21/08/2026',
+        ecopayTxnId: 'GD2026082100089',
+        partnerTxnId: 'BVB2026082133099',
+        paymentMethod: 'Payment Link',
+        ecopayAmount: '1,200,000 đ',
+        partnerAmount: '0 đ',
+        diffAmount: '+1,200,000 đ',
+        statusText: 'Thiếu GD đối tác',
+        statusClass: 'badge-failed'
+      },
+      {
+        stt: 5,
+        period: '20/08/2026',
+        ecopayTxnId: 'GD2026082000102',
+        partnerTxnId: 'TCB2026082011044',
+        paymentMethod: 'QR Bank',
+        ecopayAmount: '2,800,000 đ',
+        partnerAmount: '2,800,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp giao dịch',
+        statusClass: 'badge-success'
+      }
+    ];
+  },
+
+  // Reconcile v2 (Quản lý quyết toán) Data
+  getReconcileV2Data() {
+    return [
+      {
+        stt: 1,
+        settlementId: 'QT-20260822-01',
+        cycle: 'Quyết toán T+0 (Trong ngày)',
+        createdDate: '22/08/2026 17:30:00',
+        bankName: 'MB Bank (Ngân hàng Quân Đội)',
+        totalTxn: 142,
+        totalAmount: '485,000,000 đ',
+        fee: '4,850,000 đ',
+        netAmount: '480,150,000 đ',
+        statusText: 'Đã quyết toán thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 2,
+        settlementId: 'QT-20260821-02',
+        cycle: 'Quyết toán T+1 (Ngày tiếp theo)',
+        createdDate: '21/08/2026 18:00:00',
+        bankName: 'Vietcombank',
+        totalTxn: 98,
+        totalAmount: '320,000,000 đ',
+        fee: '3,200,000 đ',
+        netAmount: '316,800,000 đ',
+        statusText: 'Đã quyết toán thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 3,
+        settlementId: 'QT-20260821-01',
+        cycle: 'Quyết toán T+0 (Trong ngày)',
+        createdDate: '21/08/2026 12:00:00',
+        bankName: 'Techcombank',
+        totalTxn: 54,
+        totalAmount: '175,000,000 đ',
+        fee: '1,750,000 đ',
+        netAmount: '173,250,000 đ',
+        statusText: 'Đang chờ duyệt chuyển tiền',
+        statusClass: 'badge-warning'
+      },
+      {
+        stt: 4,
+        settlementId: 'QT-20260820-03',
+        cycle: 'Quyết toán T+1 (Ngày tiếp theo)',
+        createdDate: '20/08/2026 18:30:00',
+        bankName: 'VPBank',
+        totalTxn: 76,
+        totalAmount: '240,000,000 đ',
+        fee: '2,400,000 đ',
+        netAmount: '237,600,000 đ',
+        statusText: 'Đang xử lý đối soát',
+        statusClass: 'badge-processing'
+      }
+    ];
   }
 };
