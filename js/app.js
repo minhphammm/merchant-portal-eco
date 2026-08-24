@@ -2010,8 +2010,27 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   /**
-   * Modal Tùy Chỉnh - Hiển thị Chi Tiết & Cấu Hình Cửa Hàng (Quản trị cửa hàng)
+   * Modal Tùy Chỉnh - Hiển thị Chi Tiết & Cấu Hình Cửa Hàng (Quản trị cửa hàng - PRD UC-3 Specs)
    */
+  window.switchStoreModalTab = function(tabName) {
+    const tabBasic = document.getElementById('storeTabBasicContent');
+    const tabAgent = document.getElementById('storeTabAgentContent');
+    const btnBasic = document.getElementById('btnStoreTabBasic');
+    const btnAgent = document.getElementById('btnStoreTabAgent');
+
+    if (tabName === 'basic') {
+      if (tabBasic) tabBasic.style.display = 'block';
+      if (tabAgent) tabAgent.style.display = 'none';
+      if (btnBasic) { btnBasic.style.borderBottom = '2px solid var(--color-primary)'; btnBasic.style.color = 'var(--color-primary)'; btnBasic.style.fontWeight = '700'; }
+      if (btnAgent) { btnAgent.style.borderBottom = 'none'; btnAgent.style.color = 'var(--text-muted)'; btnAgent.style.fontWeight = '600'; }
+    } else {
+      if (tabBasic) tabBasic.style.display = 'none';
+      if (tabAgent) tabAgent.style.display = 'block';
+      if (btnBasic) { btnBasic.style.borderBottom = 'none'; btnBasic.style.color = 'var(--text-muted)'; btnBasic.style.fontWeight = '600'; }
+      if (btnAgent) { btnAgent.style.borderBottom = '2px solid var(--color-primary)'; btnAgent.style.color = 'var(--color-primary)'; btnAgent.style.fontWeight = '700'; }
+    }
+  };
+
   window.openStoreDetailModal = function(stt) {
     const list = MockData.getStoresData ? MockData.getStoresData() : [];
     const item = list.find(r => r.stt === stt) || list[0];
@@ -2021,16 +2040,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalBody = document.getElementById('modalBodyContent');
     const btnAction = document.getElementById('btnFooterAction');
 
-    if (modalTitle) modalTitle.textContent = `Tùy Chỉnh Cửa Hàng — ${item.storeName}`;
+    if (modalTitle) modalTitle.textContent = `Tùy Chỉnh & Cấu Hình Cửa Hàng — ${item.storeName}`;
 
     if (modalBody) {
       modalBody.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:18px; text-align:left;">
+        <div style="display:flex; flex-direction:column; gap:16px; text-align:left; font-size:13px;">
           <!-- Banner Header Info -->
-          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:14px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="background:var(--color-primary-light); border:1px solid rgba(22,119,255,0.2); padding:12px 16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-size:12px; color:var(--text-muted);">Mã cửa hàng</div>
-              <div style="font-size:16px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.storeCode} — ${item.storeName}</div>
+              <div style="font-size:12px; color:var(--text-muted);">Mã cửa hàng & Tên cửa hàng</div>
+              <div style="font-size:15px; font-weight:800; color:var(--color-primary); margin-top:2px;">${item.storeCode} — ${item.storeName}</div>
             </div>
             <div style="text-align:right;">
               <div style="font-size:12px; color:var(--text-muted);">Trạng thái cửa hàng</div>
@@ -2038,33 +2057,167 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <!-- Lưới 16 Thông Tin Cửa Hàng -->
-          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px 20px; font-size:13px;">
-            <div><span style="color:var(--text-muted);">1. Tên cửa hàng:</span> <br><strong>${item.storeName}</strong></div>
-            <div><span style="color:var(--text-muted);">2. Mã cửa hàng:</span> <br><strong class="txn-code">${item.storeCode}</strong></div>
-            <div><span style="color:var(--text-muted);">3. Mã định danh QR code:</span> <br><strong style="color:var(--color-primary); font-family:monospace;">${item.qrIdentifierCode}</strong></div>
-            <div><span style="color:var(--text-muted);">4. Mã thiết bị:</span> <br><strong style="font-family:monospace;">${item.deviceCode}</strong></div>
-            <div><span style="color:var(--text-muted);">5. Loại hình kinh doanh:</span> <br><strong>${item.businessType}</strong></div>
-            <div><span style="color:var(--text-muted);">6. Số điện thoại cửa hàng:</span> <br><strong style="font-family:monospace;">${item.storePhone}</strong></div>
-            <div><span style="color:var(--text-muted);">7. Hình thức thanh toán:</span> <br><strong>${item.paymentMethodType}</strong></div>
-            <div><span style="color:var(--text-muted);">8. Tài khoản thanh toán:</span> <br><strong>${item.paymentAccount}</strong></div>
-            <div style="grid-column: 1 / -1;"><span style="color:var(--text-muted);">9. Địa chỉ cửa hàng:</span> <br><strong>${item.address}</strong></div>
-            <div><span style="color:var(--text-muted);">10. Số ví Eco:</span> <br><strong style="font-family:monospace;">${item.ecoWalletNumber}</strong></div>
-            <div><span style="color:var(--text-muted);">11. Số điện thoại sale:</span> <br><strong>${item.salesPhone}</strong></div>
-            <div><span style="color:var(--text-muted);">12. Ngày tạo:</span> <br><strong>${item.createdDate}</strong></div>
-            <div><span style="color:var(--text-muted);">13. Ngày duyệt:</span> <br><strong>${item.approvedDate}</strong></div>
-            <div><span style="color:var(--text-muted);">14. Phương thức đối soát:</span> <br><strong style="color:var(--color-secondary);">${item.reconciliationMethod}</strong></div>
-            <div><span style="color:var(--text-muted);">15. Trạng thái hoạt động:</span> <br><span class="status-badge ${item.statusClass}">${item.statusText}</span></div>
+          <!-- TAB SWITCHER NAVIGATION (PRD UC-3 Specs) -->
+          <div style="display:flex; gap:20px; border-bottom:1px solid var(--border-color); padding-bottom:2px;">
+            <button id="btnStoreTabBasic" style="background:none; border:none; padding:8px 12px; cursor:pointer; font-size:13.5px; border-bottom:2px solid var(--color-primary); color:var(--color-primary); font-weight:700;" onclick="switchStoreModalTab('basic')">🏪 Thông Tin Cơ Bản Cửa Hàng</button>
+            <button id="btnStoreTabAgent" style="background:none; border:none; padding:8px 12px; cursor:pointer; font-size:13.5px; color:var(--text-muted); font-weight:600;" onclick="switchStoreModalTab('agent')">🏦 Cấu Hình Agent Banking: Mật Khẩu & Két Ca</button>
           </div>
+
+          <!-- TAB 1: THÔNG TIN CƠ BẢN CỬA HÀNG -->
+          <div id="storeTabBasicContent" style="display:block;">
+            <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+              <div class="form-group-field">
+                <label>Tên doanh nghiệp *</label>
+                <input type="text" value="Công ty TNHH GF Capital Việt Nam (GFCAPITAL)" readonly style="background:#FFF;">
+              </div>
+              <div class="form-group-field">
+                <label>Tên cửa hàng *</label>
+                <input type="text" value="${item.storeName}">
+              </div>
+              <div class="form-group-field">
+                <label>Mã cửa hàng</label>
+                <input type="text" value="${item.storeCode}" readonly style="background:#FFF; font-weight:700; color:var(--color-primary);">
+              </div>
+              <div class="form-group-field">
+                <label>Số điện thoại quản lý cửa hàng</label>
+                <input type="text" value="${item.storePhone}">
+              </div>
+              <div class="form-group-field">
+                <label>Tỉnh / Thành phố *</label>
+                <select>
+                  <option selected>Thành phố Hồ Chí Minh</option>
+                  <option>Thành phố Hà Nội</option>
+                  <option>Thành phố Đà Nẵng</option>
+                  <option>Thành phố Cần Thơ</option>
+                </select>
+              </div>
+              <div class="form-group-field">
+                <label>Phường / Xã *</label>
+                <select>
+                  <option selected>Phường Bến Thành</option>
+                  <option>Phường Hàng Bạc</option>
+                  <option>Phường Hải Châu 1</option>
+                </select>
+              </div>
+              <div class="form-group-field" style="grid-column: 1 / -1;">
+                <label>Địa chỉ chi tiết *</label>
+                <input type="text" value="${item.address}">
+              </div>
+              <div class="form-group-field">
+                <label>Mã định danh QR code</label>
+                <input type="text" value="${item.qrIdentifierCode}" style="font-family:monospace;">
+              </div>
+              <div class="form-group-field">
+                <label>Mã thiết bị POS/EDC</label>
+                <input type="text" value="${item.deviceCode}" style="font-family:monospace;">
+              </div>
+              <div class="form-group-field">
+                <label>Loại hình kinh doanh</label>
+                <input type="text" value="${item.businessType}">
+              </div>
+              <div class="form-group-field">
+                <label>Hình thức thanh toán</label>
+                <input type="text" value="${item.paymentMethodType}">
+              </div>
+              <div class="form-group-field">
+                <label>Tài khoản thanh toán</label>
+                <input type="text" value="${item.paymentAccount}">
+              </div>
+              <div class="form-group-field">
+                <label>Số ví ECO</label>
+                <input type="text" value="${item.ecoWalletNumber}">
+              </div>
+              <div class="form-group-field">
+                <label>Số điện thoại sale phụ trách</label>
+                <input type="text" value="${item.salesPhone}">
+              </div>
+              <div class="form-group-field">
+                <label>Phương thức đối soát</label>
+                <input type="text" value="${item.reconciliationMethod}">
+              </div>
+              <div class="form-group-field">
+                <label>Ngày tạo</label>
+                <input type="text" value="${item.createdDate}" readonly style="background:#FFF;">
+              </div>
+              <div class="form-group-field">
+                <label>Ngày duyệt</label>
+                <input type="text" value="${item.approvedDate}" readonly style="background:#FFF;">
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: CẤU HÌNH AGENT BANKING: MẬT KHẨU & KÉT CA (PRD UC-3 Specs) -->
+          <div id="storeTabAgentContent" style="display:none;">
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <!-- 1. Mật khẩu cửa hàng -->
+              <div style="background:#FFF; border:1px solid var(--border-color); padding:16px; border-radius:10px;">
+                <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                  <i data-lucide="lock" style="width:16px; height:16px; color:var(--color-primary);"></i> Mật Khẩu Cửa Hàng (Mật khẩu 6 số dùng các tính năng bảo mật)
+                </div>
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <input type="password" value="123456" maxlength="6" style="width:180px; text-align:center; letter-spacing:4px; font-size:16px; font-weight:800; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color);">
+                  <span style="font-size:12px; color:var(--text-muted);">Mật khẩu 6 số bắt buộc khi cửa hàng thực hiện tính năng Agent Banking</span>
+                </div>
+              </div>
+
+              <!-- 2. Cấu hình Phiên hoạt động (Két ca) -->
+              <div style="background:#FFF; border:1px solid var(--border-color); padding:16px; border-radius:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                  <div style="font-size:14px; font-weight:700; color:var(--text-main); display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="clock" style="width:16px; height:16px; color:var(--color-primary);"></i> Cấu Hình Phiên Hoạt Động Két Ca (Tối đa 3 phiên)
+                  </div>
+                  <button type="button" class="btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="showToast('Đã thêm 1 phiên hoạt động mới (Tối đa 3 phiên)')">+ Thêm phiên hoạt động</button>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                  <!-- Phiên 1 -->
+                  <div style="display:flex; align-items:center; gap:12px; background:var(--bg-app); padding:10px 14px; border-radius:6px; border:1px solid var(--border-color);">
+                    <strong style="width:70px;">Phiên 1:</strong>
+                    <span style="font-size:12px; color:var(--text-muted);">Bắt đầu:</span>
+                    <input type="time" value="08:00" style="padding:4px 8px; border-radius:4px; border:1px solid var(--border-color);">
+                    <span style="font-size:12px; color:var(--text-muted);">— Kết thúc:</span>
+                    <input type="time" value="12:00" style="padding:4px 8px; border-radius:4px; border:1px solid var(--border-color);">
+                    <span class="status-badge badge-success" style="margin-left:auto;">Đang hoạt động</span>
+                  </div>
+
+                  <!-- Phiên 2 -->
+                  <div style="display:flex; align-items:center; gap:12px; background:var(--bg-app); padding:10px 14px; border-radius:6px; border:1px solid var(--border-color);">
+                    <strong style="width:70px;">Phiên 2:</strong>
+                    <span style="font-size:12px; color:var(--text-muted);">Bắt đầu:</span>
+                    <input type="time" value="13:00" style="padding:4px 8px; border-radius:4px; border:1px solid var(--border-color);">
+                    <span style="font-size:12px; color:var(--text-muted);">— Kết thúc:</span>
+                    <input type="time" value="18:00" style="padding:4px 8px; border-radius:4px; border:1px solid var(--border-color);">
+                    <span class="status-badge badge-success" style="margin-left:auto;">Đang hoạt động</span>
+                  </div>
+                </div>
+
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:10px; line-height:1.5;">
+                  ⚠️ <em>Business Rule (BR1 & BR2): Thời gian các phiên không được chồng chéo (kè nhau) và bắt buộc nhập đầy đủ Giờ bắt đầu - Giờ kết thúc.</em>
+                </div>
+              </div>
+
+              <!-- 3. Ca làm việc trên App -->
+              <div style="background:#FFF; border:1px solid var(--border-color); padding:16px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:14px; font-weight:700; color:var(--text-main);">Ca làm việc trên App di động</div>
+                  <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Cho phép nhân viên điểm danh & khởi tạo ca làm việc trên App Agent Banking</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span class="status-badge badge-success">BẬT (ON)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       `;
     }
 
     if (btnAction) {
       btnAction.style.display = 'inline-block';
-      btnAction.textContent = 'Lưu Cập Nhật Cửa Hàng';
+      btnAction.textContent = 'Lưu Cập Nhật Thông Tin & Cấu Hình';
       btnAction.onclick = function() {
-        showToast(`Đã lưu tùy chỉnh cấu hình cửa hàng ${item.storeName}`);
+        showToast(`Đã lưu cập nhật thông tin & cấu hình cửa hàng ${item.storeName} thành công!`);
         const modalOverlay = document.getElementById('modalOverlay');
         if (modalOverlay) modalOverlay.classList.remove('show');
       };
