@@ -1494,13 +1494,13 @@ const ViewRenderer = {
         </div>
       </div>
 
-      <!-- MỤC TÌM KIẾM BỘ LỌC QUYẾT TOÁN V2 (5 FIELDS EXACT) -->
+      <!-- MỤC TÌM KIẾM BỘ LỌC QUYẾT TOÁN V2 (7 FIELDS EXACT) -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
           <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
         </div>
         <form id="reconcileV2FilterForm" onsubmit="return false;">
-          <div class="filter-grid-5col">
+          <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:14px;">
             <!-- 1. Tên cửa hàng -->
             <div class="form-group-field">
               <label>Tên cửa hàng</label>
@@ -1541,7 +1541,28 @@ const ViewRenderer = {
               </select>
             </div>
 
-            <!-- 5. Trạng thái -->
+            <!-- 5. Người tạo -->
+            <div class="form-group-field">
+              <label>Người tạo</label>
+              <select id="filterV2CreatedBy">
+                <option value="all">Tất cả người tạo</option>
+                <option value="userA">Nguyễn Văn A</option>
+                <option value="userTrang">Phạm Thu Trang</option>
+                <option value="userAnh">Vũ Đức Anh</option>
+              </select>
+            </div>
+
+            <!-- 6. Người phê duyệt -->
+            <div class="form-group-field">
+              <label>Người phê duyệt</label>
+              <select id="filterV2ApprovedBy">
+                <option value="all">Tất cả người phê duyệt</option>
+                <option value="approverB">Trần Thị B (Kế toán)</option>
+                <option value="approverNam">Lê Hoàng Nam (Giám đốc)</option>
+              </select>
+            </div>
+
+            <!-- 7. Trạng thái -->
             <div class="form-group-field">
               <label>Trạng thái</label>
               <select id="filterV2Status">
