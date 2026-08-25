@@ -130,7 +130,31 @@ const PortalCharts = {
     }
 
     try {
-      if (this.channelChart) this.channelChart.destroy();
+      const percentagePlugin = {
+        id: 'percentagePlugin',
+        afterDraw(chart) {
+          const { ctx, data } = chart;
+          const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+          if (!total) return;
+
+          chart.getDatasetMeta(0).data.forEach((element, index) => {
+            const val = data.datasets[0].data[index];
+            const pct = Math.round((val / total) * 100);
+            if (pct < 3) return; // Skip tiny slices
+
+            const { x, y } = element.tooltipPosition();
+            ctx.save();
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 3;
+            ctx.fillText(`${pct}%`, x, y);
+            ctx.restore();
+          });
+        }
+      };
 
       this.channelChart = new Chart(ctx, {
         type: 'doughnut',
@@ -143,12 +167,23 @@ const PortalCharts = {
             borderColor: '#FFFFFF'
           }]
         },
+        plugins: [percentagePlugin],
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          cutout: '72%',
+          cutout: '70%',
           plugins: {
-            legend: { display: false }
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const val = context.raw;
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const pct = ((val / total) * 100).toFixed(1);
+                  return ` ${context.label}: ${PortalCharts.formatShortVnd(val)} (${pct}%)`;
+                }
+              }
+            }
           }
         }
       });

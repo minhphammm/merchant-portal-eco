@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mainContent.innerHTML = `<div id="dashboardViewContainer">${dashboardHTML}</div>`;
     if (typeof i18n !== 'undefined' && i18n.updateDOM) i18n.updateDOM();
 
-    // Render Data & Init Charts safely
+    setupToolbarControls();
     renderDashboardData();
   }
 
@@ -195,6 +195,19 @@ document.addEventListener('DOMContentLoaded', () => {
    * Render Dashboard metrics, tables, top stores, and update charts
    */
   function renderDashboardData() {
+    // Update active class on time filter buttons
+    document.querySelectorAll('.time-btn[data-period]').forEach(btn => {
+      if (btn.getAttribute('data-period') === AppState.currentPeriod) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    if (AppState.currentPeriod === 'custom') {
+      const customBtn = document.getElementById('btnDateFilter');
+      if (customBtn) customBtn.classList.add('active');
+    }
+
     renderKPIs();
     renderRecentTransactions();
     renderTopStores();
@@ -601,6 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const period = btn.getAttribute('data-period');
         AppState.currentPeriod = period;
+
+        if (period === 'today') AppState.chartRangeDays = 1;
+        else if (period === 'thisWeek') AppState.chartRangeDays = 7;
+        else if (period === 'thisMonth') AppState.chartRangeDays = 30;
+
         renderDashboardData();
         showToast(`Đã lọc dữ liệu theo: ${btn.textContent.trim()}`);
       };
