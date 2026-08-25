@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=5.1">
+  <link rel="stylesheet" href="css/style.css?v=5.2">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -256,7 +256,75 @@
                 <button class="time-btn" data-period="today" data-i18n="filterToday">Hôm nay</button>
                 <button class="time-btn active" data-period="thisWeek" data-i18n="filterThisWeek">Tuần này</button>
                 <button class="time-btn" data-period="thisMonth" data-i18n="filterThisMonth">Tháng này</button>
-                <button id="btnDateFilter" class="time-btn" title="Chọn khoảng thời gian mong muốn">Tùy chọn</button>
+                
+                <!-- Ant Design Dual-Month RangePicker Wrapper -->
+                <div id="antdRangePickerWrapper" class="antd-rangepicker-wrapper">
+                  <button id="btnDateFilter" class="time-btn antd-rangepicker-trigger" title="Chọn khoảng thời gian tùy chọn">
+                    <span id="rangePickerBtnText">25-08-2026 → 25-08-2026</span>
+                    <i data-lucide="calendar" style="width:13px; height:13px; margin-left:4px;"></i>
+                  </button>
+
+                  <!-- Floating Popover Calendar Dropdown -->
+                  <div id="antdRangePickerPopover" class="antd-rangepicker-popover" style="display:none;">
+                    <!-- Top Input Display Bar -->
+                    <div class="rangepicker-inputs-bar">
+                      <input type="text" id="rangeInputStart" value="25-08-2026" readonly>
+                      <span class="range-arrow">→</span>
+                      <input type="text" id="rangeInputEnd" value="25-08-2026" readonly>
+                      <button type="button" class="range-clear-btn" id="rangeClearBtn" title="Xóa chọn">⨂</button>
+                    </div>
+
+                    <!-- Dual Calendars Container -->
+                    <div class="rangepicker-calendars-container">
+                      <!-- Month 1 -->
+                      <div class="calendar-month-panel">
+                        <div class="calendar-header">
+                          <div>
+                            <button type="button" class="cal-nav-btn" id="calPrevYear" title="Năm trước">«</button>
+                            <button type="button" class="cal-nav-btn" id="calPrevMonth" title="Tháng trước">‹</button>
+                          </div>
+                          <span class="cal-title" id="calMonth1Title">Th08 2026</span>
+                          <div></div>
+                        </div>
+                        <table class="calendar-table">
+                          <thead>
+                            <tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr>
+                          </thead>
+                          <tbody id="calBodyMonth1"></tbody>
+                        </table>
+                      </div>
+
+                      <!-- Month 2 -->
+                      <div class="calendar-month-panel">
+                        <div class="calendar-header">
+                          <div></div>
+                          <span class="cal-title" id="calMonth2Title">Th09 2026</span>
+                          <div>
+                            <button type="button" class="cal-nav-btn" id="calNextMonth" title="Tháng sau">›</button>
+                            <button type="button" class="cal-nav-btn" id="calNextYear" title="Năm sau">»</button>
+                          </div>
+                        </div>
+                        <table class="calendar-table">
+                          <thead>
+                            <tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr>
+                          </thead>
+                          <tbody id="calBodyMonth2"></tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <!-- Footer & Presets -->
+                    <div class="rangepicker-footer">
+                      <div class="preset-links">
+                        <button type="button" class="preset-btn" data-preset="today">Hôm nay</button>
+                        <button type="button" class="preset-btn" data-preset="last7">7 ngày qua</button>
+                        <button type="button" class="preset-btn" data-preset="last30">30 ngày qua</button>
+                        <button type="button" class="preset-btn" data-preset="thisMonth">Tháng này</button>
+                      </div>
+                      <button type="button" class="btn-primary" id="btnApplyRangePicker" style="padding:4px 14px; font-size:12.5px;">Áp Dụng</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -1206,6 +1206,249 @@ body {
   color: var(--text-muted);
 }
 
+/* ==========================================================================
+   Ant Design Dual-Month RangePicker Dropdown Component
+   ========================================================================== */
+.antd-rangepicker-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.antd-rangepicker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer !important;
+  transition: all 0.2s ease;
+}
+
+.antd-rangepicker-trigger:hover,
+.antd-rangepicker-trigger.active {
+  border-color: #4096ff;
+  color: #1677ff;
+}
+
+.antd-rangepicker-trigger.has-value {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.15);
+  font-weight: 600;
+}
+
+.antd-rangepicker-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 580px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14), 0 3px 6px -4px rgba(0, 0, 0, 0.12);
+  border: 1px solid #f0f0f0;
+  padding: 14px 16px;
+  z-index: 1000;
+  animation: antRangeFadeIn 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.antd-rangepicker-popover::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 28px;
+  width: 10px;
+  height: 10px;
+  background: #FFFFFF;
+  transform: rotate(45deg);
+  border-left: 1px solid #f0f0f0;
+  border-top: 1px solid #f0f0f0;
+}
+
+@keyframes antRangeFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rangepicker-inputs-bar {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid #4096ff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.15);
+  margin-bottom: 12px;
+}
+
+.rangepicker-inputs-bar input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1f1f1f;
+  text-align: center;
+  width: 100px;
+  background: transparent;
+  padding: 2px 0;
+}
+
+.rangepicker-inputs-bar .range-arrow {
+  color: #bfbfbf;
+  margin: 0 10px;
+  font-size: 12px;
+}
+
+.rangepicker-inputs-bar .range-clear-btn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: #bfbfbf;
+  font-size: 14px;
+  cursor: pointer !important;
+  padding: 0 4px;
+  transition: color 0.15s ease;
+}
+
+.rangepicker-inputs-bar .range-clear-btn:hover {
+  color: #595959;
+}
+
+.rangepicker-calendars-container {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
+}
+
+.calendar-month-panel {
+  flex: 1;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 8px;
+}
+
+.cal-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #1f1f1f;
+}
+
+.cal-nav-btn {
+  background: transparent;
+  border: none;
+  color: #8c8c8c;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 6px;
+  cursor: pointer !important;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.cal-nav-btn:hover {
+  color: #1677ff;
+  background: #f5f5f5;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  table-layout: fixed;
+}
+
+.calendar-table th {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.88);
+  padding: 6px 0;
+  text-transform: uppercase;
+}
+
+.calendar-table td {
+  padding: 2px 0;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.cal-day-cell {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  margin: 0 auto;
+  border-radius: 4px;
+  cursor: pointer !important;
+  color: #1f1f1f;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.cal-day-cell:hover {
+  background: #f5f5f5;
+}
+
+.cal-day-cell.day-other-month {
+  color: #bfbfbf !important;
+}
+
+.cal-day-cell.day-today {
+  border: 1px solid #1677ff;
+}
+
+.cal-day-cell.day-selected-start,
+.cal-day-cell.day-selected-end {
+  background: #1677ff !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+}
+
+.cal-day-cell.day-in-range {
+  background: #e6f4ff !important;
+  color: #1677ff !important;
+  border-radius: 0 !important;
+}
+
+.rangepicker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.preset-links {
+  display: flex;
+  gap: 6px;
+}
+
+.preset-btn {
+  background: transparent;
+  border: none;
+  color: #1677ff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer !important;
+  transition: background 0.15s ease;
+}
+
+.preset-btn:hover {
+  background: #e6f4ff;
+}
+
 .filter-actions-bar {
   display: flex;
   align-items: center;

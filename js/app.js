@@ -529,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Setup Dashboard Toolbar Controls
+   * Setup Dashboard Toolbar Controls & Ant Design Dual-Month RangePicker
    */
   function setupToolbarControls() {
     const refreshBtn = document.getElementById('btnRefresh');
@@ -544,68 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    const btnDateFilter = document.getElementById('btnDateFilter');
-    if (btnDateFilter) {
-      btnDateFilter.onclick = function() {
-        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-        btnDateFilter.classList.add('active');
-        openCustomDateModal();
-      };
-    }
-
-  window.openCustomDateModal = function() {
-    const modalTitle = document.getElementById('modalTitleText');
-    const modalBody = document.getElementById('modalBodyContent');
-    const btnAction = document.getElementById('btnFooterAction');
-
-    if (modalTitle) modalTitle.textContent = 'Chọn khoảng thời gian tùy chọn';
-
-    if (modalBody) {
-      modalBody.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:16px; text-align:left; font-size:13px;">
-          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
-            <div class="form-group-field">
-              <label style="font-weight:700;">Từ ngày *</label>
-              <input type="date" id="modalCustomStartDate" value="${AppState.startDate || '2026-08-01'}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
-            </div>
-            <div class="form-group-field">
-              <label style="font-weight:700;">Đến ngày *</label>
-              <input type="date" id="modalCustomEndDate" value="${AppState.endDate || '2026-08-25'}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
-            </div>
-          </div>
-
-          <div style="display:flex; gap:10px; justify-content:center;">
-            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-08-25'; document.getElementById('modalCustomEndDate').value='2026-08-25';">Hôm nay</button>
-            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-08-18'; document.getElementById('modalCustomEndDate').value='2026-08-25';">7 ngày qua</button>
-            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-07-25'; document.getElementById('modalCustomEndDate').value='2026-08-25';">30 ngày qua</button>
-            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-08-01'; document.getElementById('modalCustomEndDate').value='2026-08-25';">Tháng này</button>
-          </div>
-        </div>
-      `;
-    }
-
-    if (btnAction) {
-      btnAction.style.display = 'inline-block';
-      btnAction.textContent = 'Áp Dụng Lọc Khoảng Thời Gian';
-      btnAction.onclick = function() {
-        const startDate = document.getElementById('modalCustomStartDate')?.value;
-        const endDate = document.getElementById('modalCustomEndDate')?.value;
-        if (startDate) AppState.startDate = startDate;
-        if (endDate) AppState.endDate = endDate;
-
-        AppState.currentPeriod = 'custom';
-        renderDashboardData();
-
-        const modalOverlay = document.getElementById('modalOverlay');
-        if (modalOverlay) modalOverlay.classList.remove('show');
-        showToast(`🎉 Đã áp dụng khoảng thời gian: từ ${startDate || '01/08/2026'} đến ${endDate || '25/08/2026'}`);
-      };
-    }
-
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (modalOverlay) modalOverlay.classList.add('show');
-    if (window.refreshIcons) window.refreshIcons();
-  };
+    // Initialize Ant Design Dual-Month RangePicker Component
+    setupAntdRangePicker();
 
     document.querySelectorAll('.time-btn[data-period]:not(#btnDateFilter)').forEach(btn => {
       btn.onclick = function() {
@@ -623,6 +563,275 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast(`Đã lọc dữ liệu theo: ${btn.textContent.trim()}`);
       };
     });
+  }
+
+  /**
+   * Ant Design Dual-Month RangePicker Component Controller
+   */
+  function setupAntdRangePicker() {
+    const triggerBtn = document.getElementById('btnDateFilter');
+    const popover = document.getElementById('antdRangePickerPopover');
+    const wrapper = document.getElementById('antdRangePickerWrapper');
+    const btnText = document.getElementById('rangePickerBtnText');
+
+    if (!triggerBtn || !popover) return;
+
+    // RangePicker State
+    const state = {
+      viewYear: 2026,
+      viewMonth: 7, // August (0-indexed)
+      startDate: new Date(2026, 7, 25),
+      endDate: new Date(2026, 7, 25),
+      selectingStep: 'start'
+    };
+
+    function formatDateStr(d) {
+      if (!d) return '';
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+
+    function formatTitleStr(year, month) {
+      const monthNum = String(month + 1).padStart(2, '0');
+      return `Th${monthNum}  ${year}`;
+    }
+
+    function isSameDay(d1, d2) {
+      if (!d1 || !d2) return false;
+      return d1.getFullYear() === d2.getFullYear() &&
+             d1.getMonth() === d2.getMonth() &&
+             d1.getDate() === d2.getDate();
+    }
+
+    function isBetweenDays(target, start, end) {
+      if (!target || !start || !end) return false;
+      const t = target.getTime();
+      const s = Math.min(start.getTime(), end.getTime());
+      const e = Math.max(start.getTime(), end.getTime());
+      return t > s && t < e;
+    }
+
+    function renderCalendars() {
+      // Month 1 (current viewMonth)
+      const m1Year = state.viewYear;
+      const m1Month = state.viewMonth;
+
+      // Month 2 (next month)
+      let m2Year = m1Year;
+      let m2Month = m1Month + 1;
+      if (m2Month > 11) {
+        m2Month = 0;
+        m2Year += 1;
+      }
+
+      const title1 = document.getElementById('calMonth1Title');
+      const title2 = document.getElementById('calMonth2Title');
+      if (title1) title1.textContent = formatTitleStr(m1Year, m1Month);
+      if (title2) title2.textContent = formatTitleStr(m2Year, m2Month);
+
+      const inputStart = document.getElementById('rangeInputStart');
+      const inputEnd = document.getElementById('rangeInputEnd');
+      if (inputStart) inputStart.value = formatDateStr(state.startDate);
+      if (inputEnd) inputEnd.value = formatDateStr(state.endDate);
+
+      renderMonthBody('calBodyMonth1', m1Year, m1Month);
+      renderMonthBody('calBodyMonth2', m2Year, m2Month);
+    }
+
+    function renderMonthBody(tbodyId, year, month) {
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+
+      // Day of week offset: Mon=0, Sun=6
+      let startDayOfWeek = firstDay.getDay() - 1;
+      if (startDayOfWeek === -1) startDayOfWeek = 6;
+
+      const daysInMonth = lastDay.getDate();
+      const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+      let cells = [];
+
+      // 1. Previous month trailing days
+      for (let i = startDayOfWeek - 1; i >= 0; i--) {
+        const d = prevMonthLastDay - i;
+        const prevM = month === 0 ? 11 : month - 1;
+        const prevY = month === 0 ? year - 1 : year;
+        cells.push({ dateObj: new Date(prevY, prevM, d), isCurrent: false });
+      }
+
+      // 2. Current month days
+      for (let d = 1; d <= daysInMonth; d++) {
+        cells.push({ dateObj: new Date(year, month, d), isCurrent: true });
+      }
+
+      // 3. Next month leading days
+      const totalCellsNeeded = cells.length > 35 ? 42 : 35;
+      let nextD = 1;
+      while (cells.length < totalCellsNeeded) {
+        const nextM = month === 11 ? 0 : month + 1;
+        const nextY = month === 11 ? year + 1 : year;
+        cells.push({ dateObj: new Date(nextY, nextM, nextD++), isCurrent: false });
+      }
+
+      // Build HTML rows (7 days per row)
+      let html = '';
+      const today = new Date(2026, 7, 25); // Today reference
+
+      for (let r = 0; r < cells.length; r += 7) {
+        html += '<tr>';
+        for (let c = 0; c < 7; c++) {
+          const item = cells[r + c];
+          const dObj = item.dateObj;
+
+          let classes = ['cal-day-cell'];
+          if (!item.isCurrent) classes.push('day-other-month');
+          if (isSameDay(dObj, today)) classes.push('day-today');
+          if (isSameDay(dObj, state.startDate)) classes.push('day-selected-start');
+          if (isSameDay(dObj, state.endDate)) classes.push('day-selected-end');
+          if (isBetweenDays(dObj, state.startDate, state.endDate)) classes.push('day-in-range');
+
+          const timestamp = dObj.getTime();
+          html += `<td><div class="${classes.join(' ')}" data-time="${timestamp}">${dObj.getDate()}</div></td>`;
+        }
+        html += '</tr>';
+      }
+
+      tbody.innerHTML = html;
+
+      // Bind day click events
+      tbody.querySelectorAll('.cal-day-cell').forEach(cell => {
+        cell.onclick = function(e) {
+          e.stopPropagation();
+          const time = parseInt(cell.getAttribute('data-time'));
+          const clickedDate = new Date(time);
+
+          if (state.selectingStep === 'start' || clickedDate < state.startDate) {
+            state.startDate = clickedDate;
+            state.endDate = clickedDate;
+            state.selectingStep = 'end';
+          } else {
+            state.endDate = clickedDate;
+            state.selectingStep = 'start';
+          }
+
+          renderCalendars();
+        };
+      });
+    }
+
+    // Toggle Popover
+    triggerBtn.onclick = function(e) {
+      e.stopPropagation();
+      const isOpen = popover.style.display === 'block';
+
+      // Close all other open popovers
+      document.querySelectorAll('.antd-rangepicker-popover').forEach(p => p.style.display = 'none');
+
+      if (isOpen) {
+        popover.style.display = 'none';
+      } else {
+        popover.style.display = 'block';
+        renderCalendars();
+      }
+    };
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (wrapper && !wrapper.contains(e.target)) {
+        popover.style.display = 'none';
+      }
+    });
+
+    // Navigation Buttons
+    const btnPrevYear = document.getElementById('calPrevYear');
+    const btnPrevMonth = document.getElementById('calPrevMonth');
+    const btnNextMonth = document.getElementById('calNextMonth');
+    const btnNextYear = document.getElementById('calNextYear');
+
+    if (btnPrevYear) btnPrevYear.onclick = (e) => { e.stopPropagation(); state.viewYear -= 1; renderCalendars(); };
+    if (btnPrevMonth) btnPrevMonth.onclick = (e) => {
+      e.stopPropagation();
+      state.viewMonth -= 1;
+      if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear -= 1; }
+      renderCalendars();
+    };
+    if (btnNextMonth) btnNextMonth.onclick = (e) => {
+      e.stopPropagation();
+      state.viewMonth += 1;
+      if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear += 1; }
+      renderCalendars();
+    };
+    if (btnNextYear) btnNextYear.onclick = (e) => { e.stopPropagation(); state.viewYear += 1; renderCalendars(); };
+
+    // Clear Button
+    const clearBtn = document.getElementById('rangeClearBtn');
+    if (clearBtn) {
+      clearBtn.onclick = (e) => {
+        e.stopPropagation();
+        state.startDate = new Date(2026, 7, 25);
+        state.endDate = new Date(2026, 7, 25);
+        state.selectingStep = 'start';
+        renderCalendars();
+      };
+    }
+
+    // Presets
+    popover.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const preset = btn.getAttribute('data-preset');
+        const now = new Date(2026, 7, 25);
+
+        if (preset === 'today') {
+          state.startDate = new Date(now);
+          state.endDate = new Date(now);
+        } else if (preset === 'last7') {
+          state.startDate = new Date(2026, 7, 18);
+          state.endDate = new Date(now);
+        } else if (preset === 'last30') {
+          state.startDate = new Date(2026, 6, 25);
+          state.endDate = new Date(now);
+        } else if (preset === 'thisMonth') {
+          state.startDate = new Date(2026, 7, 1);
+          state.endDate = new Date(now);
+        }
+
+        renderCalendars();
+      };
+    });
+
+    // Apply Button
+    const applyBtn = document.getElementById('btnApplyRangePicker');
+    if (applyBtn) {
+      applyBtn.onclick = (e) => {
+        e.stopPropagation();
+        const startStr = formatDateStr(state.startDate);
+        const endStr = formatDateStr(state.endDate);
+
+        AppState.startDate = startStr;
+        AppState.endDate = endStr;
+        AppState.currentPeriod = 'custom';
+
+        if (btnText) btnText.textContent = `${startStr} → ${endStr}`;
+        triggerBtn.classList.add('has-value');
+
+        popover.style.display = 'none';
+
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+        triggerBtn.classList.add('active');
+
+        renderDashboardData();
+        showToast(`🎉 Đã áp dụng khoảng thời gian: ${startStr} → ${endStr}`);
+      };
+    }
+
+    renderCalendars();
+  }
 
     document.querySelectorAll('.chart-toggle-btn').forEach(btn => {
       btn.onclick = function() {
@@ -635,7 +844,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
     });
-  }
 
   // =========================================================================
   // PRD-ECOPAY-PAYLINK-01 v2.0 - Payment Link & QR Code Handlers
