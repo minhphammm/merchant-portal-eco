@@ -845,6 +845,94 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     });
 
+  // Global Document Preview Modal Controller
+  let currentDocZoom = 1.0;
+
+  window.zoomDocPreview = function(delta) {
+    currentDocZoom = Math.min(Math.max(0.6, currentDocZoom + delta), 1.8);
+    const canvas = document.getElementById('docSheetCanvas');
+    if (canvas) {
+      canvas.style.transform = `scale(${currentDocZoom})`;
+    }
+  };
+
+  window.openDocPreviewModal = function(docTitle = 'Hồ sơ tài liệu pháp lý') {
+    currentDocZoom = 1.0;
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = `Xem Trước Hồ Sơ: ${docTitle}`;
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:0;">
+          <!-- Toolbar -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:#F1F5F9; border:1px solid var(--border-color); border-radius:8px 8px 0 0;">
+            <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:13px; color:var(--text-main);">
+              <i data-lucide="file-text" style="width:16px; height:16px; color:var(--color-primary);"></i>
+              <span>${docTitle}</span>
+              <span class="status-badge badge-success" style="font-size:11px; padding:2px 8px;">✔ Verified System</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="btn-secondary" style="font-size:12px; padding:4px 10px;" onclick="zoomDocPreview(0.15)" title="Phóng to">🔍 +</button>
+              <button class="btn-secondary" style="font-size:12px; padding:4px 10px;" onclick="zoomDocPreview(-0.15)" title="Thu nhỏ">🔍 -</button>
+              <button class="btn-primary" style="font-size:12px; padding:4px 12px;" onclick="showToast('🎉 Tải xuống file PDF thành công!')">📥 Tải File PDF</button>
+            </div>
+          </div>
+
+          <!-- Document Viewer Paper Canvas -->
+          <div style="background:#334155; padding:20px; display:flex; justify-content:center; overflow:auto; max-height:500px; border:1px solid var(--border-color); border-top:none; border-radius:0 0 8px 8px;">
+            <div id="docSheetCanvas" style="width:520px; min-height:620px; background:#FFFFFF; padding:32px; border-radius:4px; box-shadow:0 10px 25px rgba(0,0,0,0.3); font-family:'Plus Jakarta Sans', serif; color:#0F172A; transform-origin:top center; transition:transform 0.2s ease; text-align:left;">
+              <div style="text-align:center; border-bottom:2px solid #0F172A; padding-bottom:12px; margin-bottom:16px;">
+                <div style="font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+                <div style="font-size:10px; font-weight:600; margin-bottom:6px;">Độc lập - Tự do - Hạnh phúc</div>
+                <div style="width:100px; height:1px; background:#0F172A; margin:0 auto 10px auto;"></div>
+                <h2 style="font-size:15px; font-weight:800; color:#0A66C2; margin-top:8px; text-transform:uppercase;">${docTitle.toUpperCase()}</h2>
+                <div style="font-size:11px; color:#64748B;">Mã lưu trữ chứng thực: ECO-DOC-2026-99128</div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:10px; font-size:12px; line-height:1.6;">
+                <div><strong>Tên Doanh Nghiệp:</strong> CÔNG TY TNHH GF CAPITAL VIỆT NAM</div>
+                <div><strong>Mã Số Doanh Nghiệp / MST:</strong> 0101234567</div>
+                <div><strong>Địa Chỉ Trụ Sở Chính:</strong> Tầng 12, Tòa nhà Bitexco Financial Tower, Số 2 Hải Triều, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</div>
+                <div><strong>Người Đại Diện Theo Pháp Luật:</strong> NGUYỄN VĂN A (Chức danh: Giám đốc)</div>
+                <div><strong>Vốn Điều Lệ:</strong> 810,000,000,000 VNĐ (Tám trăm mười tỷ đồng)</div>
+                <div><strong>Ngày Đăng Ký Lần Đầu:</strong> 15/03/2022</div>
+                <div><strong>Ghi Chú Đơn Vị Thẩm Định:</strong> Hồ sơ đã được kiểm duyệt, mã hóa dữ liệu bảo mật SSL và lưu trữ trên hệ sinh thái Ecopay FinViet.</div>
+              </div>
+
+              <!-- Stamp & QR Section -->
+              <div style="margin-top:32px; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div style="text-align:center;">
+                  <div style="font-size:10px; color:#64748B;">Mã QR Mã Hóa</div>
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://finviet.com.vn/verify/ECO-DOC-2026-99128" style="width:70px; height:70px; margin-top:4px; border:1px solid #CBD5E1; padding:2px;">
+                </div>
+
+                <div style="text-align:center; position:relative;">
+                  <div style="font-size:10.5px; font-weight:700;">TP.Hồ Chí Minh, Ngày 20 tháng 08 năm 2026</div>
+                  <div style="font-size:11px; font-weight:800; margin-top:4px;">CƠ QUAN PHÊ DUYỆT / SYSTEM VERIFIED</div>
+                  
+                  <div style="margin-top:8px; display:inline-block; border:3px double #EF4444; color:#EF4444; font-weight:900; font-size:10px; padding:6px 12px; border-radius:50%; transform:rotate(-12deg); text-transform:uppercase; box-shadow:0 0 0 2px rgba(239,68,68,0.2);">
+                    ★ ECOPAY FINVIET ★<br>ĐÃ XÁC THỰC<br>VERIFIED DOC
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.style.display = 'none';
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
   // =========================================================================
   // PRD-ECOPAY-PAYLINK-01 v2.0 - Payment Link & QR Code Handlers
   // =========================================================================
