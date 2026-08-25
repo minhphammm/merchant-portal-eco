@@ -1902,41 +1902,45 @@ const ViewRenderer = {
         </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH GIAO DỊCH (10 TRƯỜNG CHUẨN TÀI LIỆU IMAGE 2) -->
+      <!-- BẢNG DANH SÁCH GIAO DỊCH SAO KÊ (12 TRƯỜNG CHUẨN TÀI LIỆU BRD 1.1) -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
           <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Giao Dịch Sao Kê (${list.length} giao dịch)</span>
-          <span class="status-badge badge-success">Số dư sổ hạch toán: 185,450,000 đ</span>
+          <span class="status-badge badge-success">Tổng giá trị quyết toán: 160,253,750 đ</span>
         </div>
         <div class="table-responsive" style="overflow-x:auto;">
           <table class="portal-table">
             <thead>
               <tr>
                 <th style="white-space:nowrap;">Mã giao dịch</th>
+                <th style="white-space:nowrap;">Mã tham chiếu</th>
+                <th style="white-space:nowrap;">Approve Code</th>
                 <th style="white-space:nowrap;">Thời gian phát sinh</th>
                 <th style="white-space:nowrap;">Ngày hạch toán</th>
-                <th style="white-space:nowrap; min-width:240px;">Nội dung</th>
-                <th style="white-space:nowrap;">Loại giao dịch</th>
-                <th style="white-space:nowrap; text-align:right;">Ghi có</th>
-                <th style="white-space:nowrap; text-align:right;">Ghi nợ</th>
-                <th style="white-space:nowrap; text-align:right;">Phí FV</th>
-                <th style="white-space:nowrap; text-align:right;">Số dư</th>
-                <th style="white-space:nowrap;">Mã tham chiếu</th>
+                <th style="white-space:nowrap;">Phương thức</th>
+                <th style="white-space:nowrap;">Thông tin thanh toán</th>
+                <th style="white-space:nowrap; text-align:right;">Số tiền gốc</th>
+                <th style="white-space:nowrap; text-align:right;">Phí giao dịch</th>
+                <th style="white-space:nowrap; text-align:right;">Số tiền hoàn/hủy</th>
+                <th style="white-space:nowrap; text-align:right;">Giá trị quyết toán</th>
+                <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
               </tr>
             </thead>
             <tbody>
               ${list.map(t => `
                 <tr onclick="showToast('Chi tiết giao dịch sao kê: ${t.txnId}')">
                   <td><span class="txn-code">${t.txnId}</span></td>
+                  <td><code style="font-family:monospace; background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:11.5px; color:#334155;">${t.refCode}</code></td>
+                  <td><code style="font-family:monospace; background:#EFF6FF; padding:2px 6px; border-radius:4px; font-size:11.5px; color:#0284C7; font-weight:700;">${t.approveCode}</code></td>
                   <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${t.createdTime}</td>
                   <td style="font-size:12px; white-space:nowrap;"><strong>${t.postDate}</strong></td>
-                  <td style="font-size:12.5px; max-width:280px;">${t.description}</td>
-                  <td><span class="status-badge ${t.txnTypeClass}">${t.txnType}</span></td>
-                  <td style="text-align:right; font-weight:800; color:${t.creditAmount !== '—' ? '#10B981' : 'var(--text-muted)'}; font-size:13px;">${t.creditAmount}</td>
-                  <td style="text-align:right; font-weight:800; color:${t.debitAmount !== '—' ? '#EF4444' : 'var(--text-muted)'}; font-size:13px;">${t.debitAmount}</td>
-                  <td style="text-align:right; font-size:12px; font-weight:600;">${t.fvFee}</td>
-                  <td style="text-align:right; font-weight:800; color:var(--color-primary); font-size:13.5px;">${t.balance}</td>
-                  <td><code style="font-family:monospace; background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:11.5px; color:#334155;">${t.refCode}</code></td>
+                  <td><span class="status-badge badge-processing" style="font-size:11px;">${t.method}</span></td>
+                  <td style="font-size:12px; font-family:monospace; white-space:nowrap;">${t.paymentInfo}</td>
+                  <td style="text-align:right; font-weight:800; color:var(--color-primary); font-size:13px;">${t.originalAmount}</td>
+                  <td style="text-align:right; font-size:12px; font-weight:600;">${t.fee}</td>
+                  <td style="text-align:right; font-weight:600; color:${t.refundAmount !== '0 đ' ? '#EF4444' : 'var(--text-muted)'}; font-size:12.5px;">${t.refundAmount}</td>
+                  <td style="text-align:right; font-weight:800; color:#10B981; font-size:13.5px;">${t.settlementAmount}</td>
+                  <td style="text-align:center;"><span class="status-badge ${t.statusClass}">${t.statusText}</span></td>
                 </tr>
               `).join('')}
             </tbody>
