@@ -1382,105 +1382,84 @@ const ViewRenderer = {
         </div>
       </div>
 
-      <!-- MỤC TÌM KIẾM BỘ LỌC BÁO CÁO ĐỐI SOÁT THANH TOÁN (PRD EXACT SPECIFICATION) -->
+      <!-- MỤC TÌM KIẾM BỘ LỌC BÁO CÁO ĐỐI SOÁT THANH TOÁN -->
       <div class="table-card" style="margin-bottom:20px;">
-        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <i data-lucide="filter" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Tìm Kiếm Đối Soát
-          </div>
-          <button type="button" class="btn-secondary" style="font-size:12px; padding:4px 10px;" onclick="toggleFilterExpand(this)">
-            <i data-lucide="chevron-up" style="width:14px; height:14px; margin-right:4px;"></i> Thu gọn
-          </button>
-        </div>
         <form id="reconcileReportFilterForm" onsubmit="return false;">
-          <div class="filter-panel-content">
-            <div class="filter-grid-4col" style="row-gap:14px;">
-              <!-- 1. Tên doanh nghiệp -->
-              <div class="form-group-field">
-                <label>Tên doanh nghiệp</label>
-                <select id="filterReportMerchantName">
-                  <option value="all">Tìm và chọn doanh nghiệp</option>
-                  <option value="finviet">CÔNG TY CỔ PHẦN CÔNG NGHIỆP FINVIET</option>
-                  <option value="ngantruong">CÔNG TY CP TNHH NGÂN TRƯỜNG</option>
-                  <option value="mcn1">CÔNG TY TNHH MERCHANTUNGA</option>
-                </select>
-              </div>
+          <div class="filter-grid-4col" style="row-gap:14px;">
+            <!-- 1. Tên cửa hàng -->
+            <div class="form-group-field">
+              <label>Tên cửa hàng</label>
+              <select id="filterReportStoreName">
+                <option value="all">Tìm theo tên/mã/SĐT cửa hàng</option>
+                <option value="storeHS">Như thế học sinh (FINVIET4917.T)</option>
+                <option value="storeHK">Chi nhánh Hoàn Kiếm (FINVIET0812)</option>
+                <option value="storeSP">Cửa hàng SmartPOS Cửa NGÂN</option>
+                <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+              </select>
+            </div>
 
-              <!-- 2. Tên cửa hàng -->
-              <div class="form-group-field">
-                <label>Tên cửa hàng</label>
-                <select id="filterReportStoreName">
-                  <option value="all">Tìm theo tên/mã/SĐT cửa hàng</option>
-                  <option value="storeHS">Như thế học sinh (FINVIET4917.T)</option>
-                  <option value="storeHK">Chi nhánh Hoàn Kiếm (FINVIET0812)</option>
-                  <option value="storeSP">Cửa hàng SmartPOS Cửa NGÂN</option>
-                  <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
-                </select>
-              </div>
+            <!-- 2. Mã thanh toán -->
+            <div class="form-group-field">
+              <label>Mã thanh toán</label>
+              <input type="text" id="filterReportCode" placeholder="Vui lòng nhập mã thanh toán (VD: R_102107...)">
+            </div>
 
-              <!-- 3. Mã thanh toán -->
-              <div class="form-group-field">
-                <label>Mã thanh toán</label>
-                <input type="text" id="filterReportCode" placeholder="Vui lòng nhập mã thanh toán (VD: R_102107...)">
-              </div>
-
-              <!-- 4. Thời gian tạo (Tối đa 3 tháng + Tooltip) -->
-              <div class="form-group-field">
-                <label style="display:flex; align-items:center; gap:4px;">
-                  Thời gian tạo
-                  <span class="info-tooltip-icon" title="Khoảng thời gian tối đa là 3 tháng" style="cursor:pointer; color:var(--text-muted); display:inline-flex; align-items:center;">
-                    <i data-lucide="help-circle" style="width:13px; height:13px;"></i>
-                  </span>
-                </label>
-                <div class="date-range-input-box" title="Khoảng thời gian tối đa là 3 tháng">
-                  <input type="date" id="filterReportCreatedStart" value="2025-06-01">
-                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
-                  <input type="date" id="filterReportCreatedEnd" value="2025-08-22">
-                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
-                </div>
-              </div>
-
-              <!-- 5. Phương thức thanh toán -->
-              <div class="form-group-field">
-                <label>Phương thức thanh toán</label>
-                <select id="filterReportPayMethod">
-                  <option value="all">Vui lòng chọn phương thức thanh toán</option>
-                  <option value="card">Thẻ học sinh</option>
-                  <option value="qrcode">QR Code (VietQR / QR Bank)</option>
-                  <option value="bnpl">BNPL (Trả chậm)</option>
-                  <option value="pos">SoftPOS / Thẻ Ngân hàng</option>
-                </select>
-              </div>
-
-              <!-- 6. Thời gian thanh toán doanh nghiệp -->
-              <div class="form-group-field">
-                <label>Thời gian thanh toán doanh nghiệp</label>
-                <div class="date-range-input-box">
-                  <input type="date" id="filterReportMerchantPayStart" value="2025-08-01">
-                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
-                  <input type="date" id="filterReportMerchantPayEnd" value="2025-08-22">
-                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
-                </div>
-              </div>
-
-              <!-- 7. Trạng thái -->
-              <div class="form-group-field">
-                <label>Trạng thái</label>
-                <select id="filterReportStatus">
-                  <option value="all">Vui lòng chọn trạng thái</option>
-                  <option value="approved">Đã phê duyệt</option>
-                  <option value="paid">Đã thanh toán</option>
-                  <option value="processing">Đang xử lý</option>
-                  <option value="rejected">Từ chối</option>
-                  <option value="cancelled">Hủy</option>
-                </select>
+            <!-- 3. Thời gian tạo (Tối đa 3 tháng + Tooltip) -->
+            <div class="form-group-field">
+              <label style="display:flex; align-items:center; gap:4px;">
+                Thời gian tạo
+                <span class="info-tooltip-icon" title="Khoảng thời gian tối đa là 3 tháng" style="cursor:pointer; color:var(--text-muted); display:inline-flex; align-items:center;">
+                  <i data-lucide="help-circle" style="width:13px; height:13px;"></i>
+                </span>
+              </label>
+              <div class="date-range-input-box" title="Khoảng thời gian tối đa là 3 tháng">
+                <input type="date" id="filterReportCreatedStart" value="2025-06-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterReportCreatedEnd" value="2025-08-22">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
-            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
-              <button type="button" class="btn-secondary" onclick="showToast('Đã làm mới bộ lọc báo cáo đối soát')">Làm mới</button>
-              <button type="button" class="btn-primary" onclick="showToast('Đã lọc báo cáo đối soát thanh toán')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tìm kiếm</button>
+            <!-- 4. Phương thức thanh toán -->
+            <div class="form-group-field">
+              <label>Phương thức thanh toán</label>
+              <select id="filterReportPayMethod">
+                <option value="all">Vui lòng chọn phương thức thanh toán</option>
+                <option value="card">Thẻ học sinh</option>
+                <option value="qrcode">QR Code (VietQR / QR Bank)</option>
+                <option value="bnpl">BNPL (Trả chậm)</option>
+                <option value="pos">SoftPOS / Thẻ Ngân hàng</option>
+              </select>
             </div>
+
+            <!-- 5. Thời gian thanh toán doanh nghiệp -->
+            <div class="form-group-field">
+              <label>Thời gian thanh toán doanh nghiệp</label>
+              <div class="date-range-input-box">
+                <input type="date" id="filterReportMerchantPayStart" value="2025-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterReportMerchantPayEnd" value="2025-08-22">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+              </div>
+            </div>
+
+            <!-- 6. Trạng thái -->
+            <div class="form-group-field">
+              <label>Trạng thái</label>
+              <select id="filterReportStatus">
+                <option value="all">Vui lòng chọn trạng thái</option>
+                <option value="approved">Đã phê duyệt</option>
+                <option value="paid">Đã thanh toán</option>
+                <option value="processing">Đang xử lý</option>
+                <option value="rejected">Từ chối</option>
+                <option value="cancelled">Hủy</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+            <button type="button" class="btn-secondary" onclick="showToast('Đã làm mới bộ lọc báo cáo đối soát')">Làm mới</button>
+            <button type="button" class="btn-primary" onclick="showToast('Đã lọc báo cáo đối soát thanh toán')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tìm kiếm</button>
           </div>
         </form>
       </div>
