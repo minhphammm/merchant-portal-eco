@@ -1609,15 +1609,19 @@ const ViewRenderer = {
               </div>
             </div>
 
-            <!-- 4. Phương thức thanh toán -->
+            <!-- 4. Phương thức thanh toán (8 Phương thức chuẩn BRD ảnh) -->
             <div class="form-group-field">
               <label>Phương thức thanh toán</label>
               <select id="filterReportPayMethod">
                 <option value="all">Vui lòng chọn phương thức thanh toán</option>
-                <option value="card">Thẻ học sinh</option>
-                <option value="qrcode">QR Code (VietQR / QR Bank)</option>
-                <option value="bnpl">BNPL (Trả chậm)</option>
-                <option value="pos">SoftPOS / Thẻ Ngân hàng</option>
+                <option value="atm">ATM</option>
+                <option value="qrcode">QR Code</option>
+                <option value="trasau">Trả sau</option>
+                <option value="miniapp_seller">MiniApp - ECO điểm bán</option>
+                <option value="miniapp_user">MiniApp - ECO người tiêu dùng</option>
+                <option value="bnpl">Mua trước trả sau</option>
+                <option value="student_card">Thẻ học sinh</option>
+                <option value="cash">Tiền mặt</option>
               </select>
             </div>
 
@@ -1699,15 +1703,15 @@ const ViewRenderer = {
                 <tr>
                   <td style="text-align:center; font-weight:600;">${item.stt}</td>
                   <td>
-                    <a href="javascript:void(0)" onclick="openReconcileReportDetailModal('${item.reconcileCode}')" style="font-weight:700; color:var(--color-primary); text-decoration:underline;">
-                      ${item.reconcileCode}
+                    <a href="javascript:void(0)" onclick="openReconcileReportDetailModal('${item.reconcileCode}')" style="font-weight:700; color:#0284C7; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                      ${item.reconcileCode} <i data-lucide="copy" style="width:12px; height:12px; color:#94A3B8;"></i>
                     </a>
                   </td>
-                  <td style="font-size:12.5px;">${item.createdAt}</td>
-                  <td style="font-size:12px; color:var(--text-muted);">${item.periodRange}</td>
+                  <td style="font-size:12.5px;">${item.createdAt || item.reconcileCreatedTime}</td>
+                  <td style="font-size:12px; color:var(--text-muted);">${item.periodRange || item.txnTimeRange}</td>
                   <td>
-                    <span class="badge-neutral" style="background:#E2E8F0; color:#334155; padding:3px 8px; border-radius:4px; font-size:11.5px; font-weight:600;">
-                      ${item.paymentMethod}
+                    <span style="background:#FFF7ED; color:#C2410C; border:1px solid #FFEDD5; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">
+                      ${item.payMethod || item.paymentMethod}
                     </span>
                   </td>
                   <td style="font-size:12.5px;">${item.storeName}</td>
