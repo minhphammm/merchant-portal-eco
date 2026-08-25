@@ -1821,15 +1821,21 @@ const ViewRenderer = {
         </div>
         <form id="v11StatementFilterForm" onsubmit="return false;">
           <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
-            <!-- 1. Mã đợt thanh toán -->
+            <!-- 1. Kỳ sao kê -->
             <div class="form-group-field">
-              <label>Mã đợt thanh toán</label>
-              <input type="text" id="filterV11SettlementCode" placeholder="Nhập mã đợt thanh toán (settlement)">
+              <label>Kỳ sao kê</label>
+              <select id="filterV11Period">
+                <option value="all">Tất cả kỳ sao kê</option>
+                <option value="m08">Tháng 08/2026 (Hiện tại)</option>
+                <option value="m07">Tháng 07/2026</option>
+                <option value="m06">Tháng 06/2026</option>
+                <option value="h1_08">Kỳ 15 ngày đầu tháng 08/2026</option>
+              </select>
             </div>
 
-            <!-- 2. Khoảng thời gian đối soát -->
+            <!-- 2. Khoảng thời gian (Ngày hạch toán) -->
             <div class="form-group-field">
-              <label>Khoảng thời gian đối soát</label>
+              <label>Khoảng thời gian (Ngày hạch toán)</label>
               <div class="date-range-input-box">
                 <input type="date" id="filterV11PostStart" value="2026-08-01">
                 <span class="range-separator">→</span>
@@ -1838,33 +1844,37 @@ const ViewRenderer = {
               </div>
             </div>
 
-            <!-- 3. Mã/Tên cửa hàng -->
+            <!-- 3. Cửa hàng -->
             <div class="form-group-field">
-              <label>Mã/Tên cửa hàng</label>
-              <select id="filterV11Store">
+              <label>Cửa hàng</label>
+              <select id="filterV11Account">
                 <option value="all">Tất cả cửa hàng</option>
-                <option value="ST-Q1-001">ST-Q1-001 - Chi nhánh Quận 1 - Hồ Chí Minh</option>
-                <option value="ST-HK-002">ST-HK-002 - Chi nhánh Hoàn Kiếm - Hà Nội</option>
-                <option value="ST-HC-003">ST-HC-003 - Chi nhánh Hải Châu - Đà Nẵng</option>
+                <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+                <option value="storeHK">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                <option value="storeHC">Chi nhánh Hải Châu - Đà Nẵng</option>
               </select>
             </div>
 
-            <!-- 4. Trạng thái -->
+            <!-- 4. Loại giao dịch -->
+            <div class="form-group-field">
+              <label>Loại giao dịch</label>
+              <select id="filterV11TxnType">
+                <option value="all">Tất cả loại giao dịch</option>
+                <option value="payment">Thanh toán</option>
+                <option value="refund">Hoàn tiền</option>
+                <option value="fee">Phí</option>
+                <option value="adjust">Điều chỉnh</option>
+              </select>
+            </div>
+
+            <!-- 5. Trạng thái -->
             <div class="form-group-field">
               <label>Trạng thái</label>
               <select id="filterV11Status">
                 <option value="all">Tất cả trạng thái</option>
-                <option value="approved">Đã duyệt</option>
-                <option value="processing">Đang thanh toán</option>
-                <option value="paid">Đã thanh toán</option>
-                <option value="cancelled">Hủy / Từ chối</option>
+                <option value="official">Chính thức</option>
+                <option value="adjusted">Đã điều chỉnh</option>
               </select>
-            </div>
-
-            <!-- 5. Từ khóa giao dịch -->
-            <div class="form-group-field">
-              <label>Từ khóa giao dịch</label>
-              <input type="text" id="filterV11TxnKeyword" placeholder="Nhập mã giao dịch hoặc mã tham chiếu">
             </div>
           </div>
 
