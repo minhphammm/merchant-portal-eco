@@ -3025,4 +3025,286 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
   });
+
+  // =========================================================
+  // BRD EMPLOYEE & ACCOUNT MANAGEMENT INTERACTIVE MODULE
+  // =========================================================
+  window.switchStaffBRDTab = function(tabId) {
+    document.querySelectorAll('.enterprise-tabs-nav .ent-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('staffTabStaffContainer').style.display = 'none';
+    document.getElementById('staffTabAccountsContainer').style.display = 'none';
+    document.getElementById('staffTabActivitiesContainer').style.display = 'none';
+
+    const mainAddStaffBtn = document.getElementById('btnMainAddStaff');
+    const mainAddAccountBtn = document.getElementById('btnMainAddAccount');
+
+    if (tabId === 'staff') {
+      document.getElementById('tabBtnStaff').classList.add('active');
+      document.getElementById('staffTabStaffContainer').style.display = 'block';
+      if (mainAddStaffBtn) mainAddStaffBtn.style.display = 'inline-block';
+      if (mainAddAccountBtn) mainAddAccountBtn.style.display = 'none';
+    } else if (tabId === 'accounts') {
+      document.getElementById('tabBtnAccounts').classList.add('active');
+      document.getElementById('staffTabAccountsContainer').style.display = 'block';
+      if (mainAddStaffBtn) mainAddStaffBtn.style.display = 'none';
+      if (mainAddAccountBtn) mainAddAccountBtn.style.display = 'inline-block';
+    } else if (tabId === 'activities') {
+      document.getElementById('tabBtnActivities').classList.add('active');
+      document.getElementById('staffTabActivitiesContainer').style.display = 'block';
+      if (mainAddStaffBtn) mainAddStaffBtn.style.display = 'none';
+      if (mainAddAccountBtn) mainAddAccountBtn.style.display = 'none';
+    }
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
+  window.openCreateStaffModalBRD = function() {
+    openStaffFormModalBRD(null);
+  };
+
+  window.openEditStaffModalBRD = function(staffId) {
+    const list = MockData.getStaffListBRD ? MockData.getStaffListBRD() : [];
+    const staff = list.find(s => s.id === staffId);
+    openStaffFormModalBRD(staff);
+  };
+
+  function openStaffFormModalBRD(staff = null) {
+    const isEdit = !!staff;
+    const modalContent = document.getElementById('modalContent');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    modalContent.innerHTML = `
+      <div class="modal-header">
+        <h2 class="modal-title">${isEdit ? '✍️ Chỉnh Sửa Thông Tin Nhân Viên BRD' : '➕ Tạo Mới Nhân Viên BRD'}</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+
+      <div style="padding:20px; max-height:75vh; overflow-y:auto;">
+        <form id="formBRDStaff" onsubmit="event.preventDefault(); submitStaffFormBRD('${isEdit ? staff.id : ''}');">
+          
+          <!-- 1. Thông tin nhân viên -->
+          <div style="font-weight:700; font-size:14px; margin-bottom:10px; color:#1677ff; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">
+            1. Thông tin nhân viên
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 2fr; gap:16px; margin-bottom:16px;">
+            <div>
+              <label style="font-size:12px; font-weight:600; color:var(--text-muted);">Ảnh nhân viên</label>
+              <div style="width:100px; height:100px; border:2px dashed #cbd5e1; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; background:#f8fafc;" onclick="showToast('Chọn ảnh đại diện nhân viên')">
+                <span style="font-size:24px;">👤</span>
+                <span style="font-size:11px; color:#64748b;">Tải ảnh lên</span>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div class="form-group-field">
+                <label>Họ (H)</label>
+                <input type="text" id="staffLastName" value="${isEdit ? staff.lastName || '' : ''}" placeholder="Nhập họ">
+              </div>
+              <div class="form-group-field">
+                <label>Tên đệm (m)</label>
+                <input type="text" id="staffMiddleName" value="${isEdit ? staff.middleName || '' : ''}" placeholder="Nhập tên đệm">
+              </div>
+              <div class="form-group-field" style="grid-column: span 2;">
+                <label>Tên * (Bắt buộc)</label>
+                <input type="text" id="staffFirstName" value="${isEdit ? staff.firstName || staff.name : ''}" required placeholder="Nhập tên nhân viên">
+              </div>
+              <div class="form-group-field">
+                <label>Chức vụ</label>
+                <select id="staffRole">
+                  <option value="Quản lý Doanh nghiệp" ${isEdit && staff.role === 'Quản lý Doanh nghiệp' ? 'selected' : ''}>Quản lý Doanh nghiệp</option>
+                  <option value="Cửa hàng trưởng" ${isEdit && staff.role === 'Cửa hàng trưởng' ? 'selected' : ''}>Cửa hàng trưởng</option>
+                  <option value="Thu ngân / Bán hàng" ${isEdit && staff.role === 'Thu ngân / Bán hàng' ? 'selected' : ''}>Thu ngân / Bán hàng</option>
+                  <option value="Kiểm kho / Giao nhận" ${isEdit && staff.role === 'Kiểm kho / Giao nhận' ? 'selected' : ''}>Kiểm kho / Giao nhận</option>
+                </select>
+              </div>
+              <div class="form-group-field">
+                <label>Ngày sinh</label>
+                <input type="date" id="staffDob" value="${isEdit && staff.dob ? '1992-08-20' : '1995-05-15'}">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Thông tin liên hệ -->
+          <div style="font-weight:700; font-size:14px; margin-bottom:10px; color:#1677ff; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">
+            2. Thông tin liên hệ
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+            <div class="form-group-field">
+              <label>Email</label>
+              <input type="email" id="staffEmail" value="${isEdit ? staff.email : ''}" placeholder="vd: nhanvien@finviet.com.vn">
+            </div>
+            <div class="form-group-field">
+              <label>Số di động</label>
+              <input type="text" id="staffMobile" value="${isEdit ? staff.mobile : ''}" placeholder="vd: 0909 123 456">
+            </div>
+            <div class="form-group-field">
+              <label>Số điện thoại nhà</label>
+              <input type="text" id="staffHomePhone" value="${isEdit ? staff.homePhone || '' : ''}" placeholder="vd: 028 3811 2233">
+            </div>
+            <div class="form-group-field">
+              <label>Số điện thoại công ty</label>
+              <input type="text" id="staffWorkPhone" value="${isEdit ? staff.workPhone || '' : ''}" placeholder="vd: 0909 123 456">
+            </div>
+          </div>
+
+          <!-- 3. Địa chỉ -->
+          <div style="font-weight:700; font-size:14px; margin-bottom:10px; color:#1677ff; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">
+            3. Địa chỉ cư trú
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+            <div class="form-group-field" style="grid-column: span 2;">
+              <label>Đường/Phố</label>
+              <input type="text" id="staffStreet" value="${isEdit && staff.address ? staff.address.street : ''}" placeholder="Tên đường, số nhà...">
+            </div>
+            <div class="form-group-field">
+              <label>Thành phố</label>
+              <input type="text" id="staffCity" value="${isEdit && staff.address ? staff.address.city : ''}" placeholder="TP. Hồ Chí Minh / Hà Nội">
+            </div>
+            <div class="form-group-field">
+              <label>Bang / Tỉnh</label>
+              <input type="text" id="staffState" value="${isEdit && staff.address ? staff.address.state : ''}" placeholder="Quận 1 / Hoàn Kiếm">
+            </div>
+          </div>
+
+          <!-- 4. Ghi chú & Phân bổ Chi nhánh -->
+          <div style="font-weight:700; font-size:14px; margin-bottom:10px; color:#1677ff; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">
+            4. Phân bổ Chi nhánh làm việc
+          </div>
+          <div style="margin-bottom:16px;">
+            <div style="display:flex; gap:20px; margin-bottom:10px;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                <input type="radio" name="branchOpt" value="all" ${!isEdit || staff.branchOption === 'all' ? 'checked' : ''} onchange="toggleBranchListBRD(false)">
+                <span>Làm việc tại tất cả các chi nhánh</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                <input type="radio" name="branchOpt" value="custom" ${isEdit && staff.branchOption === 'custom' ? 'checked' : ''} onchange="toggleBranchListBRD(true)">
+                <span>Chỉ một số chi nhánh</span>
+              </label>
+            </div>
+
+            <div id="branchSelectBoxBRD" style="display:${isEdit && staff.branchOption === 'custom' ? 'block' : 'none'}; padding:10px; background:#f8fafc; border-radius:6px; border:1px solid #e2e8f0;">
+              <label style="display:block; margin-bottom:4px; font-weight:600;"><input type="checkbox" checked> Chi nhánh Quận 1 - HCM</label>
+              <label style="display:block; margin-bottom:4px; font-weight:600;"><input type="checkbox"> Chi nhánh Hoàn Kiếm - Hà Nội</label>
+              <label style="display:block; font-weight:600;"><input type="checkbox"> Chi nhánh Hải Châu - Đà Nẵng</label>
+            </div>
+          </div>
+
+          <!-- 5. Phân quyền hạn chi tiết -->
+          <div style="font-weight:700; font-size:14px; margin-bottom:10px; color:#1677ff; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">
+            5. Phân quyền hạn chi tiết (Bật/Tắt theo BRD)
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12.5px; margin-bottom:20px;">
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể đăng nhập và Sử dụng App</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" ${isEdit && staff.permissions && staff.permissions.isAdmin ? 'checked' : ''}> Có quyền Quản trị</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Yêu cầu mã PIN khi thao tác</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể Quản lý Sản phẩm / Dịch vụ</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể điều chỉnh số lượng tồn kho</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể quản lý Chiết khấu & Khuyến mãi</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể thanh toán đơn hàng</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể Thu/Chi Tiền mặt & Két tiền</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Có thể đối soát Doanh số</label>
+            <label style="display:flex; align-items:center; gap:6px;"><input type="checkbox" checked> Nhân viên làm tất cả các dịch vụ</label>
+          </div>
+
+          <div style="display:flex; justify-content:end; gap:10px; margin-top:20px;">
+            <button type="button" class="btn-secondary" onclick="closeModal()">Hủy Bỏ</button>
+            <button type="submit" class="btn-primary" style="padding:8px 24px;">Lưu Nhân Viên</button>
+          </div>
+        </form>
+      </div>
+    `;
+
+    modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  }
+
+  window.toggleBranchListBRD = function(show) {
+    const box = document.getElementById('branchSelectBoxBRD');
+    if (box) box.style.display = show ? 'block' : 'none';
+  };
+
+  window.submitStaffFormBRD = function(staffId) {
+    const firstName = document.getElementById('staffFirstName').value;
+    const role = document.getElementById('staffRole').value;
+    closeModal();
+    showToast(`🎉 ${staffId ? 'Cập nhật' : 'Tạo mới'} nhân viên "${firstName}" (${role}) thành công!`);
+  };
+
+  window.deleteStaffBRD = function(staffId) {
+    if (confirm(`Bạn có chắc chắn muốn xóa nhân viên ${staffId} không?`)) {
+      showToast(`🗑️ Đã xóa nhân viên ${staffId} khỏi hệ thống.`);
+    }
+  };
+
+  window.openCreateAccountModalBRD = function() {
+    const modalContent = document.getElementById('modalContent');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    modalContent.innerHTML = `
+      <div class="modal-header">
+        <h2 class="modal-title">🔑 Tạo Mới Tài Khoản Đăng Nhập BRD</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div style="padding:20px;">
+        <form onsubmit="event.preventDefault(); submitAccountFormBRD();">
+          <div class="form-group-field" style="margin-bottom:14px;">
+            <label>Chọn nhân viên</label>
+            <select id="accStaffSelect" required>
+              <option value="">Vui lòng chọn nhân viên từ danh sách</option>
+              <option value="NV000001">Phạm Văn Minh (Quản lý Doanh nghiệp)</option>
+              <option value="NV000002">Nguyễn Thị Hoa (Cửa hàng trưởng)</option>
+              <option value="NV000004">Lê Thị Mai (Thu ngân)</option>
+            </select>
+          </div>
+          <div class="form-group-field" style="margin-bottom:14px;">
+            <label>Email đăng nhập tài khoản</label>
+            <input type="email" id="accEmailInput" placeholder="vd: nhanvien@finviet.com.vn" required>
+          </div>
+          <div class="form-group-field" style="margin-bottom:14px;">
+            <label>Mật khẩu</label>
+            <input type="password" id="accPassInput" placeholder="Mật khẩu tối thiểu 8 ký tự" required>
+          </div>
+          <div class="form-group-field" style="margin-bottom:20px;">
+            <label>Xác nhận mật khẩu</label>
+            <input type="password" placeholder="Nhập lại mật khẩu" required>
+          </div>
+          <div style="display:flex; justify-content:end; gap:10px;">
+            <button type="button" class="btn-secondary" onclick="closeModal()">Hủy Bỏ</button>
+            <button type="submit" class="btn-primary" style="padding:8px 24px;">Tạo Tài Khoản</button>
+          </div>
+        </form>
+      </div>
+    `;
+
+    modalOverlay.classList.add('show');
+  };
+
+  window.submitAccountFormBRD = function() {
+    const email = document.getElementById('accEmailInput').value;
+    closeModal();
+    showToast(`🎉 Đã tạo thành công tài khoản đăng nhập cho email "${email}"`);
+  };
+
+  window.resetAccountPasswordBRD = function(accId) {
+    if (confirm(`Bạn có muốn đặt lại mật khẩu cho tài khoản ${accId} không?`)) {
+      showToast(`🔑 Đã gửi link đặt lại mật khẩu về email của tài khoản ${accId}`);
+    }
+  };
+
+  window.toggleAccountStatusBRD = function(accId, targetStatus) {
+    const isDisable = targetStatus === 'disabled';
+    if (confirm(`Bạn có chắc chắn muốn ${isDisable ? 'vô hiệu hóa' : 'cấp quyền lại cho'} tài khoản ${accId}?`)) {
+      showToast(`⚡ Đã ${isDisable ? 'vô hiệu hóa' : 'kích hoạt lại'} tài khoản ${accId}`);
+    }
+  };
+
+  window.filterStaffBRDTable = function() {
+    showToast('🔍 Đã lọc danh sách nhân viên theo từ khóa tìm kiếm');
+  };
+
+  window.filterAccountsBRDTable = function() {
+    showToast('🔍 Đã lọc danh sách tài khoản theo bộ lọc');
+  };
+
+  window.filterActivitiesBRDTable = function() {
+    showToast('🔍 Đã lọc nhật ký hoạt động của nhân viên');
+  };
 });

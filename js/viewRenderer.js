@@ -334,95 +334,265 @@ const ViewRenderer = {
    * Human Resources Management View (Quản trị Nhân Lực - Merged Accounts & Staff)
    */
   getHrMgmtView() {
+    const staffList = MockData.getStaffListBRD ? MockData.getStaffListBRD() : [];
+    const accountsList = MockData.getAccountsBRD ? MockData.getAccountsBRD() : [];
+    const activitiesList = MockData.getStaffActivitiesBRD ? MockData.getStaffActivitiesBRD() : [];
+
+    const managers = staffList.filter(s => s.group === 'manager');
+    const staffMembers = staffList.filter(s => s.group === 'staff');
+
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Doanh nghiệp / <strong>Quản trị Nhân lực</strong></div>
-          <h1 class="subpage-title">Quản Trị Nhân Lực</h1>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý hợp nhất Tài khoản truy cập hệ thống và Danh sách Nhân viên phụ trách các cửa hàng.</p>
+          <div class="subpage-breadcrumb">Doanh nghiệp / <strong>Quản lý Nhân viên BRD</strong></div>
+          <h1 class="subpage-title">Quản Lý Nhân Viên & Phân Quyền</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý hợp nhất Nhân viên, Tài khoản truy cập và Nhật ký hoạt động theo chuẩn BRD.</p>
         </div>
-        <button class="btn-primary" onclick="showToast('Mở form tạo Nhân viên / Tài khoản mới')">+ Thêm Nhân Viên / Tài Khoản Mới</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" id="btnMainAddStaff" onclick="openCreateStaffModalBRD()">+ Tạo Nhân Viên</button>
+          <button class="btn-primary" id="btnMainAddAccount" onclick="openCreateAccountModalBRD()" style="display:none;">+ Tạo Tài Khoản</button>
+        </div>
       </div>
 
-      <div class="enterprise-cards-grid" style="margin-bottom:20px;">
-        <div class="table-card">
-          <h3 class="card-section-title">👥 Tổng Quan Nhân Sự</h3>
-          <div class="detail-row"><span class="detail-label">Tổng số tài khoản:</span><span class="detail-val" style="color:var(--color-primary); font-weight:800;">12 tài khoản</span></div>
-          <div class="detail-row"><span class="detail-label">Quản lý Doanh nghiệp:</span><span class="detail-val">2 tài khoản</span></div>
-          <div class="detail-row"><span class="detail-label">Cửa hàng trưởng:</span><span class="detail-val">3 nhân sự</span></div>
-          <div class="detail-row"><span class="detail-label">Thu ngân / Nhân viên:</span><span class="detail-val">7 nhân sự</span></div>
-        </div>
-        <div class="table-card">
-          <h3 class="card-section-title">🔑 Phân Quyền & Hạn Mức</h3>
-          <div class="detail-row"><span class="detail-label">Phân quyền vai trò:</span><span class="detail-val">Theo Cửa hàng & Doanh nghiệp</span></div>
-          <div class="detail-row"><span class="detail-label">Quyền tạo Link thanh toán:</span><span class="detail-val">Quản lý & Cửa hàng trưởng</span></div>
-          <div class="detail-row"><span class="detail-label">Trạng thái bảo mật:</span><span class="detail-val" style="color:var(--color-secondary); font-weight:700;">Đã bật 2FA</span></div>
-        </div>
-        <div class="table-card">
-          <h3 class="card-section-title">⚡ Thao Tác Nhanh</h3>
-          <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
-            <button class="btn-secondary" onclick="showToast('Mở bảng phân quyền tài khoản')">🔑 Cấu Hình Phân Quyền Vai Trò</button>
-            <button class="btn-secondary" onclick="showToast('Gửi link kích hoạt tài khoản hàng loạt')">📧 Gửi Link Kích Hoạt Hàng Loạt</button>
+      <!-- BRD 3 Sub-Tabs Navigation -->
+      <div class="enterprise-tabs-nav" style="margin-bottom:20px;">
+        <button class="ent-tab-btn active" id="tabBtnStaff" onclick="switchStaffBRDTab('staff')">1.1. Nhân Viên</button>
+        <button class="ent-tab-btn" id="tabBtnAccounts" onclick="switchStaffBRDTab('accounts')">1.2. Tài Khoản</button>
+        <button class="ent-tab-btn" id="tabBtnActivities" onclick="switchStaffBRDTab('activities')">1.3. Hoạt Động</button>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 1.1: NHÂN VIÊN CONTAINER -->
+      <!-- ========================================== -->
+      <div id="staffTabStaffContainer">
+        <!-- Filter Search Toolbar -->
+        <div class="table-card" style="margin-bottom:16px; padding:16px;">
+          <div class="filter-controls-grid" style="grid-template-columns: 2fr 1fr 1fr; gap:14px; align-items:end;">
+            <div class="form-group-field">
+              <label>Tìm kiếm nhân viên</label>
+              <input type="text" id="searchStaffBRD" placeholder="Nhập tên nhân viên, chức vụ, SĐT..." oninput="filterStaffBRDTable()">
+            </div>
+            <div class="form-group-field">
+              <label>Nhóm nhân sự</label>
+              <select id="filterStaffGroupBRD" onchange="filterStaffBRDTable()">
+                <option value="all">Tất cả nhóm</option>
+                <option value="manager">👑 Nhóm Quản lý</option>
+                <option value="staff">👥 Nhóm Nhân viên</option>
+              </select>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-primary" style="width:100%; height:36px;" onclick="filterStaffBRDTable()">Tìm Kiếm</button>
+            </div>
           </div>
         </div>
+
+        <!-- 1. Nhóm Quản Lý Table -->
+        <div class="table-card" id="cardGroupManager" style="margin-bottom:20px;">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span>👑 Nhóm Quản Lý (${managers.length} nhân sự)</span>
+            <span class="status-badge badge-primary">Phân quyền cao cấp</span>
+          </div>
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th>MÃ NV</th>
+                <th>TÊN NHÂN VIÊN</th>
+                <th>CHỨC VỤ</th>
+                <th>SỐ ĐIỆN THOẠI</th>
+                <th>EMAIL LIÊN HỆ</th>
+                <th>CHI NHÁNH LÀM VIỆC</th>
+                <th>TRẠNG THÁI</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyGroupManager">
+              ${managers.map(s => `
+                <tr>
+                  <td><span class="txn-code">${s.id}</span></td>
+                  <td><strong>${s.name}</strong></td>
+                  <td><span class="status-badge badge-processing">${s.role}</span></td>
+                  <td style="font-family:monospace;">${s.mobile}</td>
+                  <td>${s.email}</td>
+                  <td>${s.branches.join(', ')}</td>
+                  <td><span class="status-badge ${s.statusClass}">${s.statusText}</span></td>
+                  <td>
+                    <a href="javascript:void(0)" class="link-doc-view" onclick="openEditStaffModalBRD('${s.id}')">Sửa</a>
+                    <span style="color:#cbd5e1; margin:0 4px;">|</span>
+                    <a href="javascript:void(0)" style="color:#ef4444; font-size:12px;" onclick="deleteStaffBRD('${s.id}')">Xóa</a>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 2. Nhóm Nhân Viên Table -->
+        <div class="table-card" id="cardGroupStaff">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span>👥 Nhóm Nhân Viên (${staffMembers.length} nhân sự)</span>
+            <span class="status-badge badge-gray">Phân quyền tiêu chuẩn</span>
+          </div>
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th>MÃ NV</th>
+                <th>TÊN NHÂN VIÊN</th>
+                <th>CHỨC VỤ</th>
+                <th>SỐ ĐIỆN THOẠI</th>
+                <th>EMAIL LIÊN HỆ</th>
+                <th>CHI NHÁNH LÀM VIỆC</th>
+                <th>TRẠNG THÁI</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyGroupStaff">
+              ${staffMembers.map(s => `
+                <tr>
+                  <td><span class="txn-code">${s.id}</span></td>
+                  <td><strong>${s.name}</strong></td>
+                  <td><span class="status-badge badge-gray">${s.role}</span></td>
+                  <td style="font-family:monospace;">${s.mobile}</td>
+                  <td>${s.email}</td>
+                  <td>${s.branches.join(', ')}</td>
+                  <td><span class="status-badge ${s.statusClass}">${s.statusText}</span></td>
+                  <td>
+                    <a href="javascript:void(0)" class="link-doc-view" onclick="openEditStaffModalBRD('${s.id}')">Sửa</a>
+                    <span style="color:#cbd5e1; margin:0 4px;">|</span>
+                    <a href="javascript:void(0)" style="color:#ef4444; font-size:12px;" onclick="deleteStaffBRD('${s.id}')">Xóa</a>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div class="table-card">
-        <div class="table-header">
-          <h3 class="table-title">Danh Sách Tài Khoản & Nhân Viên Trong Hệ Thống</h3>
-          <input type="text" placeholder="Tìm kiếm theo tên, email, sĐT..." style="padding:8px 14px; border-radius:6px; border:1px solid var(--border-color); width:280px;">
+      <!-- ========================================== -->
+      <!-- TAB 1.2: TÀI KHOẢN CONTAINER -->
+      <!-- ========================================== -->
+      <div id="staffTabAccountsContainer" style="display:none;">
+        <div class="table-card" style="margin-bottom:16px; padding:16px;">
+          <div class="filter-controls-grid" style="grid-template-columns: 2fr 1fr 1fr; gap:14px; align-items:end;">
+            <div class="form-group-field">
+              <label>Tìm kiếm tài khoản</label>
+              <input type="text" id="searchAccountBRD" placeholder="Nhập tên nhân viên, email..." oninput="filterAccountsBRDTable()">
+            </div>
+            <div class="form-group-field">
+              <label>Trạng thái tài khoản</label>
+              <select id="filterAccountStatusBRD" onchange="filterAccountsBRDTable()">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="active">Còn hiệu lực</option>
+                <option value="disabled">Đã vô hiệu hóa</option>
+              </select>
+            </div>
+            <div>
+              <button class="btn-primary" style="width:100%; height:36px;" onclick="filterAccountsBRDTable()">Tìm Kiếm</button>
+            </div>
+          </div>
         </div>
-        <table class="portal-table">
-          <thead>
-            <tr>
-              <th>HỌ VÀ TÊN</th>
-              <th>EMAIL TÀI KHOẢN</th>
-              <th>SỐ ĐIỆN THOẠI</th>
-              <th>VAI TRÒ PHÂN QUYỀN</th>
-              <th>CỬA HÀNG PHỤ TRÁCH</th>
-              <th>TRẠNG THÁI</th>
-              <th>THAO TÁC</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Phạm Văn Minh</strong></td>
-              <td>minh.pham@finviet.com.vn</td>
-              <td style="font-family:monospace;">0909 123 456</td>
-              <td><span class="status-badge badge-success">Quản lý DN</span></td>
-              <td>Toàn hệ thống (3 Chi nhánh)</td>
-              <td><span class="status-badge badge-success">Kích hoạt</span></td>
-              <td><a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Chỉnh sửa thông tin tài khoản Phạm Văn Minh')">Sửa</a></td>
-            </tr>
-            <tr>
-              <td><strong>Nguyễn Thị Hoa</strong></td>
-              <td>hoa.nguyen@finviet.com.vn</td>
-              <td style="font-family:monospace;">0918 887 766</td>
-              <td><span class="status-badge badge-processing">Cửa hàng trưởng</span></td>
-              <td>Chi nhánh Quận 1 - Hồ Chí Minh</td>
-              <td><span class="status-badge badge-success">Kích hoạt</span></td>
-              <td><a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Chỉnh sửa thông tin Nguyễn Thị Hoa')">Sửa</a></td>
-            </tr>
-            <tr>
-              <td><strong>Trần Văn Nam</strong></td>
-              <td>nam.tran@finviet.com.vn</td>
-              <td style="font-family:monospace;">0933 112 233</td>
-              <td><span class="status-badge badge-processing">Cửa hàng trưởng</span></td>
-              <td>Chi nhánh Hoàn Kiếm - Hà Nội</td>
-              <td><span class="status-badge badge-success">Kích hoạt</span></td>
-              <td><a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Chỉnh sửa thông tin Trần Văn Nam')">Sửa</a></td>
-            </tr>
-            <tr>
-              <td><strong>Lê Thị Mai</strong></td>
-              <td>mai.le@finviet.com.vn</td>
-              <td style="font-family:monospace;">0977 445 566</td>
-              <td><span class="status-badge badge-processing">Thu ngân / Nhân viên</span></td>
-              <td>Chi nhánh Hải Châu - Đà Nẵng</td>
-              <td><span class="status-badge badge-success">Kích hoạt</span></td>
-              <td><a href="javascript:void(0)" class="link-doc-view" onclick="showToast('Chỉnh sửa thông tin Lê Thị Mai')">Sửa</a></td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div class="table-card">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main); margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+            <span>Danh Sách Tài Khoản Đăng Nhập Hệ Thống</span>
+            <span class="status-badge badge-success">${accountsList.length} tài khoản</span>
+          </div>
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th>TÊN NHÂN VIÊN</th>
+                <th>CHỨC VỤ</th>
+                <th>EMAIL ĐĂNG NHẬP</th>
+                <th>NHÓM PHÂN QUYỀN</th>
+                <th>TRẠNG THÁI TÀI KHOẢN</th>
+                <th>NGÀY TẠO</th>
+                <th>THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyAccountsBRD">
+              ${accountsList.map(a => `
+                <tr>
+                  <td><strong>${a.name}</strong></td>
+                  <td><span class="status-badge badge-processing">${a.role}</span></td>
+                  <td><span class="txn-code">${a.email}</span></td>
+                  <td>${a.groupName}</td>
+                  <td><span class="status-badge ${a.statusClass}">${a.statusText}</span></td>
+                  <td>${a.createdDate}</td>
+                  <td>
+                    <a href="javascript:void(0)" class="link-doc-view" onclick="resetAccountPasswordBRD('${a.id}')">Đặt lại mật khẩu</a>
+                    <span style="color:#cbd5e1; margin:0 4px;">|</span>
+                    ${a.status === 'active' 
+                      ? `<a href="javascript:void(0)" style="color:#ef4444; font-size:12px;" onclick="toggleAccountStatusBRD('${a.id}', 'disabled')">Vô hiệu hóa</a>`
+                      : `<a href="javascript:void(0)" style="color:#00E676; font-size:12px;" onclick="toggleAccountStatusBRD('${a.id}', 'active')">Cấp quyền lại</a>`
+                    }
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TAB 1.3: HOẠT ĐỘNG CONTAINER -->
+      <!-- ========================================== -->
+      <div id="staffTabActivitiesContainer" style="display:none;">
+        <div class="table-card" style="margin-bottom:16px; padding:16px;">
+          <div class="filter-controls-grid" style="grid-template-columns: 2fr 1.5fr 1fr; gap:14px; align-items:end;">
+            <div class="form-group-field">
+              <label>Tìm kiếm nhật ký hoạt động</label>
+              <input type="text" id="searchActivityBRD" placeholder="Nhập tên nhân viên, thao tác, thực thể..." oninput="filterActivitiesBRDTable()">
+            </div>
+            <div class="form-group-field">
+              <label style="display:flex; align-items:center; gap:4px;">
+                Khoảng thời gian
+                <span class="info-tooltip-icon" title="Khoảng thời gian tối đa là 3 tháng"><i data-lucide="help-circle" style="width:13px; height:13px;"></i></span>
+              </label>
+              <div class="date-range-input-box" title="Khoảng thời gian tối đa là 3 tháng">
+                <input type="date" id="filterActStart" value="2025-08-01">
+                <span class="range-separator">→</span>
+                <input type="date" id="filterActEnd" value="2025-08-25">
+                <span class="calendar-icon"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+              </div>
+            </div>
+            <div>
+              <button class="btn-primary" style="width:100%; height:36px;" onclick="filterActivitiesBRDTable()">Tìm Kiếm</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div style="font-size:15px; font-weight:700; color:var(--text-main); margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+            <span>Nhật Ký Thao Tác & Hoạt Động Của Nhân Viên</span>
+            <span class="status-badge badge-primary">${activitiesList.length} ghi nhận</span>
+          </div>
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th>THỜI GIAN</th>
+                <th>NHÂN VIÊN THAO TÁC</th>
+                <th>THAO TÁC</th>
+                <th>THỰC THỂ THAO TÁC</th>
+                <th>CHI TIẾT DIỄN GIẢI</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyActivitiesBRD">
+              ${activitiesList.map(act => `
+                <tr>
+                  <td style="font-size:12px; color:var(--text-muted);">${act.time}</td>
+                  <td><strong>${act.staffName}</strong></td>
+                  <td><span class="status-badge ${act.actionClass}">${act.action}</span></td>
+                  <td>
+                    ${act.entityType === 'order' 
+                      ? `<a href="javascript:void(0)" class="link-doc-view" onclick="openTxnModal('${act.orderId || 'GD2026082000101'}')">${act.entity}</a>`
+                      : `<strong>${act.entity}</strong>`
+                    }
+                  </td>
+                  <td style="font-size:12.5px; color:var(--text-muted);">${act.detail}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   },

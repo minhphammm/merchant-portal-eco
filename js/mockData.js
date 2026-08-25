@@ -1289,6 +1289,150 @@ const MockData = {
     const newUser = { stt: newStt, name: userObj.name, username: userObj.username, phone: userObj.phone, email: userObj.email, store: userObj.store || 'Tất cả cửa hàng', createdTime: timeStr, status: 'active', statusText: 'Hoạt động', statusClass: 'badge-success' };
     this.userAccounts.unshift(newUser);
     return newUser;
+  },
+
+  // ----------------------------------------------------
+  // BRD STAFF MANAGEMENT & ACCOUNT AUDIT LOG MOCK DATA
+  // ----------------------------------------------------
+  getStaffListBRD() {
+    return [
+      {
+        id: 'NV000001',
+        group: 'manager',
+        groupName: 'Nhóm Quản lý',
+        name: 'Phạm Văn Minh',
+        firstName: 'Minh',
+        middleName: 'Văn',
+        lastName: 'Phạm',
+        role: 'Quản lý Doanh nghiệp',
+        dob: '15/05/1990',
+        email: 'minh.pham@finviet.com.vn',
+        mobile: '0909 123 456',
+        homePhone: '028 3811 2233',
+        workPhone: '0909 123 456',
+        address: { street: '123 Nguyễn Huệ', street2: 'Tầng 10 Tòa nhà ABC', region: 'Miền Nam', city: 'TP. Hồ Chí Minh', state: 'Quận 1', zip: '700000' },
+        notes: 'Quản lý cấp cao phụ trách toàn bộ hệ thống chi nhánh',
+        branchOption: 'all',
+        branches: ['Tất cả chi nhánh'],
+        status: 'active',
+        statusText: 'Đang làm việc',
+        statusClass: 'badge-success',
+        permissions: { appLogin: true, isAdmin: true, reqPin: true, manageProducts: true, adjustInventory: true, manageDiscounts: true, deleteCustomer: true }
+      },
+      {
+        id: 'NV000002',
+        group: 'manager',
+        groupName: 'Nhóm Quản lý',
+        name: 'Nguyễn Thị Hoa',
+        firstName: 'Hoa',
+        middleName: 'Thị',
+        lastName: 'Nguyễn',
+        role: 'Cửa hàng trưởng',
+        dob: '20/08/1992',
+        email: 'hoa.nguyen@finviet.com.vn',
+        mobile: '0918 887 766',
+        homePhone: '',
+        workPhone: '0918 887 766',
+        address: { street: '45 Lê Lợi', street2: '', region: 'Miền Nam', city: 'TP. Hồ Chí Minh', state: 'Quận 1', zip: '700000' },
+        notes: 'Cửa hàng trưởng chi nhánh Quận 1',
+        branchOption: 'custom',
+        branches: ['Chi nhánh Quận 1 - HCM'],
+        status: 'active',
+        statusText: 'Đang làm việc',
+        statusClass: 'badge-success',
+        permissions: { appLogin: true, isAdmin: false, reqPin: true, manageProducts: true, adjustInventory: true }
+      },
+      {
+        id: 'NV000003',
+        group: 'manager',
+        groupName: 'Nhóm Quản lý',
+        name: 'Trần Văn Nam',
+        firstName: 'Nam',
+        middleName: 'Văn',
+        lastName: 'Trần',
+        role: 'Cửa hàng trưởng',
+        dob: '10/11/1991',
+        email: 'nam.tran@finviet.com.vn',
+        mobile: '0933 112 233',
+        homePhone: '',
+        workPhone: '0933 112 233',
+        address: { street: '88 Tràng Tiền', street2: '', region: 'Miền Bắc', city: 'Hà Nội', state: 'Hoàn Kiếm', zip: '100000' },
+        notes: 'Cửa hàng trưởng chi nhánh Hoàn Kiếm',
+        branchOption: 'custom',
+        branches: ['Chi nhánh Hoàn Kiếm - Hà Nội'],
+        status: 'active',
+        statusText: 'Đang làm việc',
+        statusClass: 'badge-success',
+        permissions: { appLogin: true, isAdmin: false, reqPin: true, manageProducts: true }
+      },
+      {
+        id: 'NV000004',
+        group: 'staff',
+        groupName: 'Nhóm Nhân viên',
+        name: 'Lê Thị Mai',
+        firstName: 'Mai',
+        middleName: 'Thị',
+        lastName: 'Lê',
+        role: 'Thu ngân / Bán hàng',
+        dob: '05/04/1995',
+        email: 'mai.le@finviet.com.vn',
+        mobile: '0977 445 566',
+        homePhone: '',
+        workPhone: '0977 445 566',
+        address: { street: '12 Nguyễn Văn Linh', street2: '', region: 'Miền Trung', city: 'Đà Nẵng', state: 'Hải Châu', zip: '550000' },
+        notes: 'Thu ngân chính chi nhánh Đà Nẵng',
+        branchOption: 'custom',
+        branches: ['Chi nhánh Hải Châu - Đà Nẵng'],
+        status: 'active',
+        statusText: 'Đang làm việc',
+        statusClass: 'badge-success',
+        permissions: { appLogin: true, isAdmin: false, reqPin: false }
+      },
+      {
+        id: 'NV000005',
+        group: 'staff',
+        groupName: 'Nhóm Nhân viên',
+        name: 'Hoàng Văn Dũng',
+        firstName: 'Dũng',
+        middleName: 'Văn',
+        lastName: 'Hoàng',
+        role: 'Kiểm kho / Giao nhận',
+        dob: '18/09/1996',
+        email: 'dung.hoang@finviet.com.vn',
+        mobile: '0988 334 455',
+        homePhone: '',
+        workPhone: '0988 334 455',
+        address: { street: '99 Võ Văn Tần', street2: '', region: 'Miền Nam', city: 'TP. Hồ Chí Minh', state: 'Quận 3', zip: '700000' },
+        notes: 'Nhân viên kiểm kho tổng',
+        branchOption: 'all',
+        branches: ['Tất cả chi nhánh'],
+        status: 'active',
+        statusText: 'Đang làm việc',
+        statusClass: 'badge-success',
+        permissions: { appLogin: true, isAdmin: false }
+      }
+    ];
+  },
+
+  getAccountsBRD() {
+    return [
+      { id: 'ACC001', staffId: 'NV000001', name: 'Phạm Văn Minh', role: 'Quản lý Doanh nghiệp', email: 'minh.pham@finviet.com.vn', group: 'manager', groupName: 'Nhóm Quản lý', status: 'active', statusText: 'Còn hiệu lực', statusClass: 'badge-success', createdDate: '15/03/2022' },
+      { id: 'ACC002', staffId: 'NV000002', name: 'Nguyễn Thị Hoa', role: 'Cửa hàng trưởng', email: 'hoa.nguyen@finviet.com.vn', group: 'manager', groupName: 'Nhóm Quản lý', status: 'active', statusText: 'Còn hiệu lực', statusClass: 'badge-success', createdDate: '10/05/2023' },
+      { id: 'ACC003', staffId: 'NV000003', name: 'Trần Văn Nam', role: 'Cửa hàng trưởng', email: 'nam.tran@finviet.com.vn', group: 'manager', groupName: 'Nhóm Quản lý', status: 'active', statusText: 'Còn hiệu lực', statusClass: 'badge-success', createdDate: '12/08/2023' },
+      { id: 'ACC004', staffId: 'NV000004', name: 'Lê Thị Mai', role: 'Thu ngân / Bán hàng', email: 'mai.le@finviet.com.vn', group: 'staff', groupName: 'Nhóm Nhân viên', status: 'active', statusText: 'Còn hiệu lực', statusClass: 'badge-success', createdDate: '01/02/2024' },
+      { id: 'ACC005', staffId: 'NV000005', name: 'Hoàng Văn Dũng', role: 'Kiểm kho', email: 'dung.hoang@finviet.com.vn', group: 'staff', groupName: 'Nhóm Nhân viên', status: 'disabled', statusText: 'Đã vô hiệu hóa', statusClass: 'badge-danger', createdDate: '15/04/2024' }
+    ];
+  },
+
+  getStaffActivitiesBRD() {
+    return [
+      { id: 'ACT001', time: '25/08/2026 11:20:15', staffName: 'Nguyễn Thị Hoa (Cửa hàng trưởng)', action: 'Hoàn tất thanh toán', actionClass: 'badge-success', entity: 'Đơn hàng #DH20260825001', entityType: 'order', orderId: 'GD2026082000101', detail: 'Thanh toán đơn hàng 1,250,000đ qua VietQR' },
+      { id: 'ACT002', time: '25/08/2026 10:45:00', staffName: 'Phạm Văn Minh (Quản lý)', action: 'Đối soát Doanh số', actionClass: 'badge-primary', entity: 'Báo cáo đối soát #DS25082026', entityType: 'reconcile', detail: 'Thực hiện phê duyệt đối soát doanh số tuần' },
+      { id: 'ACT003', time: '25/08/2026 09:30:12', staffName: 'Lê Thị Mai (Thu ngân)', action: 'Thu/Chi Tiền mặt', actionClass: 'badge-warning', entity: 'Ngăn đựng tiền (Két #01)', entityType: 'cashbox', detail: 'Rút 500,000đ tiền lẻ nộp tiền mặt đầu ca' },
+      { id: 'ACT004', time: '24/08/2026 16:15:40', staffName: 'Nguyễn Thị Hoa (Cửa hàng trưởng)', action: 'Tạo mới Thẻ trả trước', actionClass: 'badge-success', entity: 'Khách hàng Nguyễn Văn A', entityType: 'customer', detail: 'Tạo thẻ trả trước VIP hạn mức 5,000,000đ' },
+      { id: 'ACT005', time: '24/08/2026 14:00:22', staffName: 'Trần Văn Nam (Cửa hàng trưởng)', action: 'Sửa giá bán', actionClass: 'badge-processing', entity: 'Mặt hàng SP-0024 (Áo thun Eco)', entityType: 'item', detail: 'Điều chỉnh giá bán từ 250,000đ sang 220,000đ' },
+      { id: 'ACT006', time: '24/08/2026 11:10:05', staffName: 'Hoàng Văn Dũng (Kiểm kho)', action: 'Điều chỉnh kho', actionClass: 'badge-gray', entity: 'Kho tổng Quận 1', entityType: 'inventory', detail: 'Cập nhật tồn kho thêm +50 sản phẩm' }
+    ];
   }
 };
 
