@@ -3370,4 +3370,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('contactModal');
     if (modal) modal.style.display = 'none';
   };
+
+  window.toggleStatementDownloadMenu = function(e) {
+    if (e) e.stopPropagation();
+    const menu = document.getElementById('statementDownloadMenu');
+    if (menu) {
+      const isVisible = menu.style.display === 'block';
+      menu.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible && window.refreshIcons) window.refreshIcons();
+    }
+  };
+
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('statementDownloadMenu');
+    if (menu && !e.target.closest('.download-dropdown-wrapper')) {
+      menu.style.display = 'none';
+    }
+  });
 });
