@@ -85,31 +85,7 @@ const ViewRenderer = {
           <h1 class="subpage-title">Quản Trị Doanh Nghiệp</h1>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-secondary" onclick="openCreatePaylinkModalOverview()">+ Tạo Yêu Cầu Chi</button>
           <button class="btn-primary" onclick="openRequestAdjustModal()">✍️ Yêu Cầu Điều Chỉnh Thông Tin</button>
-        </div>
-      </div>
-
-      <!-- Cashless Balance Banner -->
-      <div class="cashless-balance-banner" style="background:linear-gradient(135deg, #001529 0%, #002140 100%); color:#fff; border-radius:12px; padding:20px 24px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 16px rgba(0,21,41,0.15); border:1px solid rgba(255,255,255,0.08);">
-        <div>
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-            <span style="font-size:13px; color:#94A3B8; font-weight:600;">Số dư khả dụng tài khoản ECOPAY</span>
-            <div class="tooltip-wrapper" style="position:relative; display:inline-block;">
-              <i data-lucide="help-circle" style="width:15px; height:15px; color:#FFC107; cursor:pointer;" onclick="showToast('Số dư khả dụng = Số dư thực tế – Số tiền đang bị treo bởi các giao dịch đang xử lý')"></i>
-            </div>
-            <span class="finviet-cashless-badge" style="background:rgba(0,200,83,0.15); color:#00E676; border:1px solid rgba(0,230,118,0.3); font-weight:700; font-size:11px; padding:2px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
-              <span style="width:6px; height:6px; background:#00E676; border-radius:50%;"></span> ECOPAY Cashless
-            </span>
-          </div>
-          <div style="font-size:28px; font-weight:800; color:#FFC107; letter-spacing:-0.5px;">
-            ${formattedBalance} <span style="font-size:18px; font-weight:600; color:#E2E8F0;">đ</span>
-          </div>
-        </div>
-        <div>
-          <button class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="padding:10px 20px; font-weight:700; font-size:14px; background:linear-gradient(135deg, #1677ff 0%, #0958d9 100%); border:none; box-shadow:0 4px 12px rgba(22,119,255,0.3);">
-            <i data-lucide="send" style="width:16px; height:16px; margin-right:6px;"></i> Tạo Yêu Cầu Chi
-          </button>
         </div>
       </div>
 

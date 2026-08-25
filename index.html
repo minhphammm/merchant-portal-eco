@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=6.5">
+  <link rel="stylesheet" href="css/style.css?v=6.6">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -329,51 +329,9 @@
             </div>
           </div>
 
-          <!-- KPI Metric Cards Grid (Bổ sung Số Dư Ví ECO & Số Dư TK ECOPAY Cashless) -->
-          <div class="kpi-cards-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap:14px;">
-            <!-- 1. Card Số Dư Ví ECO (Mới bổ sung theo yêu cầu) -->
-            <div class="kpi-card card-balance-ecowallet" style="background:linear-gradient(135deg, #004D40 0%, #00796B 100%); color:#fff; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.1); box-shadow:0 4px 14px rgba(0,77,64,0.2);">
-              <div style="position:absolute; right:-15px; bottom:-15px; opacity:0.15; font-size:90px; pointer-events:none;">👛</div>
-              <div class="kpi-content" style="position:relative; z-index:2;">
-                <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-                  <span class="kpi-title" style="color:#A7F3D0; font-weight:700; font-size:12px;">Số dư Ví ECO</span>
-                  <div class="tooltip-container" style="position:relative; display:inline-block;">
-                    <i data-lucide="help-circle" style="width:13px; height:13px; color:#6EE7B7; cursor:pointer;" onclick="showToast('Số dư Ví điện tử ECO dùng cho thanh toán trực tiếp và nạp/rút tiền ví')"></i>
-                  </div>
-                </div>
-                <div id="dashEcoWalletBalanceVal" class="kpi-value" style="color:#6EE7B7; font-size:20px; font-weight:800; letter-spacing:-0.5px;">
-                  350,000,000 đ
-                </div>
-                <div style="margin-top:8px;">
-                  <button class="btn-primary" onclick="showToast('Mở màn hình Nạp tiền vào Ví ECO')" style="padding:4px 10px; font-size:11px; font-weight:700; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; border-radius:6px;">
-                    Nạp tiền Ví ECO ->
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. Card Số Dư TK ECOPAY Cashless (Thu chi hộ) -->
-            <div class="kpi-card card-balance-cashless" style="background:linear-gradient(135deg, #001529 0%, #0A2540 100%); color:#fff; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.1); box-shadow:0 4px 14px rgba(0,21,41,0.2);">
-              <div style="position:absolute; right:-15px; bottom:-15px; opacity:0.12; font-size:90px; pointer-events:none;">💳</div>
-              <div class="kpi-content" style="position:relative; z-index:2;">
-                <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-                  <span class="kpi-title" style="color:#94A3B8; font-weight:700; font-size:12px;">Số dư TK ECOPAY (Cashless)</span>
-                  <div class="tooltip-container" style="position:relative; display:inline-block;">
-                    <i data-lucide="help-circle" style="width:13px; height:13px; color:#FFC107; cursor:pointer;" onclick="showToast('Số dư hiển thị là số dư khả dụng = Số dư thực tế - Số tiền đang bị treo bởi các giao dịch đang xử lý')"></i>
-                  </div>
-                </div>
-                <div id="dashAvailableBalanceVal" class="kpi-value" style="color:#FFC107; font-size:20px; font-weight:800; letter-spacing:-0.5px;">
-                  1,245,000,000 đ
-                </div>
-                <div style="margin-top:8px;">
-                  <button class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="padding:4px 10px; font-size:11px; font-weight:700; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; border-radius:6px;">
-                    Tạo yêu cầu chi ->
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 3. Doanh thu tổng -->
+          <!-- KPI Metric Cards Grid -->
+          <div class="kpi-cards-grid" style="grid-template-columns: 1fr 1fr 1fr; gap:14px;">
+            <!-- 1. Doanh thu tổng -->
             <div class="kpi-card card-revenue">
               <div class="kpi-content">
                 <span id="kpiRevenueTitleText" class="kpi-title" data-i18n="kpiRevenueTitle" style="font-size:12px;">Doanh Thu Tuần Này</span>
@@ -385,7 +343,7 @@
               </div>
             </div>
 
-            <!-- 4. Giao dịch thành công -->
+            <!-- 2. Giao dịch thành công -->
             <div class="kpi-card card-success">
               <div class="kpi-content">
                 <span class="kpi-title" data-i18n="kpiSuccessTitle" style="font-size:12px;">Giao Dịch Thành Công</span>
@@ -397,7 +355,7 @@
               </div>
             </div>
 
-            <!-- 5. Giao dịch thất bại -->
+            <!-- 3. Giao dịch thất bại -->
             <div class="kpi-card card-failed">
               <div class="kpi-content">
                 <span class="kpi-title" data-i18n="kpiFailedTitle" style="font-size:12px;">Giao Dịch Thất Bại</span>
