@@ -1897,14 +1897,6 @@ const ViewRenderer = {
           <!-- Các nút thao tác -->
           <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
             <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc sao kê 1.1')">Đặt lại</button>
-
-            <!-- Combined Download Dropdown Button in Actions bar -->
-            <div class="download-dropdown-wrapper" style="position:relative; display:inline-block;">
-              <button type="button" class="btn-secondary" onclick="toggleStatementDownloadMenu(event)" style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="download" style="width:14px; height:14px;"></i> Tải sao kê <i data-lucide="chevron-down" style="width:12px; height:12px; margin-left:2px;"></i>
-              </button>
-            </div>
-
             <button type="button" class="btn-primary" onclick="showToast('Đã tìm kiếm sao kê theo điều kiện lọc')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tìm kiếm</button>
           </div>
         </form>
