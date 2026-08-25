@@ -52,10 +52,12 @@ const ViewRenderer = {
       case 'statement':
         html = this.getReconcileV2View();
         break;
+      case 'statement-v11':
+        html = this.getStatementV11View();
+        break;
       case 'reconcile':
       case 'fee-diff':
       case 'balance-rpt':
-      case 'statement':
         html = this.getSettlementView(pageId);
         break;
       case 'analytics':
@@ -1629,7 +1631,7 @@ const ViewRenderer = {
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Đối soát / <strong>Sao Kê Tài Khoản</strong></div>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Sao Kê Quyết Toán</strong></div>
           <h1 class="subpage-title">Sao Kê Tài Khoản</h1>
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý phiên quyết toán doanh thu T+0 / T+1, sao kê chi tiết số dư giải ngân và luồng tiền chuyển về ngân hàng.</p>
         </div>
@@ -1637,6 +1639,16 @@ const ViewRenderer = {
           <button class="btn-primary" onclick="showToast('Yêu cầu tạo phiên quyết toán mới...')">+ Tạo Phiên Quyết Toán</button>
           <button class="btn-secondary" onclick="showToast('Tải file báo cáo tổng hợp quyết toán v2...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất PDF/Excel</button>
         </div>
+      </div>
+
+      <!-- SUB-TABS TO SWITCH BETWEEN SAO KÊ BRD 1.1 & SAO KÊ QUYẾT TOÁN V2 -->
+      <div class="statement-subtab-bar" style="display:flex; gap:12px; margin-bottom:20px; border-bottom:2px solid #E2E8F0; padding-bottom:2px;">
+        <button class="subtab-item" onclick="ViewRenderer.renderPage('statement-v11')" style="padding:10px 18px; font-weight:600; font-size:14px; border:none; background:none; color:#64748B; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <i data-lucide="file-spreadsheet" style="width:16px; height:16px;"></i> Sao Kê 1.1 (Theo Tài Liệu)
+        </button>
+        <button class="subtab-item active" onclick="ViewRenderer.renderPage('statement')" style="padding:10px 18px; font-weight:700; font-size:14px; border:none; background:none; border-bottom:3px solid #0284C7; color:#0284C7; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <i data-lucide="calculator" style="width:16px; height:16px;"></i> Sao Kê Quyết Toán (v2)
+        </button>
       </div>
 
       <!-- MỤC TÌM KIẾM BỘ LỌC QUYẾT TOÁN V2 (7 FIELDS EXACT) -->
@@ -1788,6 +1800,158 @@ const ViewRenderer = {
                   <td style="white-space:nowrap;">
                     <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="openReconcileV2DetailModal(${item.stt})">Tùy chỉnh</button>
                   </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
+  /**
+   * Sao Kê 1.1 (Theo Tài Liệu BRD 1.1) View
+   */
+  getStatementV11View() {
+    const list = MockData.getStatementV11Data ? MockData.getStatementV11Data() : [];
+
+    return `
+      <div class="subpage-header">
+        <div>
+          <div class="subpage-breadcrumb">Đối soát / Sao Kê / <strong>Sao kê 1.1 tài liệu</strong></div>
+          <h1 class="subpage-title">Sao Kê Tài Khoản (Theo Tài Liệu 1.1)</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu biến động số dư, hạch toán giao dịch và mã tham chiếu đối soát chuẩn quy định tài liệu 1.1.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" onclick="showToast('Tải sao kê PDF...')"><i data-lucide="file-text" style="width:15px; height:15px; margin-right:4px;"></i> Tải PDF</button>
+          <button class="btn-secondary" onclick="showToast('Xuất sao kê Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel</button>
+        </div>
+      </div>
+
+      <!-- SUB-TABS TO SWITCH BETWEEN SAO KÊ BRD 1.1 & SAO KÊ QUYẾT TOÁN V2 -->
+      <div class="statement-subtab-bar" style="display:flex; gap:12px; margin-bottom:20px; border-bottom:2px solid #E2E8F0; padding-bottom:2px;">
+        <button class="subtab-item active" onclick="ViewRenderer.renderPage('statement-v11')" style="padding:10px 18px; font-weight:700; font-size:14px; border:none; background:none; border-bottom:3px solid #0284C7; color:#0284C7; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <i data-lucide="file-spreadsheet" style="width:16px; height:16px;"></i> Sao Kê 1.1 (Theo Tài Liệu)
+        </button>
+        <button class="subtab-item" onclick="ViewRenderer.renderPage('statement')" style="padding:10px 18px; font-weight:600; font-size:14px; border:none; background:none; color:#64748B; cursor:pointer; display:flex; align-items:center; gap:6px;">
+          <i data-lucide="calculator" style="width:16px; height:16px;"></i> Sao Kê Quyết Toán (v2)
+        </button>
+      </div>
+
+      <!-- MỤC TÌM KIẾM & BỘ LỌC SAO KÊ (6 TRƯỜNG CHUẨN TÀI LIỆU IMAGE 1) -->
+      <div class="table-card" style="margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm & Bộ Lọc Sao Kê
+        </div>
+        <form id="v11StatementFilterForm" onsubmit="return false;">
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+            <!-- 1. Từ khóa: Tìm theo mã sao kê hoặc mã giao dịch -->
+            <div class="form-group-field">
+              <label>Từ khóa (Mã sao kê / Mã giao dịch)</label>
+              <input type="text" id="filterV11Keyword" placeholder="Nhập mã sao kê hoặc mã giao dịch">
+            </div>
+
+            <!-- 2. Kỳ sao kê: Chọn tháng hoặc kỳ cần xem -->
+            <div class="form-group-field">
+              <label>Kỳ sao kê</label>
+              <select id="filterV11Period">
+                <option value="all">Tất cả kỳ sao kê</option>
+                <option value="m08">Tháng 08/2026 (Hiện tại)</option>
+                <option value="m07">Tháng 07/2026</option>
+                <option value="m06">Tháng 06/2026</option>
+                <option value="h1_08">Kỳ 15 ngày đầu tháng 08/2026</option>
+              </select>
+            </div>
+
+            <!-- 3. Khoảng thời gian: Lọc theo ngày hạch toán từ ngày – đến ngày -->
+            <div class="form-group-field">
+              <label>Khoảng thời gian (Ngày hạch toán)</label>
+              <div class="date-range-input-box">
+                <input type="date" id="filterV11PostStart" value="2026-08-01">
+                <span class="range-separator">→</span>
+                <input type="date" id="filterV11PostEnd" value="2026-08-25">
+                <span class="calendar-icon"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+              </div>
+            </div>
+
+            <!-- 4. Tài khoản: Chọn tài khoản/điểm kinh doanh -->
+            <div class="form-group-field">
+              <label>Tài khoản / Điểm kinh doanh</label>
+              <select id="filterV11Account">
+                <option value="all">Tất cả tài khoản/điểm kinh doanh</option>
+                <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+                <option value="storeHK">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                <option value="storeHC">Chi nhánh Hải Châu - Đà Nẵng</option>
+              </select>
+            </div>
+
+            <!-- 5. Loại giao dịch: Thanh toán, hoàn tiền, phí hoặc điều chỉnh -->
+            <div class="form-group-field">
+              <label>Loại giao dịch</label>
+              <select id="filterV11TxnType">
+                <option value="all">Tất cả loại giao dịch</option>
+                <option value="payment">Thanh toán</option>
+                <option value="refund">Hoàn tiền</option>
+                <option value="fee">Phí</option>
+                <option value="adjust">Điều chỉnh</option>
+              </select>
+            </div>
+
+            <!-- 6. Trạng thái: Chính thức hoặc đã điều chỉnh -->
+            <div class="form-group-field">
+              <label>Trạng thái</label>
+              <select id="filterV11Status">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="official">Chính thức</option>
+                <option value="adjusted">Đã điều chỉnh</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Các nút thao tác theo đúng chuẩn Image 1 -->
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
+            <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc sao kê tài liệu 1.1')">Đặt lại</button>
+            <button type="button" class="btn-secondary" onclick="showToast('Đang tải file sao kê PDF/Excel...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Tải sao kê PDF/Excel</button>
+            <button type="button" class="btn-primary" onclick="showToast('Đã tìm kiếm sao kê theo điều kiện lọc')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tìm kiếm</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- BẢNG DANH SÁCH GIAO DỊCH (10 TRƯỜNG CHUẨN TÀI LIỆU IMAGE 2) -->
+      <div class="table-card">
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Giao Dịch Sao Kê (${list.length} giao dịch)</span>
+          <span class="status-badge badge-success">Số dư sổ hạch toán: 185,450,000 đ</span>
+        </div>
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap;">Mã giao dịch</th>
+                <th style="white-space:nowrap;">Thời gian phát sinh</th>
+                <th style="white-space:nowrap;">Ngày hạch toán</th>
+                <th style="white-space:nowrap; min-width:240px;">Nội dung</th>
+                <th style="white-space:nowrap;">Loại giao dịch</th>
+                <th style="white-space:nowrap; text-align:right;">Ghi có</th>
+                <th style="white-space:nowrap; text-align:right;">Ghi nợ</th>
+                <th style="white-space:nowrap; text-align:right;">Phí FV</th>
+                <th style="white-space:nowrap; text-align:right;">Số dư</th>
+                <th style="white-space:nowrap;">Mã tham chiếu</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map(t => `
+                <tr onclick="showToast('Chi tiết giao dịch sao kê: ${t.txnId}')">
+                  <td><span class="txn-code">${t.txnId}</span></td>
+                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${t.createdTime}</td>
+                  <td style="font-size:12px; white-space:nowrap;"><strong>${t.postDate}</strong></td>
+                  <td style="font-size:12.5px; max-width:280px;">${t.description}</td>
+                  <td><span class="status-badge ${t.txnTypeClass}">${t.txnType}</span></td>
+                  <td style="text-align:right; font-weight:800; color:${t.creditAmount !== '—' ? '#10B981' : 'var(--text-muted)'}; font-size:13px;">${t.creditAmount}</td>
+                  <td style="text-align:right; font-weight:800; color:${t.debitAmount !== '—' ? '#EF4444' : 'var(--text-muted)'}; font-size:13px;">${t.debitAmount}</td>
+                  <td style="text-align:right; font-size:12px; font-weight:600;">${t.fvFee}</td>
+                  <td style="text-align:right; font-weight:800; color:var(--color-primary); font-size:13.5px;">${t.balance}</td>
+                  <td><code style="font-family:monospace; background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:11.5px; color:#334155;">${t.refCode}</code></td>
                 </tr>
               `).join('')}
             </tbody>
