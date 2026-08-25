@@ -889,23 +889,23 @@ const ViewRenderer = {
           <table class="portal-table">
             <thead>
               <tr>
-                <th style="white-space:nowrap;">STT</th>
-                <th style="white-space:nowrap;">MÃ GD</th>
-                <th style="white-space:nowrap;">MÃ ĐƠN HÀNG DN</th>
-                <th style="white-space:nowrap;">NGÀY TẠO</th>
-                <th style="white-space:nowrap;">TÊN KH</th>
-                <th style="white-space:nowrap;">SĐT/ TK THANH TOÁN</th>
-                <th style="white-space:nowrap;">TÊN CỬA HÀNG (CHỦ DN)</th>
-                <th style="white-space:nowrap;">SỐ TIỀN GD</th>
-                <th style="white-space:nowrap;">PHÍ GD</th>
-                <th style="white-space:nowrap;">PHÍ NGƯỜI DÙNG</th>
-                <th style="white-space:nowrap;">MÃ VOUCHER</th>
+                <th style="white-space:nowrap;">Stt</th>
+                <th style="white-space:nowrap;">Mã giao dịch</th>
+                <th style="white-space:nowrap;">Mã đơn hàng DN</th>
+                <th style="white-space:nowrap;">Ngày tạo</th>
+                <th class="col-customer" style="white-space:nowrap; min-width:220px; width:250px;">Tên khách hàng</th>
+                <th style="white-space:nowrap;">SĐT/ TK thanh toán</th>
+                <th style="white-space:nowrap;">Tên cửa hàng (Chủ DN)</th>
+                <th style="white-space:nowrap;">Số tiền GD</th>
+                <th style="white-space:nowrap;">Phí GD</th>
+                <th style="white-space:nowrap;">Phí người dùng</th>
+                <th style="white-space:nowrap;">Mã voucher</th>
                 <th style="white-space:nowrap;">CTKM</th>
-                <th style="white-space:nowrap;">NGUỒN THANH TOÁN</th>
-                <th style="white-space:nowrap;">LOẠI HÌNH THANH TOÁN</th>
-                <th style="white-space:nowrap;">THỜI GIAN ĐỐI TÁC THANH TOÁN</th>
-                <th style="white-space:nowrap;">THỜI GIAN THANH TOÁN DOANH NGHIỆP</th>
-                <th style="white-space:nowrap;">TRẠNG THÁI</th>
+                <th style="white-space:nowrap;">Nguồn thanh toán</th>
+                <th style="white-space:nowrap;">Loại hình thanh toán</th>
+                <th style="white-space:nowrap;">Thời gian đối tác thanh toán</th>
+                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
+                <th style="white-space:nowrap;">Trạng thái</th>
               </tr>
             </thead>
             <tbody id="payTxnsFullTbody">
@@ -915,7 +915,7 @@ const ViewRenderer = {
                   <td><span class="txn-code">${t.id}</span></td>
                   <td><span class="txn-code">${t.merchantOrderId}</span></td>
                   <td style="font-size:11.5px; color:var(--text-muted); white-space:nowrap;">${t.createdDate}</td>
-                  <td><strong>${t.customerName}</strong></td>
+                  <td class="col-customer" style="min-width:220px; white-space:nowrap;"><strong>${t.customerName}</strong></td>
                   <td style="font-size:12px; font-family:monospace; white-space:nowrap;">${t.customerPhoneAccount}</td>
                   <td style="font-size:12px;">${t.storeName}</td>
                   <td style="font-weight:800; color:var(--color-primary); white-space:nowrap;">${t.amount.toLocaleString('vi-VN')} đ</td>
@@ -1187,30 +1187,30 @@ const ViewRenderer = {
           <table class="portal-table">
             <thead>
               <tr>
-                <th style="white-space:nowrap;">STT</th>
-                <th style="white-space:nowrap;">MÃ HOÀN TIỀN</th>
-                <th style="white-space:nowrap;">MÃ GD GỐC</th>
-                <th style="white-space:nowrap;">MÃ GD GỐC CỦA ĐỐI TÁC</th>
-                <th style="white-space:nowrap;">MÃ ĐỐI SOÁT HOÀN TIỀN ĐỐI TÁC</th>
-                <th style="white-space:nowrap;">MÃ GD HOÀN TIỀN ĐỐI TÁC</th>
-                <th style="white-space:nowrap;">TÊN CỬA HÀNG/ NPP (CHỦ DN)</th>
-                <th style="white-space:nowrap;">TÊN KHÁCH HÀNG</th>
-                <th style="white-space:nowrap;">SĐT/TK GD</th>
-                <th style="white-space:nowrap;">SỐ TIỀN GD</th>
-                <th style="white-space:nowrap;">SỐ TIỀN PHẠT</th>
-                <th style="white-space:nowrap;">MÃ ĐỐI TÁC THANH TOÁN</th>
-                <th style="white-space:nowrap;">NGUỒN THANH TOÁN</th>
-                <th style="white-space:nowrap;">PHƯƠNG THỨC THANH TOÁN</th>
-                <th style="white-space:nowrap;">NỘI DUNG HOÀN</th>
-                <th style="white-space:nowrap;">LÝ DO TỪ CHỐI</th>
-                <th style="white-space:nowrap;">NGÀY TẠO</th>
-                <th style="white-space:nowrap;">NGƯỜI PHÊ DUYỆT</th>
-                <th style="white-space:nowrap;">THỜI GIAN PHÊ DUYỆT</th>
-                <th style="white-space:nowrap;">THỜI GIAN TỪ CHỐI</th>
-                <th style="white-space:nowrap;">NGƯỜI TẠO</th>
-                <th style="white-space:nowrap;">LOẠI HÌNH THANH TOÁN</th>
-                <th style="white-space:nowrap;">THỜI GIAN THANH TOÁN DOANH NGHIỆP</th>
-                <th style="white-space:nowrap;">TRẠNG THÁI</th>
+                <th style="white-space:nowrap;">Stt</th>
+                <th style="white-space:nowrap;">Mã hoàn tiền</th>
+                <th style="white-space:nowrap;">Mã GD gốc</th>
+                <th style="white-space:nowrap;">Mã GD gốc của đối tác</th>
+                <th style="white-space:nowrap;">Mã đối soát hoàn tiền đối tác</th>
+                <th style="white-space:nowrap;">Mã GD hoàn tiền đối tác</th>
+                <th style="white-space:nowrap;">Tên cửa hàng/ NPP (Chủ DN)</th>
+                <th class="col-customer" style="white-space:nowrap; min-width:220px; width:250px;">Tên khách hàng</th>
+                <th style="white-space:nowrap;">SĐT/ TK GD</th>
+                <th style="white-space:nowrap;">Số tiền GD</th>
+                <th style="white-space:nowrap;">Số tiền phạt</th>
+                <th style="white-space:nowrap;">Mã đối tác thanh toán</th>
+                <th style="white-space:nowrap;">Nguồn thanh toán</th>
+                <th style="white-space:nowrap;">Phương thức thanh toán</th>
+                <th style="white-space:nowrap;">Nội dung hoàn</th>
+                <th style="white-space:nowrap;">Lý do từ chối</th>
+                <th style="white-space:nowrap;">Ngày tạo</th>
+                <th style="white-space:nowrap;">Người phê duyệt</th>
+                <th style="white-space:nowrap;">Thời gian phê duyệt</th>
+                <th style="white-space:nowrap;">Thời gian từ chối</th>
+                <th style="white-space:nowrap;">Người tạo</th>
+                <th style="white-space:nowrap;">Loại hình thanh toán</th>
+                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
+                <th style="white-space:nowrap;">Trạng thái</th>
               </tr>
             </thead>
             <tbody id="refundTxnsFullTbody">
@@ -1223,7 +1223,7 @@ const ViewRenderer = {
                   <td><span class="txn-code">${t.partnerRefundReconcileId}</span></td>
                   <td><span class="txn-code">${t.partnerRefundTxnId}</span></td>
                   <td style="font-size:12px;">${t.storeName}</td>
-                  <td><strong>${t.customerName}</strong></td>
+                  <td class="col-customer" style="min-width:220px; white-space:nowrap;"><strong>${t.customerName}</strong></td>
                   <td style="font-size:12px; font-family:monospace; white-space:nowrap;">${t.customerPhoneAccount}</td>
                   <td style="font-weight:800; color:var(--color-primary); white-space:nowrap;">${t.amount.toLocaleString('vi-VN')} đ</td>
                   <td style="font-weight:600; color:var(--color-danger); white-space:nowrap;">${t.penaltyAmount ? t.penaltyAmount.toLocaleString('vi-VN') + ' đ' : '0 đ'}</td>

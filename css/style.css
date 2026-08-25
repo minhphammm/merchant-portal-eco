@@ -2413,4 +2413,20 @@ table.portal-table th {
 
 .badge-warning { background: #FEF3C7; color: #D97706; }
 
+/* Universal Sentence Case / Lowercase Rules for all inputs, table headers, labels & cards */
+th, table th, .portal-table th, .preview-table th, .calendar-table th,
+label, .form-group-field label,
+input, select, option, textarea,
+.stat-label, .kpi-title, .center-label,
+.detail-label, .detail-val, .doc-name {
+  text-transform: none !important;
+}
+
+/* Customer Name Column Width Expansion */
+th.col-customer, td.col-customer, .col-customer {
+  min-width: 220px !important;
+  width: 250px !important;
+  white-space: nowrap !important;
+}
+
 
