@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=7.5">
+  <link rel="stylesheet" href="css/style.css?v=7.6">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -461,13 +461,13 @@
     </div>
   </div>
 
-  <!-- Floating Action Buttons (Góc dưới bên phải): Chatbot AI & Contact Support -->
-  <div class="floating-widget-bar" style="position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:12px; z-index:9990;">
-    <button onclick="toggleChatbotWidget()" title="Trợ lý AI Chatbot Ecopay" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#fff; border:none; box-shadow:0 10px 25px -5px rgba(2, 132, 199, 0.5); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;">
-      <i data-lucide="bot" style="width:24px; height:24px;"></i>
+  <!-- Floating Action Buttons (Góc dưới bên phải): Chatbot AI & Contact Support (Mờ mặc định, Hover rõ) -->
+  <div class="floating-widget-bar" style="position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px; z-index:9990;">
+    <button class="floating-widget-btn" onclick="toggleChatbotWidget()" title="Trợ lý AI Chatbot Ecopay" style="background:linear-gradient(135deg, #0284C7 0%, #0369A1 100%); color:#fff;">
+      <i data-lucide="bot" style="width:18px; height:18px;"></i>
     </button>
-    <button onclick="openContactModal()" title="Liên hệ Tổng đài hỗ trợ 24/7" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg, #DB2777 0%, #BE185D 100%); color:#fff; border:none; box-shadow:0 10px 25px -5px rgba(219, 39, 119, 0.5); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;">
-      <i data-lucide="headphones" style="width:22px; height:22px;"></i>
+    <button class="floating-widget-btn" onclick="openContactModal()" title="Liên hệ Tổng đài hỗ trợ 24/7" style="background:linear-gradient(135deg, #DB2777 0%, #BE185D 100%); color:#fff;">
+      <i data-lucide="headphones" style="width:17px; height:17px;"></i>
     </button>
   </div>
 

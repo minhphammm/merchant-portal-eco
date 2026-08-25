@@ -2725,4 +2725,39 @@ select,
   align-items: center;
 }
 
+/* COMPACT & TRANSLUCENT CHATBOT / CONTACT WIDGET ICONS (MỜ MẶC ĐỊNH, HOVER HIỂN THỊ RÕ) */
+#btnTopChatbot,
+#btnTopContact {
+  opacity: 0.35 !important;
+  transform: scale(0.85);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#btnTopChatbot:hover,
+#btnTopContact:hover {
+  opacity: 1 !important;
+  transform: scale(1.08) translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.floating-widget-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  opacity: 0.35 !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.floating-widget-btn:hover {
+  opacity: 1 !important;
+  transform: scale(1.2) translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
 
