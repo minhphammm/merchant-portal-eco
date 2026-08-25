@@ -40,12 +40,10 @@ const i18n = {
       navAbHistory: 'Lịch sử giao dịch',
       navAbShift: 'Báo cáo két ca',
       navSettlement: 'Đối soát',
-      navReconcileEcopay: 'Đối soát Ecopay (Đối soát Giao dịch)',
-      navReconcileV2: 'Đối soát v2 (Quản lý quyết toán)',
       navReconcileReport: 'Báo cáo đối soát',
+      navStatement: 'Sao kê',
       navFeeDiffReport: 'Báo cáo chênh lệch phí',
       navBalanceReport: 'Báo cáo số dư',
-      navStatement: 'Sao kê tài khoản',
       navAnalytics: 'Analytics',
 
       // Header Actions & User Menu

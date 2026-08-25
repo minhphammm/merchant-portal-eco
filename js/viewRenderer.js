@@ -45,9 +45,11 @@ const ViewRenderer = {
         html = this.getAgentBankingView();
         break;
       case 'reconcile-ecopay':
+      case 'reconcile-report':
         html = this.getReconcileEcopayView();
         break;
       case 'reconcile-v2':
+      case 'statement':
         html = this.getReconcileV2View();
         break;
       case 'reconcile':
@@ -1371,8 +1373,8 @@ const ViewRenderer = {
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Đối soát / <strong>Đối soát Ecopay (Đối soát GD)</strong></div>
-          <h1 class="subpage-title">Đối Soát Ecopay (Đối Soát GD)</h1>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Báo Cáo Đối Soát</strong></div>
+          <h1 class="subpage-title">Báo Cáo Đối Soát</h1>
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu, quản lý và kiểm tra đối soát khớp dữ liệu từng giao dịch giữa Ecopay FinViet và Doanh nghiệp / Cửa hàng.</p>
         </div>
         <div style="display:flex; gap:10px;">
@@ -1512,9 +1514,9 @@ const ViewRenderer = {
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Đối soát / <strong>Đối soát v2 (Quản lý quyết toán)</strong></div>
-          <h1 class="subpage-title">Đối Soát v2 (Quản Lý Quyết Toán)</h1>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý phiên quyết toán doanh thu T+0 / T+1, số dư giải ngân và theo dõi luồng tiền chuyển về ngân hàng của Doanh nghiệp.</p>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Sao Kê Tài Khoản</strong></div>
+          <h1 class="subpage-title">Sao Kê Tài Khoản</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý phiên quyết toán doanh thu T+0 / T+1, sao kê chi tiết số dư giải ngân và luồng tiền chuyển về ngân hàng.</p>
         </div>
         <div style="display:flex; gap:10px;">
           <button class="btn-primary" onclick="showToast('Yêu cầu tạo phiên quyết toán mới...')">+ Tạo Phiên Quyết Toán</button>
