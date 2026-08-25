@@ -120,16 +120,17 @@ const PortalCharts = {
     const channelData = MockData.getChannelDistribution(storeId);
     this.renderCustomLegend(channelData);
 
-    const centerEl = document.getElementById('donutCenterAmount');
-    if (centerEl) {
-      centerEl.textContent = this.formatShortVnd(channelData.totalGmv);
-    }
+    const centerLabel = document.getElementById('donutCenterLabel');
+    const centerAmount = document.getElementById('donutCenterAmount');
 
-    if (typeof Chart === 'undefined') {
-      return;
-    }
+    if (centerLabel) centerLabel.textContent = 'Tổng GMV';
+    if (centerAmount) centerAmount.textContent = this.formatShortVnd(channelData.totalGmv);
+
+    if (typeof Chart === 'undefined') return;
 
     try {
+      if (this.channelChart) this.channelChart.destroy();
+
       const percentagePlugin = {
         id: 'percentagePlugin',
         afterDraw(chart) {
@@ -148,13 +149,15 @@ const PortalCharts = {
             ctx.font = 'bold 11px "Plus Jakarta Sans", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.shadowColor = 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = 3;
+            ctx.shadowColor = 'rgba(0,0,0,0.6)';
+            ctx.shadowBlur = 4;
             ctx.fillText(`${pct}%`, x, y);
             ctx.restore();
           });
         }
       };
+
+      const self = this;
 
       this.channelChart = new Chart(ctx, {
         type: 'doughnut',
@@ -164,7 +167,8 @@ const PortalCharts = {
             data: channelData.channels.map(c => c.value),
             backgroundColor: channelData.channels.map(c => c.color),
             borderWidth: 3,
-            borderColor: '#FFFFFF'
+            borderColor: '#FFFFFF',
+            hoverOffset: 6
           }]
         },
         plugins: [percentagePlugin],
@@ -172,15 +176,49 @@ const PortalCharts = {
           responsive: true,
           maintainAspectRatio: false,
           cutout: '70%',
+          onHover: (event, activeElements) => {
+            const legendItems = document.querySelectorAll('#channelLegendContainer .legend-item');
+            legendItems.forEach(item => item.style.backgroundColor = 'transparent');
+
+            if (activeElements && activeElements.length > 0) {
+              const idx = activeElements[0].index;
+              const ch = channelData.channels[idx];
+              if (ch) {
+                if (centerLabel) centerLabel.textContent = ch.name;
+                if (centerAmount) centerAmount.textContent = `${self.formatShortVnd(ch.value)} (${ch.percent}%)`;
+
+                if (legendItems[idx]) {
+                  legendItems[idx].style.backgroundColor = 'rgba(22, 119, 255, 0.08)';
+                }
+              }
+            } else {
+              if (centerLabel) centerLabel.textContent = 'Tổng GMV';
+              if (centerAmount) centerAmount.textContent = self.formatShortVnd(channelData.totalGmv);
+            }
+          },
           plugins: {
             legend: { display: false },
             tooltip: {
+              enabled: true,
+              backgroundColor: '#0F172A',
+              titleColor: '#FFFFFF',
+              bodyColor: '#F8FAFC',
+              titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 13, weight: '700' },
+              bodyFont: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' },
+              padding: 12,
+              cornerRadius: 8,
+              boxWidth: 10,
+              boxHeight: 10,
+              usePointStyle: true,
               callbacks: {
+                title: (items) => items[0]?.label || '',
                 label: (context) => {
                   const val = context.raw;
                   const total = context.dataset.data.reduce((a, b) => a + b, 0);
                   const pct = ((val / total) * 100).toFixed(1);
-                  return ` ${context.label}: ${PortalCharts.formatShortVnd(val)} (${pct}%)`;
+                  const formattedVnd = val.toLocaleString('vi-VN') + ' đ';
+                  const shortVnd = self.formatShortVnd(val);
+                  return ` Giá trị: ${formattedVnd} (${shortVnd}) — ${pct}%`;
                 }
               }
             }
