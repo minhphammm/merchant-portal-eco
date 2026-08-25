@@ -2481,4 +2481,63 @@ select,
   color: var(--text-muted) !important;
 }
 
+/* Ant Design Style Date Range Input Box for Filter Panels (Limit 3 months) */
+.date-range-input-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 11px;
+  background-color: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  width: 100%;
+}
+
+.date-range-input-box:hover {
+  border-color: #4096ff;
+}
+
+.date-range-input-box:focus-within {
+  border-color: #1677ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+}
+
+.date-range-input-box input[type="date"] {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  height: 100% !important;
+  font-size: 13px !important;
+  color: var(--text-muted) !important;
+  font-family: inherit !important;
+  flex: 1;
+  min-width: 0;
+  box-shadow: none !important;
+}
+
+.date-range-input-box input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.date-range-input-box .range-separator {
+  font-size: 12px;
+  color: #bfbfbf;
+  user-select: none;
+  font-weight: 400;
+  padding: 0 2px;
+}
+
+.date-range-input-box .calendar-icon {
+  margin-left: auto;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
 

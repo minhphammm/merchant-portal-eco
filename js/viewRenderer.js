@@ -1423,7 +1423,7 @@ const ViewRenderer = {
               <input type="text" id="filterReportCode" placeholder="Vui lòng nhập mã thanh toán (VD: R_102107...)">
             </div>
 
-            <!-- 3. Thời gian tạo (Tối đa 3 tháng + Tooltip) -->
+            <!-- 3. Thời gian tạo (Giới hạn 3 tháng + Tooltip) -->
             <div class="form-group-field">
               <label style="display:flex; align-items:center; gap:4px;">
                 Thời gian tạo
@@ -1433,9 +1433,9 @@ const ViewRenderer = {
               </label>
               <div class="date-range-input-box" title="Khoảng thời gian tối đa là 3 tháng">
                 <input type="date" id="filterReportCreatedStart" value="2025-06-01">
-                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <span class="range-separator">→</span>
                 <input type="date" id="filterReportCreatedEnd" value="2025-08-22">
-                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <span class="calendar-icon"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -1451,14 +1451,19 @@ const ViewRenderer = {
               </select>
             </div>
 
-            <!-- 5. Thời gian thanh toán doanh nghiệp -->
+            <!-- 5. Thời gian thanh toán doanh nghiệp (Giới hạn 3 tháng + Tooltip) -->
             <div class="form-group-field">
-              <label>Thời gian thanh toán doanh nghiệp</label>
-              <div class="date-range-input-box">
+              <label style="display:flex; align-items:center; gap:4px;">
+                Thời gian thanh toán doanh nghiệp
+                <span class="info-tooltip-icon" title="Khoảng thời gian tối đa là 3 tháng" style="cursor:pointer; color:var(--text-muted); display:inline-flex; align-items:center;">
+                  <i data-lucide="help-circle" style="width:13px; height:13px;"></i>
+                </span>
+              </label>
+              <div class="date-range-input-box" title="Khoảng thời gian tối đa là 3 tháng">
                 <input type="date" id="filterReportMerchantPayStart" value="2025-08-01">
-                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <span class="range-separator">→</span>
                 <input type="date" id="filterReportMerchantPayEnd" value="2025-08-22">
-                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <span class="calendar-icon"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
