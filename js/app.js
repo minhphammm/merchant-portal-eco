@@ -2871,4 +2871,198 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalOverlay) modalOverlay.classList.add('show');
     if (window.refreshIcons) window.refreshIcons();
   };
+
+  // Filter Expand/Collapse Toggle Helper
+  window.toggleFilterExpand = function(btn) {
+    const card = btn.closest('.table-card');
+    const content = card.querySelector('.filter-panel-content');
+    if (content) {
+      const isHidden = content.style.display === 'none';
+      content.style.display = isHidden ? 'block' : 'none';
+      btn.innerHTML = isHidden 
+        ? '<i data-lucide="chevron-up" style="width:14px; height:14px; margin-right:4px;"></i> Thu gọn' 
+        : '<i data-lucide="chevron-down" style="width:14px; height:14px; margin-right:4px;"></i> Mở rộng';
+      if (window.refreshIcons) window.refreshIcons();
+    }
+  };
+
+  // Reconcile Report 4-Tab Detail Modal Helper (PRD Match)
+  window.openReconcileReportDetailModal = function(reconcileCode) {
+    const list = MockData.getReconcileEcopayData ? MockData.getReconcileEcopayData() : [];
+    const item = list.find(x => x.reconcileCode === reconcileCode) || list[0];
+
+    const titleEl = document.getElementById('modalTitleText');
+    if (titleEl) titleEl.textContent = `Chi Tiết Báo Cáo Đối Soát Thanh Toán - ${item.reconcileCode}`;
+
+    const bodyEl = document.getElementById('modalBodyContent');
+    if (bodyEl) {
+      bodyEl.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Tab Header Switcher Bar -->
+          <div style="display:flex; gap:6px; border-bottom:2px solid var(--border-color); padding-bottom:8px;">
+            <button class="reconcile-detail-tab-btn active" onclick="switchReconcileDetailTab('dvcntt')">Thông tin DVCNTT</button>
+            <button class="reconcile-detail-tab-btn" onclick="switchReconcileDetailTab('report')">Thông tin báo cáo</button>
+            <button class="reconcile-detail-tab-btn" onclick="switchReconcileDetailTab('txns')">Danh sách giao dịch</button>
+            <button class="reconcile-detail-tab-btn" onclick="switchReconcileDetailTab('audit')">Lịch sử đối soát</button>
+          </div>
+
+          <!-- Tab 1: Thông tin DVCNTT -->
+          <div id="tabDetailDvcntt" class="reconcile-tab-pane" style="display:block;">
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:8px; color:var(--text-main);">Thông tin doanh nghiệp</div>
+            <div class="table-card" style="margin-bottom:16px; padding:0;">
+              <table class="portal-table" style="font-size:13px;">
+                <tbody>
+                  <tr><td style="width:200px; font-weight:600; color:var(--text-muted);">1. Mã doanh nghiệp</td><td><strong>${item.merchantCode}</strong></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">2. Tên doanh nghiệp</td><td><strong>${item.merchantName}</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="font-weight:700; font-size:13.5px; margin-bottom:8px; color:var(--text-main);">Thông tin cửa hàng</div>
+            <div class="table-card" style="padding:0;">
+              <table class="portal-table" style="font-size:13px;">
+                <tbody>
+                  <tr><td style="width:200px; font-weight:600; color:var(--text-muted);">1. Mã cửa hàng</td><td><strong>${item.storeCode}</strong></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">2. Tên cửa hàng</td><td><strong>${item.storeName}</strong></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">3. Ví ECO</td><td>${item.ecoWallet || '-'}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">4. Tên chủ tài khoản</td><td><strong>${item.accountOwner}</strong></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">5. Số tài khoản</td><td><code>${item.accountNumber}</code></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">6. Ngân hàng</td><td>${item.bankName}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">7. Chi nhánh</td><td>${item.bankBranch}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 2: Thông tin báo cáo (20 Metrics) -->
+          <div id="tabDetailReport" class="reconcile-tab-pane" style="display:none;">
+            <div class="table-card" style="padding:0;">
+              <table class="portal-table" style="font-size:13px;">
+                <tbody>
+                  <tr><td style="width:320px; font-weight:600; color:var(--text-muted);">1. Mã thanh toán</td><td><strong>${item.reconcileCode}</strong></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">2. Khoảng thời gian giao dịch</td><td>${item.periodRange}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">3. Phương thức thanh toán</td><td><span class="badge-neutral">${item.paymentMethod}</span></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">4. Tổng số giao dịch</td><td><strong>${item.totalTxnCount}</strong></td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">5. Tổng số tiền giao dịch gốc</td><td>${item.totalOriginalAmount}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">6. Tổng số tiền đơn hàng</td><td>${item.totalOrderAmount}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">7. Tổng số tiền hoàn</td><td>${item.totalRefundAmount}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">8. Phí hoàn</td><td>${item.refundFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">9. Phí giao dịch</td><td>${item.txnFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">10. Phí trả sau áp dụng cho doanh nghiệp</td><td>${item.postpaidBizFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">11. Phí dịch vụ trả sau áp dụng cho doanh nghiệp</td><td>${item.postpaidBizServiceFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">12. Phí trả sau áp dụng cho người dùng</td><td>${item.postpaidUserFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">13. Phí dịch vụ trả sau áp dụng cho người dùng</td><td>${item.postpaidUserServiceFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">14. Phí BNPL áp dụng cho doanh nghiệp</td><td>${item.bnplBizFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">15. Phí BNPL áp dụng cho người dùng</td><td>${item.bnplUserFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">16. Phí dịch vụ BNPL áp dụng cho người dùng</td><td>${item.bnplUserServiceFee}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">17. Số tiền hoàn cấn trừ</td><td>${item.deductedRefundAmount}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">18. Phí hoàn cấn trừ</td><td>${item.deductedRefundFee}</td></tr>
+                  <tr style="background:#F0FDF4;"><td style="font-weight:800; color:#10B981;">19. Tổng số tiền phải trả</td><td style="font-weight:800; font-size:15px; color:#10B981;">${item.finalPayableAmount}</td></tr>
+                  <tr><td style="font-weight:600; color:var(--text-muted);">20. Phí bổ sung</td><td>${item.extraFee}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 3: Danh sách giao dịch -->
+          <div id="tabDetailTxns" class="reconcile-tab-pane" style="display:none;">
+            <div class="table-card" style="padding:0;">
+              <table class="portal-table" style="font-size:12.5px;">
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Mã GD Ecopay</th>
+                    <th>Mã Đơn Hàng DN</th>
+                    <th>Thời Gian GD</th>
+                    <th>Số Tiền Gốc</th>
+                    <th>Phí GD</th>
+                    <th>Thực Nhận</th>
+                    <th>Trạng Thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td><code>FTX20250808991</code></td>
+                    <td>ORD-2025-08-01</td>
+                    <td>08-08-2025 09:28:10</td>
+                    <td>3,000,000 đ</td>
+                    <td>66,000 đ</td>
+                    <td style="font-weight:700; color:#10B981;">2,934,000 đ</td>
+                    <td><span class="status-badge badge-success">Thành công</span></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><code>FTX20250808992</code></td>
+                    <td>ORD-2025-08-02</td>
+                    <td>08-08-2025 09:29:05</td>
+                    <td>3,000,000 đ</td>
+                    <td>66,000 đ</td>
+                    <td style="font-weight:700; color:#10B981;">2,934,000 đ</td>
+                    <td><span class="status-badge badge-success">Thành công</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 4: Lịch sử đối soát (Audit Trail Logs) -->
+          <div id="tabDetailAudit" class="reconcile-tab-pane" style="display:none;">
+            <div class="table-card" style="padding:0;">
+              <table class="portal-table" style="font-size:13px;">
+                <thead>
+                  <tr>
+                    <th>Các bước tiến trình đối soát</th>
+                    <th>Thời gian ghi nhận</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${(item.auditLogs || []).map(log => `
+                    <tr>
+                      <td style="font-weight:600; color:var(--text-main);">${log.step}</td>
+                      <td style="font-size:12.5px;">${log.time}</td>
+                      <td><span class="status-badge badge-success">${log.status}</span></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    const btnAction = document.getElementById('btnFooterAction');
+    if (btnAction) {
+      btnAction.style.display = 'inline-block';
+      btnAction.textContent = 'Xuất dữ liệu Excel/PDF';
+      btnAction.onclick = function() {
+        showToast(`Đã tải xuống dữ liệu báo cáo đối soát thanh toán ${item.reconcileCode}`);
+      };
+    }
+
+    window.switchReconcileDetailTab = function(tabKey) {
+      document.querySelectorAll('.reconcile-detail-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.reconcile-tab-pane').forEach(p => p.style.display = 'none');
+
+      if (tabKey === 'dvcntt') {
+        document.querySelectorAll('.reconcile-detail-tab-btn')[0]?.classList.add('active');
+        document.getElementById('tabDetailDvcntt').style.display = 'block';
+      } else if (tabKey === 'report') {
+        document.querySelectorAll('.reconcile-detail-tab-btn')[1]?.classList.add('active');
+        document.getElementById('tabDetailReport').style.display = 'block';
+      } else if (tabKey === 'txns') {
+        document.querySelectorAll('.reconcile-detail-tab-btn')[2]?.classList.add('active');
+        document.getElementById('tabDetailTxns').style.display = 'block';
+      } else if (tabKey === 'audit') {
+        document.querySelectorAll('.reconcile-detail-tab-btn')[3]?.classList.add('active');
+        document.getElementById('tabDetailAudit').style.display = 'block';
+      }
+    };
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
 });

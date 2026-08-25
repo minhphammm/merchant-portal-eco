@@ -2447,4 +2447,28 @@ input.has-error, select.has-error, textarea.has-error {
   line-height: 1.3;
 }
 
+/* Reconcile Detail Modal Tab Styling */
+.reconcile-detail-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.reconcile-detail-tab-btn:hover {
+  color: var(--text-main);
+  background-color: #F1F5F9;
+}
+
+.reconcile-detail-tab-btn.active {
+  color: #1677ff;
+  background-color: #E6F4FF;
+  font-weight: 700;
+}
+
 

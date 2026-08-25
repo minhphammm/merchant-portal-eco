@@ -1366,105 +1366,13 @@ const ViewRenderer = {
   },
 
   /**
-   * Đối soát Ecopay (Đối soát Giao dịch) View
+   * Báo cáo đối soát thanh toán View (Matching ECOPAY PRD Specification)
    */
   getReconcileEcopayView() {
     const list = MockData.getReconcileEcopayData ? MockData.getReconcileEcopayData() : [];
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Đối soát / <strong>Báo Cáo Đối Soát</strong></div>
-          <h1 class="subpage-title">Báo Cáo Đối Soát</h1>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu, quản lý và kiểm tra đối soát khớp dữ liệu từng giao dịch giữa Ecopay FinViet và Doanh nghiệp / Cửa hàng.</p>
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo đối soát Ecopay Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel</button>
-        </div>
-      </div>
-
-      <!-- MỤC TÌM KIẾM BỘ LỌC ĐỐI SOÁT ECOPAY (4 FIELDS EXACT) -->
-      <div class="table-card" style="margin-bottom:20px;">
-        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
-        </div>
-        <form id="reconcileEcopayFilterForm" onsubmit="return false;">
-          <div class="filter-grid-4col">
-            <!-- 1. Tên cửa hàng -->
-            <div class="form-group-field">
-              <label>Tên cửa hàng</label>
-              <select id="filterReconcileStoreName">
-                <option value="all">Tất cả cửa hàng</option>
-                <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
-                <option value="storeQ3">Chi nhánh Hoàn Kiếm - Hà Nội</option>
-                <option value="storeTB">Chi nhánh Hải Châu - Đà Nẵng</option>
-              </select>
-            </div>
-
-            <!-- 2. Thời gian tạo đối soát -->
-            <div class="form-group-field">
-              <label>Thời gian tạo đối soát</label>
-              <div class="date-range-input-box">
-                <input type="date" id="filterReconcileCreatedStart" value="2026-08-01">
-                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
-                <input type="date" id="filterReconcileCreatedEnd" value="2026-08-25">
-                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
-              </div>
-            </div>
-
-            <!-- 3. Thời gian thanh toán DN -->
-            <div class="form-group-field">
-              <label>Thời gian thanh toán DN</label>
-              <div class="date-range-input-box">
-                <input type="date" id="filterReconcileMerchantPayStart" value="2026-08-01">
-                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
-                <input type="date" id="filterReconcileMerchantPayEnd" value="2026-08-25">
-                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
-              </div>
-            </div>
-
-            <!-- 4. Trạng thái -->
-            <div class="form-group-field">
-              <label>Trạng thái</label>
-              <select id="filterReconcileStatus">
-                <option value="all">Tất cả trạng thái</option>
-                <option value="created">Khởi tạo</option>
-                <option value="processing">Đang xử lý</option>
-                <option value="approved">Đã phê duyệt</option>
-                <option value="rejected">Đã từ chối</option>
-                <option value="failed">Thất bại</option>
-                <option value="paid">Đã thanh toán</option>
-                <option value="success">Thành công</option>
-                <option value="pending">Đang chờ duyệt</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
-            <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc tìm kiếm đối soát')">Làm lại</button>
-            <button type="button" class="btn-primary" onclick="showToast('Đã áp dụng bộ lọc đối soát Ecopay')">Tìm kiếm</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- BẢNG HIỂN THỊ THÔNG TIN ĐỐI SOÁT ECOPAY (16 COLUMNS EXACT) -->
-      <div class="table-card">
-        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
-          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Hiển thị thông tin đối soát Ecopay (${list.length} bản ghi)</span>
-          <span class="status-badge badge-success">Cập nhật kỳ đối soát mới nhất</span>
-        </div>
-        <div class="table-responsive" style="overflow-x:auto;">
-          <table class="portal-table">
-            <thead>
-              <tr>
-                <th style="white-space:nowrap;">STT</th>
-                <th style="white-space:nowrap;">Tên cửa hàng</th>
-                <th style="white-space:nowrap;">Thời gian tạo đối soát</th>
-                <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
-                <th style="white-space:nowrap;">Tổng số tiền phải trả</th>
-                <th style="white-space:nowrap;">Phí Giao dịch</th>
-                <th style="white-space:nowrap;">Phí người dùng</th>
-                <th style="white-space:nowrap;">Số tiền cấn trừ</th>
-                <th style="white-space:nowrap;">Người tạo</th>
                 <th style="white-space:nowrap;">Tổng số tiền khuyến mãi</th>
                 <th style="white-space:nowrap;">Người phê duyệt</th>
                 <th style="white-space:nowrap;">Thời gian đối tác được duyệt</th>
