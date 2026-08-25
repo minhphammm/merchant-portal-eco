@@ -75,13 +75,42 @@ const ViewRenderer = {
    * Enterprise Management View (MC - Quản trị Doanh nghiệp PDF Spec)
    */
   getEnterpriseView() {
+    const cashless = MockData.cashlessState || { availableBalance: 1245000000 };
+    const formattedBalance = cashless.availableBalance.toLocaleString('vi-VN');
+
     return `
       <div class="subpage-header">
         <div>
           <div class="subpage-breadcrumb">Doanh nghiệp / <strong>Quản trị Doanh nghiệp</strong></div>
           <h1 class="subpage-title">Quản Trị Doanh Nghiệp</h1>
         </div>
-        <button class="btn-primary" onclick="openRequestAdjustModal()">✍️ Yêu Cầu Điều Chỉnh Thông Tin</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-secondary" onclick="openCreatePaylinkModalOverview()">+ Tạo Yêu Cầu Chi</button>
+          <button class="btn-primary" onclick="openRequestAdjustModal()">✍️ Yêu Cầu Điều Chỉnh Thông Tin</button>
+        </div>
+      </div>
+
+      <!-- Cashless Balance Banner -->
+      <div class="cashless-balance-banner" style="background:linear-gradient(135deg, #001529 0%, #002140 100%); color:#fff; border-radius:12px; padding:20px 24px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 16px rgba(0,21,41,0.15); border:1px solid rgba(255,255,255,0.08);">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <span style="font-size:13px; color:#94A3B8; font-weight:600;">Số dư khả dụng tài khoản ECOPAY</span>
+            <div class="tooltip-wrapper" style="position:relative; display:inline-block;">
+              <i data-lucide="help-circle" style="width:15px; height:15px; color:#FFC107; cursor:pointer;" onclick="showToast('Số dư khả dụng = Số dư thực tế – Số tiền đang bị treo bởi các giao dịch đang xử lý')"></i>
+            </div>
+            <span class="finviet-cashless-badge" style="background:rgba(0,200,83,0.15); color:#00E676; border:1px solid rgba(0,230,118,0.3); font-weight:700; font-size:11px; padding:2px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+              <span style="width:6px; height:6px; background:#00E676; border-radius:50%;"></span> ECOPAY Cashless
+            </span>
+          </div>
+          <div style="font-size:28px; font-weight:800; color:#FFC107; letter-spacing:-0.5px;">
+            ${formattedBalance} <span style="font-size:18px; font-weight:600; color:#E2E8F0;">đ</span>
+          </div>
+        </div>
+        <div>
+          <button class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="padding:10px 20px; font-weight:700; font-size:14px; background:linear-gradient(135deg, #1677ff 0%, #0958d9 100%); border:none; box-shadow:0 4px 12px rgba(22,119,255,0.3);">
+            <i data-lucide="send" style="width:16px; height:16px; margin-right:6px;"></i> Tạo Yêu Cầu Chi
+          </button>
+        </div>
       </div>
 
       <div class="enterprise-tabs-nav">
@@ -90,15 +119,19 @@ const ViewRenderer = {
       </div>
 
       <div id="entTabInfoContainer">
+        <!-- 1. Thông tin nhận diện doanh nghiệp -->
         <div class="table-card" style="margin-bottom:20px;">
-          <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main);">1. Thông Tin Nhận Diện Doanh Nghiệp</div>
+          <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; justify-content:space-between; align-items:center;">
+            <span>1. Thông Tin Nhận Diện Doanh Nghiệp</span>
+            <span class="status-badge badge-success">Đang hoạt động</span>
+          </div>
           <table class="portal-table">
             <thead>
               <tr>
                 <th>MÃ DOANH NGHIỆP</th>
                 <th>TÊN DOANH NGHIỆP</th>
                 <th>LOGO</th>
-                <th>MÃ QR</th>
+                <th>MÃ QR THANH TOÁN</th>
                 <th>MST / MÃ SỐ DN</th>
                 <th>ĐỊA CHỈ TRỤ SỞ</th>
                 <th>NGÀY ĐĂNG KÝ</th>
@@ -109,9 +142,19 @@ const ViewRenderer = {
               <tr>
                 <td><span class="txn-code">DN000001</span></td>
                 <td><strong>CÔNG TY TNHH ABC</strong></td>
-                <td><div style="width:32px; height:32px; background:var(--color-primary-light); color:var(--color-primary); border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:800;">ABC</div></td>
-                <td><span style="font-size:11px; background:#F1F5F9; padding:4px 8px; border-radius:4px; font-family:monospace;">[QR ECOPAY]</span></td>
-                <td><strong>0101234567</strong></td>
+                <td>
+                  <div style="width:36px; height:36px; background:linear-gradient(135deg, #1677ff 0%, #0958d9 100%); color:#fff; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; box-shadow:0 2px 6px rgba(22,119,255,0.2);">ABC</div>
+                </td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=STK_190500001234_TCB_ABC" alt="VietQR ECOPAY" style="width:36px; height:36px; border-radius:4px; border:1px solid #CBD5E1; cursor:pointer;" onclick="openQrEnlargeModal()" title="Nhấp để phóng to QR">
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                      <a href="javascript:void(0)" onclick="openQrEnlargeModal()" style="font-size:12px; font-weight:600; color:#1677ff;">Xem QR</a>
+                      <a href="javascript:void(0)" onclick="showToast('Đã tải mã QR VietQR ECOPAY')" style="font-size:11px; color:#64748B;">Tải về</a>
+                    </div>
+                  </div>
+                </td>
+                <td><strong>0101243567</strong></td>
                 <td style="max-width:220px;">Tầng 10, Tòa nhà ABC, 123 Đường Lăng, Đống Đa, Hà Nội</td>
                 <td>15/03/2022</td>
                 <td><span class="status-badge badge-success">Hoạt động</span></td>
@@ -1366,7 +1409,7 @@ const ViewRenderer = {
   },
 
   /**
-   * Báo cáo đối soát thanh toán View (Matching ECOPAY PRD Specification)
+   * Báo cáo đối soát thanh toán View (Matching User Specification)
    */
   getReconcileEcopayView() {
     const list = MockData.getReconcileEcopayData ? MockData.getReconcileEcopayData() : [];
@@ -1375,14 +1418,14 @@ const ViewRenderer = {
         <div>
           <div class="subpage-breadcrumb">Báo cáo / <strong>Báo cáo đối soát thanh toán</strong></div>
           <h1 class="subpage-title">Báo Cáo Đối Soát Thanh Toán</h1>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tổng hợp và theo dõi báo cáo đối soát thanh toán tập trung từ tất cả các phiên bản giữa FINVIET và Doanh nghiệp / Cửa hàng.</p>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tổng hợp và theo dõi báo cáo đối soát thanh toán tập trung từ tất cả các phiên bản giữa FINVIET và Cửa hàng.</p>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo đối soát thanh toán Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất dữ liệu</button>
+          <button class="btn-primary" style="font-size:12px; padding:6px 14px;" onclick="exportReconcileReportExcel()"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát thanh toán</button>
         </div>
       </div>
 
-      <!-- MỤC TÌM KIẾM BỘ LỌC BÁO CÁO ĐỐI SOÁT THANH TOÁN -->
+      <!-- MỤC TÌM KIẾM BỘ LỌC BÁO CÁO ĐỐI SOÁT THANH TOÁN (6 FIELDS) -->
       <div class="table-card" style="margin-bottom:20px;">
         <form id="reconcileReportFilterForm" onsubmit="return false;">
           <div class="filter-grid-4col" style="row-gap:14px;">
@@ -1464,7 +1507,7 @@ const ViewRenderer = {
         </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN (17 COLUMNS EXACT MATCHING USER SPECIFICATION) -->
+      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN (15 COLUMNS MATCHING SPECIFICATION) -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
           <div>
