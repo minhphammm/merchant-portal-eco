@@ -1373,37 +1373,176 @@ const ViewRenderer = {
     return `
       <div class="subpage-header">
         <div>
-                <th style="white-space:nowrap;">Tổng số tiền khuyến mãi</th>
-                <th style="white-space:nowrap;">Người phê duyệt</th>
-                <th style="white-space:nowrap;">Thời gian đối tác được duyệt</th>
-                <th style="white-space:nowrap;">Mô tả</th>
-                <th style="white-space:nowrap;">Lý do</th>
-                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
-                <th style="white-space:nowrap;">Trạng thái</th>
-                <th style="white-space:nowrap;">Tùy chỉnh</th>
+          <div class="subpage-breadcrumb">Báo cáo / <strong>Báo cáo đối soát thanh toán</strong></div>
+          <h1 class="subpage-title">Báo Cáo Đối Soát Thanh Toán</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tổng hợp và theo dõi báo cáo đối soát thanh toán tập trung từ tất cả các phiên bản giữa FINVIET và Doanh nghiệp / Cửa hàng.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-secondary" onclick="showToast('Xuất file Báo cáo đối soát thanh toán Excel...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất dữ liệu</button>
+        </div>
+      </div>
+
+      <!-- MỤC TÌM KIẾM BỘ LỌC BÁO CÁO ĐỐI SOÁT THANH TOÁN (PRD EXACT SPECIFICATION) -->
+      <div class="table-card" style="margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i data-lucide="filter" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Tìm Kiếm Đối Soát
+          </div>
+          <button type="button" class="btn-secondary" style="font-size:12px; padding:4px 10px;" onclick="toggleFilterExpand(this)">
+            <i data-lucide="chevron-up" style="width:14px; height:14px; margin-right:4px;"></i> Thu gọn
+          </button>
+        </div>
+        <form id="reconcileReportFilterForm" onsubmit="return false;">
+          <div class="filter-panel-content">
+            <div class="filter-grid-4col" style="row-gap:14px;">
+              <!-- 1. Tên doanh nghiệp -->
+              <div class="form-group-field">
+                <label>Tên doanh nghiệp</label>
+                <select id="filterReportMerchantName">
+                  <option value="all">Tìm và chọn doanh nghiệp</option>
+                  <option value="finviet">CÔNG TY CỔ PHẦN CÔNG NGHIỆP FINVIET</option>
+                  <option value="ngantruong">CÔNG TY CP TNHH NGÂN TRƯỜNG</option>
+                  <option value="mcn1">CÔNG TY TNHH MERCHANTUNGA</option>
+                </select>
+              </div>
+
+              <!-- 2. Tên cửa hàng -->
+              <div class="form-group-field">
+                <label>Tên cửa hàng</label>
+                <select id="filterReportStoreName">
+                  <option value="all">Tìm theo tên/mã/SĐT cửa hàng</option>
+                  <option value="storeHS">Như thế học sinh (FINVIET4917.T)</option>
+                  <option value="storeHK">Chi nhánh Hoàn Kiếm (FINVIET0812)</option>
+                  <option value="storeSP">Cửa hàng SmartPOS Cửa NGÂN</option>
+                  <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+                </select>
+              </div>
+
+              <!-- 3. Mã thanh toán -->
+              <div class="form-group-field">
+                <label>Mã thanh toán</label>
+                <input type="text" id="filterReportCode" placeholder="Vui lòng nhập mã thanh toán (VD: R_102107...)">
+              </div>
+
+              <!-- 4. Thời gian tạo -->
+              <div class="form-group-field">
+                <label>Thời gian tạo</label>
+                <div class="date-range-input-box">
+                  <input type="date" id="filterReportCreatedStart" value="2025-08-01">
+                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                  <input type="date" id="filterReportCreatedEnd" value="2025-08-22">
+                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                </div>
+              </div>
+
+              <!-- 5. Phương thức thanh toán -->
+              <div class="form-group-field">
+                <label>Phương thức thanh toán</label>
+                <select id="filterReportPayMethod">
+                  <option value="all">Vui lòng chọn phương thức thanh toán</option>
+                  <option value="card">Thẻ học sinh</option>
+                  <option value="qrcode">QR Code (VietQR / QR Bank)</option>
+                  <option value="bnpl">BNPL (Trả chậm)</option>
+                  <option value="pos">SoftPOS / Thẻ Ngân hàng</option>
+                </select>
+              </div>
+
+              <!-- 6. Thời gian thanh toán doanh nghiệp -->
+              <div class="form-group-field">
+                <label>Thời gian thanh toán doanh nghiệp</label>
+                <div class="date-range-input-box">
+                  <input type="date" id="filterReportMerchantPayStart" value="2025-08-01">
+                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                  <input type="date" id="filterReportMerchantPayEnd" value="2025-08-22">
+                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                </div>
+              </div>
+
+              <!-- 7. Trạng thái -->
+              <div class="form-group-field">
+                <label>Trạng thái</label>
+                <select id="filterReportStatus">
+                  <option value="all">Vui lòng chọn trạng thái</option>
+                  <option value="approved">Đã phê duyệt</option>
+                  <option value="paid">Đã thanh toán</option>
+                  <option value="processing">Đang xử lý</option>
+                  <option value="rejected">Từ chối</option>
+                  <option value="cancelled">Hủy</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+              <button type="button" class="btn-secondary" onclick="showToast('Đã làm mới bộ lọc báo cáo đối soát')">Làm mới</button>
+              <button type="button" class="btn-primary" onclick="showToast('Đã lọc báo cáo đối soát thanh toán')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tìm kiếm</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN (12 COLUMNS EXACT MATCHING PRD) -->
+      <div class="table-card">
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
+          <div>
+            <span style="font-weight:800; font-size:14px; color:var(--text-main);">Danh sách báo cáo đối soát thanh toán</span>
+            <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">(Hiển thị <strong>${list.length}</strong> báo cáo)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:13px; color:var(--text-muted);">
+              Tổng số tiền phải trả: <strong style="font-size:15px; color:#10B981; font-weight:800; margin-left:4px;">665,710,886 đ</strong>
+            </div>
+            <button class="btn-secondary" style="font-size:12px; padding:4px 10px;" onclick="showToast('Xuất dữ liệu báo cáo danh sách...')"><i data-lucide="download" style="width:13px; height:13px; margin-right:4px;"></i> Xuất dữ liệu</button>
+          </div>
+        </div>
+
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap; text-align:center; width:50px;">STT</th>
+                <th style="white-space:nowrap;">Mã thanh toán</th>
+                <th style="white-space:nowrap;">Thời gian tạo</th>
+                <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
+                <th style="white-space:nowrap;">Phương thức thanh toán</th>
+                <th style="white-space:nowrap;">Tên doanh nghiệp</th>
+                <th style="white-space:nowrap;">Mã doanh nghiệp</th>
+                <th style="white-space:nowrap;">Tên cửa hàng</th>
+                <th style="white-space:nowrap;">Mã cửa hàng</th>
+                <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả</th>
+                <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
+                <th style="white-space:nowrap; text-align:center;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               ${list.map(item => `
                 <tr>
-                  <td><strong>${item.stt}</strong></td>
-                  <td style="font-weight:600; white-space:nowrap;">${item.storeName}</td>
-                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.reconcileCreatedTime}</td>
-                  <td style="font-size:11.5px; color:var(--text-muted); white-space:nowrap;">${item.txnTimeRange}</td>
-                  <td style="font-weight:700; color:var(--color-primary); white-space:nowrap;">${item.totalPayable}</td>
-                  <td style="font-size:12px; white-space:nowrap;">${item.txnFee}</td>
-                  <td style="font-size:12px; white-space:nowrap;">${item.userFee}</td>
-                  <td style="font-weight:600; color:var(--color-danger); white-space:nowrap;">${item.deductedAmount}</td>
-                  <td style="font-size:12.5px; white-space:nowrap;">${item.createdBy}</td>
-                  <td style="font-weight:600; color:var(--color-secondary); white-space:nowrap;">${item.totalDiscount}</td>
-                  <td style="font-size:12.5px; white-space:nowrap;">${item.approvedBy}</td>
-                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.partnerApprovedTime}</td>
-                  <td style="font-size:12px; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description}">${item.description}</td>
-                  <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.reason}">${item.reason}</td>
-                  <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${item.merchantPayTime}</td>
-                  <td><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
-                  <td style="white-space:nowrap;">
-                    <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="openReconcileDetailModal(${item.stt})">Tùy chỉnh</button>
+                  <td style="text-align:center; font-weight:600;">${item.stt}</td>
+                  <td>
+                    <a href="javascript:void(0)" onclick="openReconcileReportDetailModal('${item.reconcileCode}')" style="font-weight:700; color:var(--color-primary); text-decoration:underline;">
+                      ${item.reconcileCode}
+                    </a>
+                  </td>
+                  <td style="font-size:12.5px;">${item.createdAt}</td>
+                  <td style="font-size:12px; color:var(--text-muted);">${item.periodRange}</td>
+                  <td>
+                    <span class="badge-neutral" style="background:#E2E8F0; color:#334155; padding:3px 8px; border-radius:4px; font-size:11.5px; font-weight:600;">
+                      ${item.paymentMethod}
+                    </span>
+                  </td>
+                  <td style="font-size:12.5px; font-weight:600; color:var(--text-main);">${item.merchantName}</td>
+                  <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.merchantCode}</code></td>
+                  <td style="font-size:12.5px;">${item.storeName}</td>
+                  <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.storeCode}</code></td>
+                  <td style="text-align:right; font-weight:800; color:${(item.totalPayout || '').startsWith('-') ? '#EF4444' : '#10B981'}; font-size:13.5px;">
+                    ${item.totalPayout}
+                  </td>
+                  <td style="text-align:center;">
+                    <span class="status-badge ${item.statusClass}">${item.statusText}</span>
+                  </td>
+                  <td style="text-align:center;">
+                    <button type="button" class="btn-secondary" style="font-size:11.5px; padding:3px 8px;" onclick="openReconcileReportDetailModal('${item.reconcileCode}')">
+                      👁️ Xem chi tiết
+                    </button>
                   </td>
                 </tr>
               `).join('')}
