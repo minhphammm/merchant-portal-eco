@@ -1424,11 +1424,16 @@ const ViewRenderer = {
                 <input type="text" id="filterReportCode" placeholder="Vui lòng nhập mã thanh toán (VD: R_102107...)">
               </div>
 
-              <!-- 4. Thời gian tạo -->
+              <!-- 4. Thời gian tạo (Tối đa 3 tháng + Tooltip) -->
               <div class="form-group-field">
-                <label>Thời gian tạo</label>
-                <div class="date-range-input-box">
-                  <input type="date" id="filterReportCreatedStart" value="2025-08-01">
+                <label style="display:flex; align-items:center; gap:4px;">
+                  Thời gian tạo
+                  <span class="info-tooltip-icon" title="Khoảng thời gian tối đa là 3 tháng" style="cursor:pointer; color:var(--text-muted); display:inline-flex; align-items:center;">
+                    <i data-lucide="help-circle" style="width:13px; height:13px;"></i>
+                  </span>
+                </label>
+                <div class="date-range-input-box" title="Khoảng thời gian tối đa là 3 tháng">
+                  <input type="date" id="filterReportCreatedStart" value="2025-06-01">
                   <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
                   <input type="date" id="filterReportCreatedEnd" value="2025-08-22">
                   <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
@@ -1480,7 +1485,7 @@ const ViewRenderer = {
         </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN (12 COLUMNS EXACT MATCHING PRD) -->
+      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN (17 COLUMNS EXACT MATCHING USER SPECIFICATION) -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
           <div>
@@ -1489,9 +1494,9 @@ const ViewRenderer = {
           </div>
           <div style="display:flex; align-items:center; gap:16px;">
             <div style="font-size:13px; color:var(--text-muted);">
-              Tổng số tiền phải trả: <strong style="font-size:15px; color:#10B981; font-weight:800; margin-left:4px;">665,710,886 đ</strong>
+              Tổng số tiền phải trả (Tổng cộng): <strong style="font-size:15px; color:#10B981; font-weight:800; margin-left:4px;">665,710,886 đ</strong>
             </div>
-            <button class="btn-secondary" style="font-size:12px; padding:4px 10px;" onclick="showToast('Xuất dữ liệu báo cáo danh sách...')"><i data-lucide="download" style="width:13px; height:13px; margin-right:4px;"></i> Xuất dữ liệu</button>
+            <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="exportReconcileReportExcel()"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát thanh toán</button>
           </div>
         </div>
 
@@ -1508,9 +1513,14 @@ const ViewRenderer = {
                 <th style="white-space:nowrap;">Mã doanh nghiệp</th>
                 <th style="white-space:nowrap;">Tên cửa hàng</th>
                 <th style="white-space:nowrap;">Mã cửa hàng</th>
-                <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả</th>
+                <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả (Tổng cộng)</th>
+                <th style="white-space:nowrap; text-align:right;">Phí giao dịch</th>
+                <th style="white-space:nowrap; text-align:right;">Phí người dùng</th>
+                <th style="white-space:nowrap; text-align:right;">Số tiền hoàn cấn trừ</th>
+                <th style="white-space:nowrap;">Mô tả</th>
+                <th style="white-space:nowrap;">Lý do hủy/từ chối</th>
+                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
                 <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
-                <th style="white-space:nowrap; text-align:center;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -1536,13 +1546,14 @@ const ViewRenderer = {
                   <td style="text-align:right; font-weight:800; color:${(item.totalPayout || '').startsWith('-') ? '#EF4444' : '#10B981'}; font-size:13.5px;">
                     ${item.totalPayout}
                   </td>
+                  <td style="text-align:right; font-size:12.5px;">${item.txnFee || '0 đ'}</td>
+                  <td style="text-align:right; font-size:12.5px;">${item.userFee || '0 đ'}</td>
+                  <td style="text-align:right; font-weight:600; color:var(--color-danger); font-size:12.5px;">${item.deductedRefundAmount || '0 đ'}</td>
+                  <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description || ''}">${item.description || '-'}</td>
+                  <td style="font-size:12px; color:var(--text-muted); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.rejectReason || ''}">${item.rejectReason || '-'}</td>
+                  <td style="font-size:12.5px; color:var(--text-muted);">${item.merchantPayTime || '-'}</td>
                   <td style="text-align:center;">
                     <span class="status-badge ${item.statusClass}">${item.statusText}</span>
-                  </td>
-                  <td style="text-align:center;">
-                    <button type="button" class="btn-secondary" style="font-size:11.5px; padding:3px 8px;" onclick="openReconcileReportDetailModal('${item.reconcileCode}')">
-                      👁️ Xem chi tiết
-                    </button>
                   </td>
                 </tr>
               `).join('')}
