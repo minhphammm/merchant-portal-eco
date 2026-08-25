@@ -204,6 +204,11 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   gap: 10px;
   justify-content: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: var(--bg-sidebar);
+  flex-shrink: 0;
 }
 
 .sidebar.collapsed .sidebar-header {
@@ -272,13 +277,7 @@ body {
 }
 
 .nav-section-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #475569;
-  padding: 10px 10px 6px 10px;
-  font-weight: 700;
-  white-space: nowrap;
+  display: none !important;
 }
 
 .sidebar.collapsed .nav-section-label {
@@ -323,18 +322,24 @@ body {
   color: #F8FAFC;
 }
 
+/* 1. Single Menu (Tổng quan) Active Style -> Solid Blue Background */
 .nav-item.active:not(.has-dropdown) > .nav-link {
-  background-color: var(--color-primary);
-  color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.35);
+  background-color: var(--color-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.35) !important;
+  border-left: none !important;
+  border-radius: var(--radius-md);
 }
 
+/* 2. Parent Dropdown Active Style -> One consistent light background with left border */
 .nav-item.has-dropdown.active > .nav-link {
-  background-color: rgba(22, 119, 255, 0.14);
-  color: #60A5FA;
-  font-weight: 600;
-  box-shadow: none;
-  border-left: 3px solid var(--color-primary);
+  background-color: rgba(22, 119, 255, 0.12) !important;
+  color: #60A5FA !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  border-left: 3px solid var(--color-primary) !important;
+  border-radius: var(--radius-md);
 }
 
 .nav-icon {
@@ -369,8 +374,9 @@ body {
 }
 
 .nav-dropdown-link {
-  display: block;
-  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px 8px 14px;
   color: #94A3B8;
   text-decoration: none;
   font-size: 13px;
@@ -378,6 +384,7 @@ body {
   transition: var(--transition);
   white-space: nowrap;
   cursor: pointer !important;
+  position: relative;
 }
 
 .nav-dropdown-link:hover {
@@ -385,11 +392,27 @@ body {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+/* 3. Submenu Child Active Style -> Distinct Glass Highlight with Yellow Indicator Dot */
 .nav-dropdown-link.active {
-  color: #FFFFFF;
-  background-color: var(--color-primary);
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.3);
+  color: #FFFFFF !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  padding-left: 28px !important;
+  border-radius: var(--radius-sm);
+}
+
+.nav-dropdown-link.active::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #FFC107;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 193, 7, 0.9);
 }
 
 /* Tooltip on Collapsed Sidebar Module Hover */
