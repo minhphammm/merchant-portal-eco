@@ -1812,25 +1812,9 @@ const ViewRenderer = {
           <h1 class="subpage-title">Sao Kê 1.1</h1>
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tra cứu biến động số dư, hạch toán giao dịch và mã tham chiếu đối soát chuẩn quy định BRD 1.1.</p>
         </div>
-        <div style="display:flex; gap:10px;">
-          <!-- Combined Download Button with Dropdown (PDF / Excel) -->
-          <div class="download-dropdown-wrapper" style="position:relative; display:inline-block;">
-            <button type="button" class="btn-primary" onclick="toggleStatementDownloadMenu(event)" style="display:flex; align-items:center; gap:6px; font-weight:600;">
-              <i data-lucide="download" style="width:15px; height:15px;"></i> Tải sao kê <i data-lucide="chevron-down" style="width:13px; height:13px; margin-left:2px;"></i>
-            </button>
-            <div id="statementDownloadMenu" class="download-dropdown-menu" style="display:none; position:absolute; right:0; top:calc(100% + 6px); background:#fff; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,0.18); border:1px solid #E2E8F0; z-index:999; min-width:190px; overflow:hidden; padding:4px 0;">
-              <a href="javascript:void(0)" onclick="showToast('Đang khởi tạo và tải file sao kê dạng PDF...'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
-                <i data-lucide="file-text" style="width:16px; height:16px; color:#EF4444;"></i> Xuất file PDF (.pdf)
-              </a>
-              <a href="javascript:void(0)" onclick="showToast('Đang khởi tạo và tải file sao kê dạng Excel...'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
-                <i data-lucide="file-spreadsheet" style="width:16px; height:16px; color:#10B981;"></i> Xuất file Excel (.xlsx)
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- MỤC TÌM KIẾM (ĐÃ BỎ TEXT BỘ LỌC SAO KÊ & BỎ TRƯỜNG TỪ KHÓA) -->
+      <!-- MỤC TÌM KIẾM -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
           <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Mục Tìm Kiếm
@@ -1860,11 +1844,11 @@ const ViewRenderer = {
               </div>
             </div>
 
-            <!-- 3. Tài khoản: Chọn tài khoản/điểm kinh doanh -->
+            <!-- 3. Cửa hàng -->
             <div class="form-group-field">
-              <label>Tài khoản / Điểm kinh doanh</label>
+              <label>Cửa hàng</label>
               <select id="filterV11Account">
-                <option value="all">Tất cả tài khoản/điểm kinh doanh</option>
+                <option value="all">Tất cả cửa hàng</option>
                 <option value="storeQ1">Chi nhánh Quận 1 - Hồ Chí Minh</option>
                 <option value="storeHK">Chi nhánh Hoàn Kiếm - Hà Nội</option>
                 <option value="storeHC">Chi nhánh Hải Châu - Đà Nẵng</option>
@@ -1897,7 +1881,23 @@ const ViewRenderer = {
           <!-- Các nút thao tác -->
           <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
             <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc sao kê 1.1')">Đặt lại</button>
+
             <button type="button" class="btn-primary" onclick="showToast('Đã tìm kiếm sao kê theo điều kiện lọc')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tìm kiếm</button>
+
+            <!-- Combined Download Dropdown Button right next to Tìm kiếm -->
+            <div class="download-dropdown-wrapper" style="position:relative; display:inline-block;">
+              <button type="button" class="btn-secondary" onclick="toggleStatementDownloadMenu(event)" style="display:flex; align-items:center; gap:6px; font-weight:600;">
+                <i data-lucide="download" style="width:14px; height:14px;"></i> Tải sao kê <i data-lucide="chevron-down" style="width:12px; height:12px; margin-left:2px;"></i>
+              </button>
+              <div id="statementDownloadMenu" class="download-dropdown-menu" style="display:none; position:absolute; right:0; bottom:calc(100% + 6px); background:#fff; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,0.18); border:1px solid #E2E8F0; z-index:999; min-width:190px; overflow:hidden; padding:4px 0;">
+                <a href="javascript:void(0)" onclick="showToast('Đang khởi tạo và tải file sao kê dạng PDF...'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
+                  <i data-lucide="file-text" style="width:16px; height:16px; color:#EF4444;"></i> Xuất file PDF (.pdf)
+                </a>
+                <a href="javascript:void(0)" onclick="showToast('Đang khởi tạo và tải file sao kê dạng Excel...'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
+                  <i data-lucide="file-spreadsheet" style="width:16px; height:16px; color:#10B981;"></i> Xuất file Excel (.xlsx)
+                </a>
+              </div>
+            </div>
           </div>
         </form>
       </div>
