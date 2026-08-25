@@ -540,6 +540,60 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+  window.openCustomDateModal = function() {
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = 'Chọn khoảng thời gian tùy chọn';
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px; text-align:left; font-size:13px;">
+          <div style="background:var(--bg-app); border:1px solid var(--border-color); padding:16px; border-radius:10px; display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+            <div class="form-group-field">
+              <label style="font-weight:700;">Từ ngày *</label>
+              <input type="date" id="modalCustomStartDate" value="${AppState.startDate || '2026-08-01'}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+            </div>
+            <div class="form-group-field">
+              <label style="font-weight:700;">Đến ngày *</label>
+              <input type="date" id="modalCustomEndDate" value="${AppState.endDate || '2026-08-25'}" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:13px;">
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; justify-content:center;">
+            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-08-25'; document.getElementById('modalCustomEndDate').value='2026-08-25';">Hôm nay</button>
+            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-08-18'; document.getElementById('modalCustomEndDate').value='2026-08-25';">7 ngày qua</button>
+            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-07-25'; document.getElementById('modalCustomEndDate').value='2026-08-25';">30 ngày qua</button>
+            <button class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="document.getElementById('modalCustomStartDate').value='2026-08-01'; document.getElementById('modalCustomEndDate').value='2026-08-25';">Tháng này</button>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.style.display = 'inline-block';
+      btnAction.textContent = 'Áp Dụng Lọc Khoảng Thời Gian';
+      btnAction.onclick = function() {
+        const startDate = document.getElementById('modalCustomStartDate')?.value;
+        const endDate = document.getElementById('modalCustomEndDate')?.value;
+        if (startDate) AppState.startDate = startDate;
+        if (endDate) AppState.endDate = endDate;
+
+        AppState.currentPeriod = 'custom';
+        renderDashboardData();
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+        showToast(`🎉 Đã áp dụng khoảng thời gian: từ ${startDate || '01/08/2026'} đến ${endDate || '25/08/2026'}`);
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
     document.querySelectorAll('.time-btn[data-period]:not(#btnDateFilter)').forEach(btn => {
       btn.onclick = function() {
         document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));

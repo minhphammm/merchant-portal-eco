@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=4.8">
+  <link rel="stylesheet" href="css/style.css?v=4.9">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -241,15 +241,16 @@
 
             <!-- Toolbar Filters & Actions -->
             <div class="dashboard-toolbar">
-              <button id="btnCreatePaylinkOverview" class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="display:inline-flex; align-items:center; font-weight:700; padding:8px 16px;">
-                <span>Tạo Yêu Cầu Thanh Toán</span>
-              </button>
-
               <div class="refresh-group">
                 <button id="btnRefresh" class="btn-refresh" title="Làm mới dữ liệu">
+                  <i data-lucide="rotate-cw" style="width:14px; height:14px; margin-right:4px;"></i>
                   <span data-i18n="btnRefresh">Làm mới</span>
                 </button>
               </div>
+
+              <button id="btnCreatePaylinkOverview" class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="display:inline-flex; align-items:center; font-weight:700; padding:8px 16px;">
+                <span>Tạo Yêu Cầu Thanh Toán</span>
+              </button>
 
               <!-- Filter thời gian toolbar -->
               <div class="time-filter-buttons">

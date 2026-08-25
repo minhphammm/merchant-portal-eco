@@ -1168,20 +1168,36 @@ body {
 .date-range-input-box {
   display: flex;
   align-items: center;
+  gap: 4px;
   background: #FFFFFF;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 0 10px;
+  padding: 2px 8px;
+  transition: var(--transition);
 }
 
-.date-range-input-box input {
+.date-range-input-box:hover,
+.date-range-input-box:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+}
+
+.date-range-input-box input[type="date"] {
   border: none !important;
   box-shadow: none !important;
-  padding: 8px 0;
+  padding: 5px 0 !important;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text-main);
+  background: transparent;
+  outline: none;
+  cursor: pointer !important;
+  flex: 1;
+  min-width: 0;
 }
 
 .date-range-input-box span {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
@@ -1702,14 +1718,18 @@ body {
   text-align: left;
 }
 
-.portal-table th {
+.portal-table th,
+table.portal-table th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #FAFAFA;
+  box-shadow: 0 1px 0 var(--border-color);
   font-size: 11.5px;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--text-muted);
   padding: 10px 12px;
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-app);
 }
 
 .portal-table td {

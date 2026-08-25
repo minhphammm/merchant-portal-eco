@@ -788,8 +788,10 @@ const ViewRenderer = {
             <div class="form-group-field">
               <label>Ngày tạo</label>
               <div class="date-range-input-box">
-                <input type="text" id="filterCreatedDate" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <input type="date" id="filterCreatedDateStart" value="2026-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterCreatedDateEnd" value="2026-08-25">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -797,8 +799,10 @@ const ViewRenderer = {
             <div class="form-group-field">
               <label>Thời gian đối tác thanh toán</label>
               <div class="date-range-input-box">
-                <input type="text" id="filterPartnerPayTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <input type="date" id="filterPartnerPayTimeStart" value="2026-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterPartnerPayTimeEnd" value="2026-08-25">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -806,8 +810,10 @@ const ViewRenderer = {
             <div class="form-group-field">
               <label>Thời gian thanh toán doanh nghiệp</label>
               <div class="date-range-input-box">
-                <input type="text" id="filterMerchantPayTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <input type="date" id="filterMerchantPayTimeStart" value="2026-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterMerchantPayTimeEnd" value="2026-08-25">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
           </div>
@@ -1079,8 +1085,10 @@ const ViewRenderer = {
               <div class="form-group-field">
                 <label>Ngày tạo</label>
                 <div class="date-range-input-box">
-                  <input type="text" id="filterRefundCreatedDate" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                  <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                  <input type="date" id="filterRefundCreatedStart" value="2026-08-01">
+                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                  <input type="date" id="filterRefundCreatedEnd" value="2026-08-25">
+                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
                 </div>
               </div>
 
@@ -1088,8 +1096,10 @@ const ViewRenderer = {
               <div class="form-group-field">
                 <label>Thời gian phê duyệt</label>
                 <div class="date-range-input-box">
-                  <input type="text" id="filterRefundApprovedTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                  <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                  <input type="date" id="filterRefundApprovedStart" value="2026-08-01">
+                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                  <input type="date" id="filterRefundApprovedEnd" value="2026-08-25">
+                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
                 </div>
               </div>
 
@@ -1097,8 +1107,10 @@ const ViewRenderer = {
               <div class="form-group-field">
                 <label>Thời gian thanh toán doanh nghiệp</label>
                 <div class="date-range-input-box">
-                  <input type="text" id="filterRefundMerchantPayTime" value="20-08-2026 00:00:00 — 20-08-2026 23:59:59" readonly>
-                  <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                  <input type="date" id="filterRefundMerchantPayStart" value="2026-08-01">
+                  <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                  <input type="date" id="filterRefundMerchantPayEnd" value="2026-08-25">
+                  <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
                 </div>
               </div>
             </div>
@@ -1390,8 +1402,10 @@ const ViewRenderer = {
             <div class="form-group-field">
               <label>Thời gian tạo đối soát</label>
               <div class="date-range-input-box">
-                <input type="text" id="filterReconcileCreatedTime" value="20-08-2026 00:00:00 — 22-08-2026 23:59:59" readonly>
-                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <input type="date" id="filterReconcileCreatedStart" value="2026-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterReconcileCreatedEnd" value="2026-08-25">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -1399,8 +1413,10 @@ const ViewRenderer = {
             <div class="form-group-field">
               <label>Thời gian thanh toán DN</label>
               <div class="date-range-input-box">
-                <input type="text" id="filterReconcileMerchantPayTime" value="20-08-2026 00:00:00 — 22-08-2026 23:59:59" readonly>
-                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <input type="date" id="filterReconcileMerchantPayStart" value="2026-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterReconcileMerchantPayEnd" value="2026-08-25">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
@@ -1534,8 +1550,10 @@ const ViewRenderer = {
             <div class="form-group-field">
               <label>Thời gian tạo thanh toán</label>
               <div class="date-range-input-box">
-                <input type="text" id="filterV2CreatedTime" value="20-08-2026 00:00:00 — 22-08-2026 23:59:59" readonly>
-                <span><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
+                <input type="date" id="filterV2CreatedStart" value="2026-08-01">
+                <span style="font-size:11px; color:var(--text-muted); margin:0 2px;">đến</span>
+                <input type="date" id="filterV2CreatedEnd" value="2026-08-25">
+                <span style="margin-left:auto; color:var(--color-primary);"><i data-lucide="calendar" style="width:14px; height:14px;"></i></span>
               </div>
             </div>
 
