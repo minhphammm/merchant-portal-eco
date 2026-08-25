@@ -1509,8 +1509,6 @@ const ViewRenderer = {
                 <th style="white-space:nowrap;">Thời gian tạo</th>
                 <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
                 <th style="white-space:nowrap;">Phương thức thanh toán</th>
-                <th style="white-space:nowrap;">Tên doanh nghiệp</th>
-                <th style="white-space:nowrap;">Mã doanh nghiệp</th>
                 <th style="white-space:nowrap;">Tên cửa hàng</th>
                 <th style="white-space:nowrap;">Mã cửa hàng</th>
                 <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả (Tổng cộng)</th>
@@ -1539,8 +1537,6 @@ const ViewRenderer = {
                       ${item.paymentMethod}
                     </span>
                   </td>
-                  <td style="font-size:12.5px; font-weight:600; color:var(--text-main);">${item.merchantName}</td>
-                  <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.merchantCode}</code></td>
                   <td style="font-size:12.5px;">${item.storeName}</td>
                   <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.storeCode}</code></td>
                   <td style="text-align:right; font-weight:800; color:${(item.totalPayout || '').startsWith('-') ? '#EF4444' : '#10B981'}; font-size:13.5px;">
