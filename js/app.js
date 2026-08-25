@@ -25,6 +25,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Smart Topbar Scroll Behavior:
+  // Cố định ở top, khi scroll xuống qua khỏi screen đầu tiên (1st screen) thì biến mất, scroll lên mới hiện trở lại
+  let lastScrollY = window.scrollY || document.documentElement.scrollTop;
+
+  window.addEventListener('scroll', function() {
+    const topbar = document.querySelector('.topbar');
+    if (!topbar) return;
+
+    const currentScrollY = window.scrollY || document.documentElement.scrollTop;
+    const firstScreenHeight = window.innerHeight;
+
+    // Khi ở vùng top gần đầu trang (<= 80px), luôn giữ hiển thị topbar
+    if (currentScrollY <= 80) {
+      topbar.classList.remove('topbar-hidden');
+      lastScrollY = currentScrollY;
+      return;
+    }
+
+    // Khi cuộn xuống qua khỏi screen đầu tiên -> Ẩn topbar
+    if (currentScrollY > lastScrollY && currentScrollY > (firstScreenHeight * 0.4)) {
+      topbar.classList.add('topbar-hidden');
+    }
+    // Khi cuộn ngược lên -> Hiện lại topbar lập tức
+    else if (currentScrollY < lastScrollY) {
+      topbar.classList.remove('topbar-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+  }, { passive: true });
+
   // Global Ant Design Custom Select Component Enhancer
   window.initAntdSelects = function(container = document) {
     const nativeSelects = container.querySelectorAll('select:not(.ant-select-enhanced)');

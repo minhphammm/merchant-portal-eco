@@ -186,7 +186,10 @@ body {
   flex-shrink: 0;
   z-index: 100;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  align-self: flex-start;
 }
 
 .sidebar.collapsed {
@@ -571,6 +574,9 @@ body {
 }
 
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 90;
   height: 70px;
   background-color: var(--bg-header);
   border-bottom: 1px solid var(--border-color);
@@ -579,6 +585,14 @@ body {
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--shadow-sm);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  will-change: transform;
+}
+
+.topbar.topbar-hidden {
+  transform: translateY(-100%);
+  box-shadow: none;
+  pointer-events: none;
 }
 
 .topbar-left {
