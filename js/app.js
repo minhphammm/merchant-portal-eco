@@ -2883,4 +2883,146 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalOverlay) modalOverlay.classList.add('show');
     if (window.refreshIcons) window.refreshIcons();
   };
+
+  // Interactive Dual-Month Ant Design RangePicker Popover Handler for date-range-input-box
+  document.addEventListener('click', function(e) {
+    const rangeBox = e.target.closest('.date-range-input-box');
+    
+    // Close existing global popover if clicked outside
+    const existingPopover = document.getElementById('globalAntdRangePickerPopover');
+    if (!rangeBox && existingPopover && !e.target.closest('#globalAntdRangePickerPopover')) {
+      existingPopover.remove();
+      document.querySelectorAll('.date-range-input-box.open').forEach(b => b.classList.remove('open'));
+      return;
+    }
+
+    if (rangeBox) {
+      e.stopPropagation();
+      
+      const isOpen = rangeBox.classList.contains('open');
+      if (existingPopover) existingPopover.remove();
+      document.querySelectorAll('.date-range-input-box.open').forEach(b => b.classList.remove('open'));
+
+      if (isOpen) return; // Toggle close
+
+      rangeBox.classList.add('open');
+
+      const startInput = rangeBox.querySelector('input[type="date"]:first-of-type');
+      const endInput = rangeBox.querySelector('input[type="date"]:last-of-type');
+
+      const startVal = startInput ? startInput.value : '2025-06-01';
+      const endVal = endInput ? endInput.value : '2025-08-22';
+
+      const popover = document.createElement('div');
+      popover.id = 'globalAntdRangePickerPopover';
+      popover.className = 'antd-rangepicker-popover-global';
+
+      popover.innerHTML = `
+        <div class="rangepicker-inputs-bar">
+          <input type="text" id="popoverStartDisplay" value="${startVal}" readonly>
+          <span class="range-arrow">→</span>
+          <input type="text" id="popoverEndDisplay" value="${endVal}" readonly>
+          <button type="button" class="range-clear-btn" onclick="clearPopoverRange()" title="Xóa chọn">⨂</button>
+        </div>
+
+        <div class="rangepicker-calendars-container">
+          <!-- Month 1: Th08 2025 -->
+          <div class="calendar-month-panel">
+            <div class="calendar-header">
+              <div>
+                <button type="button" class="cal-nav-btn" title="Năm trước">«</button>
+                <button type="button" class="cal-nav-btn" title="Tháng trước">‹</button>
+              </div>
+              <span class="cal-title">Th08 2025</span>
+              <div></div>
+            </div>
+            <table class="calendar-table">
+              <thead><tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr></thead>
+              <tbody>
+                <tr><td class="calendar-day-cell muted">28</td><td class="calendar-day-cell muted">29</td><td class="calendar-day-cell muted">30</td><td class="calendar-day-cell muted">31</td><td class="calendar-day-cell normal">1</td><td class="calendar-day-cell normal">2</td><td class="calendar-day-cell normal">3</td></tr>
+                <tr><td class="calendar-day-cell normal">4</td><td class="calendar-day-cell normal">5</td><td class="calendar-day-cell normal">6</td><td class="calendar-day-cell normal">7</td><td class="calendar-day-cell selected-start">8</td><td class="calendar-day-cell in-range">9</td><td class="calendar-day-cell in-range">10</td></tr>
+                <tr><td class="calendar-day-cell in-range">11</td><td class="calendar-day-cell in-range">12</td><td class="calendar-day-cell in-range">13</td><td class="calendar-day-cell in-range">14</td><td class="calendar-day-cell in-range">15</td><td class="calendar-day-cell in-range">16</td><td class="calendar-day-cell in-range">17</td></tr>
+                <tr><td class="calendar-day-cell in-range">18</td><td class="calendar-day-cell in-range">19</td><td class="calendar-day-cell in-range">20</td><td class="calendar-day-cell in-range">21</td><td class="calendar-day-cell selected-end">22</td><td class="calendar-day-cell normal">23</td><td class="calendar-day-cell normal">24</td></tr>
+                <tr><td class="calendar-day-cell normal">25</td><td class="calendar-day-cell normal">26</td><td class="calendar-day-cell normal">27</td><td class="calendar-day-cell normal">28</td><td class="calendar-day-cell normal">29</td><td class="calendar-day-cell normal">30</td><td class="calendar-day-cell normal">31</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Month 2: Th09 2025 -->
+          <div class="calendar-month-panel">
+            <div class="calendar-header">
+              <div></div>
+              <span class="cal-title">Th09 2025</span>
+              <div>
+                <button type="button" class="cal-nav-btn" title="Tháng sau">›</button>
+                <button type="button" class="cal-nav-btn" title="Năm sau">»</button>
+              </div>
+            </div>
+            <table class="calendar-table">
+              <thead><tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr></thead>
+              <tbody>
+                <tr><td class="calendar-day-cell normal">1</td><td class="calendar-day-cell normal">2</td><td class="calendar-day-cell normal">3</td><td class="calendar-day-cell normal">4</td><td class="calendar-day-cell normal">5</td><td class="calendar-day-cell normal">6</td><td class="calendar-day-cell normal">7</td></tr>
+                <tr><td class="calendar-day-cell normal">8</td><td class="calendar-day-cell normal">9</td><td class="calendar-day-cell normal">10</td><td class="calendar-day-cell normal">11</td><td class="calendar-day-cell normal">12</td><td class="calendar-day-cell normal">13</td><td class="calendar-day-cell normal">14</td></tr>
+                <tr><td class="calendar-day-cell normal">15</td><td class="calendar-day-cell normal">16</td><td class="calendar-day-cell normal">17</td><td class="calendar-day-cell normal">18</td><td class="calendar-day-cell normal">19</td><td class="calendar-day-cell normal">20</td><td class="calendar-day-cell normal">21</td></tr>
+                <tr><td class="calendar-day-cell normal">22</td><td class="calendar-day-cell normal">23</td><td class="calendar-day-cell normal">24</td><td class="calendar-day-cell normal">25</td><td class="calendar-day-cell normal">26</td><td class="calendar-day-cell normal">27</td><td class="calendar-day-cell normal">28</td></tr>
+                <tr><td class="calendar-day-cell normal">29</td><td class="calendar-day-cell normal">30</td><td class="calendar-day-cell muted">1</td><td class="calendar-day-cell muted">2</td><td class="calendar-day-cell muted">3</td><td class="calendar-day-cell muted">4</td><td class="calendar-day-cell muted">5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="rangepicker-footer">
+          <div class="preset-links">
+            <button type="button" class="preset-btn" onclick="applyPresetRange('today')">Hôm nay</button>
+            <button type="button" class="preset-btn" onclick="applyPresetRange('last7')">7 ngày qua</button>
+            <button type="button" class="preset-btn" onclick="applyPresetRange('last30')">30 ngày qua</button>
+            <button type="button" class="preset-btn" onclick="applyPresetRange('thisMonth')">Tháng này</button>
+          </div>
+          <button type="button" class="btn-primary" style="padding:5px 16px; font-weight:700; font-size:12.5px;" onclick="applyPopoverDateRange()">Áp Dụng</button>
+        </div>
+      `;
+
+      document.body.appendChild(popover);
+
+      // Position popover relative to rangeBox
+      const rect = rangeBox.getBoundingClientRect();
+      const popoverWidth = 580;
+      let left = rect.left + window.scrollX;
+      if (left + popoverWidth > window.innerWidth - 20) {
+        left = window.innerWidth - popoverWidth - 20;
+      }
+      if (left < 10) left = 10;
+
+      popover.style.left = left + 'px';
+      popover.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+
+      window.clearPopoverRange = function() {
+        document.getElementById('popoverStartDisplay').value = '';
+        document.getElementById('popoverEndDisplay').value = '';
+      };
+
+      window.applyPresetRange = function(preset) {
+        if (startInput && endInput) {
+          if (preset === 'today') {
+            startInput.value = '2025-08-25'; endInput.value = '2025-08-25';
+          } else if (preset === 'last7') {
+            startInput.value = '2025-08-18'; endInput.value = '2025-08-25';
+          } else if (preset === 'last30') {
+            startInput.value = '2025-07-25'; endInput.value = '2025-08-25';
+          } else if (preset === 'thisMonth') {
+            startInput.value = '2025-08-01'; endInput.value = '2025-08-25';
+          }
+        }
+        popover.remove();
+        rangeBox.classList.remove('open');
+        showToast('📅 Đã chọn khoảng thời gian đối soát (Tối đa 3 tháng)');
+      };
+
+      window.applyPopoverDateRange = function() {
+        popover.remove();
+        rangeBox.classList.remove('open');
+        showToast('📅 Đã áp dụng khoảng thời gian (Tối đa 3 tháng)');
+      };
+    }
+  });
 });

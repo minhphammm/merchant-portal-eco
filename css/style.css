@@ -2481,6 +2481,190 @@ select,
   color: var(--text-muted) !important;
 }
 
+/* Global Ant Design Dual-Month RangePicker Popover Component */
+.antd-rangepicker-popover-global {
+  position: absolute;
+  z-index: 2050;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.15), 0 3px 6px -4px rgba(0, 0, 0, 0.12);
+  padding: 16px;
+  width: 580px;
+  border: 1px solid #e2e8f0;
+  font-family: var(--font-family);
+  animation: antDropdownSlideIn 0.15s ease-out;
+}
+
+.rangepicker-inputs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #1677ff;
+  box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+  border-radius: 6px;
+  margin-bottom: 14px;
+}
+
+.rangepicker-inputs-bar input {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--text-muted) !important;
+  text-align: center;
+  flex: 1;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.rangepicker-inputs-bar .range-arrow {
+  color: #bfbfbf;
+  font-size: 12px;
+}
+
+.rangepicker-inputs-bar .range-clear-btn {
+  background: none;
+  border: none;
+  color: #bfbfbf;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px;
+}
+
+.rangepicker-inputs-bar .range-clear-btn:hover {
+  color: #595959;
+}
+
+.rangepicker-calendars-container {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 14px;
+}
+
+.calendar-month-panel {
+  flex: 1;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendar-header .cal-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.calendar-header .cal-nav-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.calendar-header .cal-nav-btn:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.calendar-table th {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  padding: 6px 0;
+  text-transform: none !important;
+}
+
+.calendar-table td {
+  padding: 4px 0;
+  font-size: 12.5px;
+}
+
+.calendar-day-cell {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  margin: 0 auto;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  font-weight: 500;
+}
+
+.calendar-day-cell.muted {
+  color: #cbd5e1;
+}
+
+.calendar-day-cell.normal {
+  color: #334155;
+}
+
+.calendar-day-cell.normal:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.calendar-day-cell.selected-start,
+.calendar-day-cell.selected-end {
+  background-color: #1677ff !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.calendar-day-cell.in-range {
+  background-color: #e6f4ff;
+  color: #1677ff;
+  border-radius: 0;
+}
+
+.rangepicker-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+}
+
+.rangepicker-footer .preset-links {
+  display: flex;
+  gap: 12px;
+}
+
+.rangepicker-footer .preset-btn {
+  background: none;
+  border: none;
+  color: #1677ff;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition);
+}
+
+.rangepicker-footer .preset-btn:hover {
+  color: #0958d9;
+  text-decoration: underline;
+}
+
 /* Ant Design Style Date Range Input Box for Filter Panels (Limit 3 months) */
 .date-range-input-box {
   display: flex;
@@ -2501,7 +2685,8 @@ select,
   border-color: #4096ff;
 }
 
-.date-range-input-box:focus-within {
+.date-range-input-box:focus-within,
+.date-range-input-box.open {
   border-color: #1677ff;
   box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
 }
