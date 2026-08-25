@@ -1540,6 +1540,7 @@ body {
   padding: 8px 0;
   border-bottom: 1px dashed var(--border-color);
   font-size: 13px;
+  color: var(--text-muted);
   text-transform: none !important;
 }
 
@@ -1554,8 +1555,8 @@ body {
 }
 
 .detail-val {
-  color: var(--text-main);
-  font-weight: 600;
+  color: var(--text-muted);
+  font-weight: 500;
   text-transform: none !important;
 }
 
