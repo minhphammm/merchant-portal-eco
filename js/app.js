@@ -962,6 +962,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // =========================================================================
+  // In-line Field Error Validation Helpers
+  // =========================================================================
+  window.clearFieldErrors = function(containerId) {
+    const container = containerId ? (document.getElementById(containerId) || document) : document;
+    container.querySelectorAll('.has-error').forEach(el => el.classList.remove('has-error'));
+    container.querySelectorAll('.field-error-msg').forEach(el => {
+      el.textContent = '';
+      el.style.display = 'none';
+    });
+  };
+
+  window.setFieldError = function(fieldId, errorMsg) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+
+    field.classList.add('has-error');
+
+    let errDiv = document.getElementById(`err_${fieldId}`);
+    if (!errDiv) {
+      errDiv = document.createElement('div');
+      errDiv.id = `err_${fieldId}`;
+      errDiv.className = 'field-error-msg';
+      if (field.parentNode) {
+        field.parentNode.appendChild(errDiv);
+      }
+    }
+
+    errDiv.innerHTML = `⚠️ ${errorMsg}`;
+    errDiv.style.display = 'flex';
+  };
+
   /**
    * US-001 / FR-001: Modal Khởi tạo Yêu cầu thanh toán đơn lẻ
    */
@@ -1018,7 +1050,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <option value="48H">Tùy chỉnh: 02 ngày 00:00 (48 giờ)</option>
           </select>
         </div>
-        <div id="plCreateErrorAlert" class="error-text-alert"></div>
       </div>
     `;
 
@@ -1027,34 +1058,45 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAction.textContent = 'Phát Hành Link';
 
     btnAction.onclick = function() {
-      const name = document.getElementById('plCreateCustomerName').value.trim();
-      const phone = document.getElementById('plCreatePhone').value.trim();
-      const email = document.getElementById('plCreateEmail').value.trim();
-      const amount = parseFloat(document.getElementById('plCreateAmount').value);
+      clearFieldErrors('modalBodyContent');
+
+      const name = document.getElementById('plCreateCustomerName')?.value.trim();
+      const phone = document.getElementById('plCreatePhone')?.value.trim();
+      const email = document.getElementById('plCreateEmail')?.value.trim();
+      const orderCode = document.getElementById('plCreateOrderCode')?.value.trim();
+      const amount = parseFloat(document.getElementById('plCreateAmount')?.value);
+
+      let hasError = false;
 
       if (!name) {
-        showError('Vui lòng nhập Họ và tên khách hàng.');
-        return;
+        setFieldError('plCreateCustomerName', 'Vui lòng nhập Họ và tên khách hàng.');
+        hasError = true;
       }
-      if (!/^0[0-9]{9}$/.test(phone)) {
-        showError('Số điện thoại không hợp lệ (Bắt buộc 10 chữ số, bắt đầu từ 0).');
-        return;
+      if (!phone || !/^0[0-9]{9}$/.test(phone)) {
+        setFieldError('plCreatePhone', 'Số điện thoại không hợp lệ (bắt buộc 10 chữ số, bắt đầu từ 0).');
+        if (!hasError) { document.getElementById('plCreatePhone')?.focus(); hasError = true; }
       }
       if (!email || !email.includes('@')) {
-        showError('Email khách hàng không đúng định dạng.');
-        return;
+        setFieldError('plCreateEmail', 'Email khách hàng không đúng định dạng (VD: name@domain.com).');
+        if (!hasError) { document.getElementById('plCreateEmail')?.focus(); hasError = true; }
+      }
+      if (!orderCode) {
+        setFieldError('plCreateOrderCode', 'Vui lòng nhập Mã đơn hàng DN.');
+        if (!hasError) { document.getElementById('plCreateOrderCode')?.focus(); hasError = true; }
       }
       if (isNaN(amount) || amount < 1000 || amount > 1000000000) {
-        showError('Số tiền thanh toán phải nằm trong khoảng từ 1.000 VNĐ đến 100.000.000 VNĐ (BR-001).');
-        return;
+        setFieldError('plCreateAmount', 'Số tiền phải nằm trong khoảng từ 1.000 VNĐ đến 100.000.000 VNĐ (BR-001).');
+        if (!hasError) { document.getElementById('plCreateAmount')?.focus(); hasError = true; }
       }
 
-      const description = document.getElementById('plCreateCustomerName')?.value || 'Yêu cầu thanh toán đơn lẻ';
-      showToast(`Tạo Yêu cầu thanh toán thành công! Mã đơn: DH2026082099.`);
+      if (hasError) return;
+
+      const description = name || 'Yêu cầu thanh toán đơn lẻ';
+      showToast(`Tạo Yêu cầu thanh toán thành công! Mã đơn: ${orderCode}.`);
       ViewRenderer.renderPage('pay-requests');
       setTimeout(() => {
         showQrCodeResultModal({
-          orderCode: 'DH2026082099',
+          orderCode: orderCode,
           amount: amount,
           customerName: name,
           phone: phone,
@@ -1064,14 +1106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }, 200);
     };
-
-    function showError(msg) {
-      const alertEl = document.getElementById('plCreateErrorAlert');
-      if (alertEl) {
-        alertEl.textContent = `⚠️ ${msg}`;
-        alertEl.style.display = 'block';
-      }
-    }
 
     document.getElementById('modalOverlay').classList.add('show');
   };
@@ -1834,8 +1868,6 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
           </div>
-
-          <div id="plModalErrorAlert" class="error-text-alert"></div>
         </div>
       `;
     }
@@ -1844,48 +1876,57 @@ document.addEventListener('DOMContentLoaded', () => {
       btnAction.style.display = 'inline-block';
       btnAction.textContent = 'Tạo Link Thanh Toán';
       btnAction.onclick = function() {
-        const orderCode = document.getElementById('plModalOrderCode').value.trim();
-        const amount = parseFloat(document.getElementById('plModalAmount').value);
-        const name = document.getElementById('plModalCustomerName').value.trim();
-        const email = document.getElementById('plModalCustomerEmail').value.trim();
-        const phone = document.getElementById('plModalCustomerPhone').value.trim();
-        const expiryType = document.getElementById('plModalExpiryType').value;
+        clearFieldErrors('modalBodyContent');
+
+        const orderCode = document.getElementById('plModalOrderCode')?.value.trim();
+        const amount = parseFloat(document.getElementById('plModalAmount')?.value);
+        const name = document.getElementById('plModalCustomerName')?.value.trim();
+        const email = document.getElementById('plModalCustomerEmail')?.value.trim();
+        const phone = document.getElementById('plModalCustomerPhone')?.value.trim();
+        const expiryType = document.getElementById('plModalExpiryType')?.value;
+
+        let hasError = false;
 
         if (!orderCode) {
-          showError('Vui lòng nhập Mã đơn hàng.');
-          return;
+          setFieldError('plModalOrderCode', 'Vui lòng nhập Mã đơn hàng.');
+          hasError = true;
         }
         if (isNaN(amount) || amount <= 0) {
-          showError('Vui lòng nhập Số tiền thanh toán hợp lệ.');
-          return;
+          setFieldError('plModalAmount', 'Vui lòng nhập Số tiền thanh toán hợp lệ (> 0 VNĐ).');
+          if (!hasError) { document.getElementById('plModalAmount')?.focus(); hasError = true; }
         }
         if (!name) {
-          showError('Vui lòng nhập Họ và tên khách hàng.');
-          return;
+          setFieldError('plModalCustomerName', 'Vui lòng nhập Họ và tên khách hàng.');
+          if (!hasError) { document.getElementById('plModalCustomerName')?.focus(); hasError = true; }
         }
         if (!email || !email.includes('@')) {
-          showError('Vui lòng nhập Email hợp lệ.');
-          return;
+          setFieldError('plModalCustomerEmail', 'Vui lòng nhập Email khách hàng hợp lệ (VD: name@domain.com).');
+          if (!hasError) { document.getElementById('plModalCustomerEmail')?.focus(); hasError = true; }
         }
         if (!phone || !/^0[0-9]{9}$/.test(phone)) {
-          showError('Vui lòng nhập Số điện thoại 10 chữ số hợp lệ.');
-          return;
+          setFieldError('plModalCustomerPhone', 'Vui lòng nhập Số điện thoại 10 chữ số hợp lệ (bắt đầu 0).');
+          if (!hasError) { document.getElementById('plModalCustomerPhone')?.focus(); hasError = true; }
         }
 
         if (expiryType === 'CUSTOM') {
-          const d = document.getElementById('plModalExpiryDate').value;
-          const t = document.getElementById('plModalExpiryTime').value;
-          if (!d || !t) {
-            showError('Vui lòng chọn Ngày và Giờ hết hạn tùy chỉnh.');
-            return;
+          const d = document.getElementById('plModalExpiryDate')?.value;
+          const t = document.getElementById('plModalExpiryTime')?.value;
+          if (!d) {
+            setFieldError('plModalExpiryDate', 'Vui lòng chọn Ngày hết hạn.');
+            if (!hasError) { document.getElementById('plModalExpiryDate')?.focus(); hasError = true; }
+          }
+          if (!t) {
+            setFieldError('plModalExpiryTime', 'Vui lòng chọn Giờ hết hạn.');
+            if (!hasError) { document.getElementById('plModalExpiryTime')?.focus(); hasError = true; }
           }
         }
+
+        if (hasError) return;
 
         const desc = document.getElementById('plModalDescription')?.value || '';
         const expiryText = expiryType === 'CUSTOM' ? 
           `${document.getElementById('plModalExpiryDate').value} ${document.getElementById('plModalExpiryTime').value}` : '24 giờ (Mặc định)';
 
-        showToast(`Tạo Link thanh toán thành công! Mã đơn: ${orderCode}`);
         setTimeout(() => {
           showQrCodeResultModal({
             orderCode: orderCode,
@@ -1898,14 +1939,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }, 200);
       };
-    }
-
-    function showError(msg) {
-      const alertEl = document.getElementById('plModalErrorAlert');
-      if (alertEl) {
-        alertEl.textContent = `⚠️ ${msg}`;
-        alertEl.style.display = 'block';
-      }
     }
 
     const modalOverlay = document.getElementById('modalOverlay');

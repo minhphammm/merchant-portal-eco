@@ -2429,4 +2429,22 @@ th.col-customer, td.col-customer, .col-customer {
   white-space: nowrap !important;
 }
 
+/* In-line Field Error Message Styling */
+input.has-error, select.has-error, textarea.has-error {
+  border-color: #EF4444 !important;
+  background-color: #FEF2F2 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.field-error-msg {
+  color: #DC2626;
+  font-size: 11.5px;
+  font-weight: 600;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.3;
+}
+
 
