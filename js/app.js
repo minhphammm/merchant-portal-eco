@@ -3307,4 +3307,67 @@ document.addEventListener('DOMContentLoaded', () => {
   window.filterActivitiesBRDTable = function() {
     showToast('🔍 Đã lọc nhật ký hoạt động của nhân viên');
   };
+
+  // Chatbot AI & Contact Support Functions
+  window.toggleChatbotWidget = function() {
+    const drawer = document.getElementById('chatbotDrawer');
+    if (!drawer) return;
+    if (drawer.style.display === 'none' || !drawer.style.display) {
+      drawer.style.display = 'flex';
+      if (window.lucide) lucide.createIcons();
+    } else {
+      drawer.style.display = 'none';
+    }
+  };
+
+  window.sendChatbotMsg = function() {
+    const input = document.getElementById('chatbotInput');
+    const container = document.getElementById('chatbotMsgContainer');
+    if (!input || !container || !input.value.trim()) return;
+
+    const val = input.value.trim();
+    input.value = '';
+
+    // Add user msg
+    const userMsg = document.createElement('div');
+    userMsg.style.cssText = 'display:flex; justify-content:flex-end; margin-top:6px;';
+    userMsg.innerHTML = `<div style="background:#0284C7; color:#fff; padding:8px 12px; border-radius:12px; border-top-right-radius:2px; font-size:12.5px; max-width:85%; line-height:1.4;">${val}</div>`;
+    container.appendChild(userMsg);
+    container.scrollTop = container.scrollHeight;
+
+    // Simulate bot reply
+    setTimeout(() => {
+      const botMsg = document.createElement('div');
+      botMsg.style.cssText = 'display:flex; gap:8px; align-items:flex-start; margin-top:8px;';
+      botMsg.innerHTML = `
+        <div style="width:28px; height:28px; border-radius:50%; background:#0284C7; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0;">🤖</div>
+        <div style="background:#fff; border:1px solid #E2E8F0; padding:10px 12px; border-radius:12px; border-top-left-radius:2px; font-size:12.5px; color:#334155; max-width:85%; line-height:1.4;">
+          Cảm ơn bạn đã hỏi về <strong>"${val}"</strong>. Bộ phận hỗ trợ kỹ thuật Finviet Ecopay đang tự động xử lý yêu cầu của bạn! Hotline 1900 636 652 luôn sẵn sàng 24/7.
+        </div>
+      `;
+      container.appendChild(botMsg);
+      container.scrollTop = container.scrollHeight;
+    }, 600);
+  };
+
+  window.sendQuickChatMsg = function(text) {
+    const input = document.getElementById('chatbotInput');
+    if (input) {
+      input.value = text;
+      sendChatbotMsg();
+    }
+  };
+
+  window.openContactModal = function() {
+    const modal = document.getElementById('contactModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      if (window.lucide) lucide.createIcons();
+    }
+  };
+
+  window.closeContactModal = function() {
+    const modal = document.getElementById('contactModal');
+    if (modal) modal.style.display = 'none';
+  };
 });
