@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=4.9">
+  <link rel="stylesheet" href="css/style.css?v=5.0">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -236,18 +236,17 @@
           <div class="dashboard-header-bar">
             <div class="dashboard-title-group">
               <h1 data-i18n="dashboardTitle">Hiệu Suất Kinh Doanh Doanh Nghiệp</h1>
-              <div class="merchant-subtitle">Cập nhật lúc: 20/08/2026 14:00 🔄</div>
+              <div style="display:flex; align-items:center; gap:12px; margin-top:6px;">
+                <button id="btnRefresh" class="btn-refresh" title="Làm mới dữ liệu" style="display:inline-flex; align-items:center; font-weight:600; padding:6px 12px; font-size:12.5px;">
+                  <i data-lucide="rotate-cw" style="width:14px; height:14px; margin-right:4px;"></i>
+                  <span data-i18n="btnRefresh">Làm mới</span>
+                </button>
+                <div class="merchant-subtitle">Cập nhật lúc: 20/08/2026 14:00</div>
+              </div>
             </div>
 
             <!-- Toolbar Filters & Actions -->
             <div class="dashboard-toolbar">
-              <div class="refresh-group">
-                <button id="btnRefresh" class="btn-refresh" title="Làm mới dữ liệu">
-                  <i data-lucide="rotate-cw" style="width:14px; height:14px; margin-right:4px;"></i>
-                  <span data-i18n="btnRefresh">Làm mới</span>
-                </button>
-              </div>
-
               <button id="btnCreatePaylinkOverview" class="btn-primary" onclick="openCreatePaylinkModalOverview()" style="display:inline-flex; align-items:center; font-weight:700; padding:8px 16px;">
                 <span>Tạo Yêu Cầu Thanh Toán</span>
               </button>
