@@ -147,27 +147,27 @@ const ViewRenderer = {
               <div class="doc-file-item" onclick="openDocPreviewModal('Giấy chứng nhận đăng ký doanh nghiệp')">
                 <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">1. Giấy chứng nhận đăng ký doanh nghiệp</span>
-                <a href="javascript:void(0)" class="link-doc-view">Xem Xem Trước 👁</a>
+                <a href="javascript:void(0)" class="link-doc-view">Xem</a>
               </div>
               <div class="doc-file-item" onclick="openDocPreviewModal('Giấy chứng nhận mã số thuế')">
                 <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">2. Giấy chứng nhận mã số thuế</span>
-                <a href="javascript:void(0)" class="link-doc-view">Xem Xem Trước 👁</a>
+                <a href="javascript:void(0)" class="link-doc-view">Xem</a>
               </div>
               <div class="doc-file-item" onclick="openDocPreviewModal('Điều lệ công ty')">
                 <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">3. Điều lệ công ty</span>
-                <a href="javascript:void(0)" class="link-doc-view">Xem Xem Trước 👁</a>
+                <a href="javascript:void(0)" class="link-doc-view">Xem</a>
               </div>
               <div class="doc-file-item" onclick="openDocPreviewModal('Giấy ủy quyền đại diện')">
                 <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">4. Giấy ủy quyền (nếu có)</span>
-                <a href="javascript:void(0)" class="link-doc-view">Xem Xem Trước 👁</a>
+                <a href="javascript:void(0)" class="link-doc-view">Xem</a>
               </div>
               <div class="doc-file-item" onclick="openDocPreviewModal('CMND/CCCD người đại diện pháp luật')">
                 <span class="file-icon"><i data-lucide="file" style="width:15px; height:15px; margin-right:6px; color:var(--color-primary);"></i></span>
                 <span class="doc-name">5. CMND/CCCD người đại diện</span>
-                <a href="javascript:void(0)" class="link-doc-view">Xem Xem Trước 👁</a>
+                <a href="javascript:void(0)" class="link-doc-view">Xem</a>
               </div>
             </div>
           </div>
