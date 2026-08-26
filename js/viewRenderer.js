@@ -2067,42 +2067,77 @@ const ViewRenderer = {
         </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH BÁO CÁO DAILY -->
+      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN DAILY V1 (GIỮ NGUYÊN FORMAT GỐC + 4 TRƯỜNG DAILY) -->
       <div class="table-card">
-        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
-          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Báo Cáo Đối Soát Daily (${list.length} bản ghi)</span>
-          <span class="status-badge badge-success">Khớp số dư 100%: 6/6 phiên</span>
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
+          <div>
+            <span style="font-weight:800; font-size:14px; color:var(--text-main);">Danh sách báo cáo đối soát thanh toán v1 (Daily)</span>
+            <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">(Hiển thị <strong>${list.length}</strong> báo cáo)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:13px; color:var(--text-muted);">
+              Tổng giá trị thanh toán cuối ngày: <strong style="font-size:15px; color:#10B981; font-weight:800; margin-left:4px;">773,880,000 đ</strong>
+            </div>
+            <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="showToast('Đang xuất danh sách đối soát thanh toán Daily v1...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát v1</button>
+          </div>
         </div>
+
         <div class="table-responsive" style="overflow-x:auto;">
           <table class="portal-table">
             <thead>
               <tr>
-                <th style="white-space:nowrap;">Ngày báo cáo</th>
-                <th style="white-space:nowrap; min-width:220px;">Cửa hàng</th>
-                <th style="white-space:nowrap; text-align:right;">Số dư đầu ngày</th>
-                <th style="white-space:nowrap; min-width:230px;">Giao dịch đầu tiên trong ngày</th>
-                <th style="white-space:nowrap; min-width:230px;">Giao dịch cuối cùng trong ngày</th>
-                <th style="white-space:nowrap; text-align:right;">Doanh thu phát sinh</th>
-                <th style="white-space:nowrap; text-align:right;">Phí & Hoàn tiền</th>
-                <th style="white-space:nowrap; text-align:right;">Số dư cuối ngày</th>
+                <th style="white-space:nowrap; text-align:center; width:50px;">STT</th>
+                <th style="white-space:nowrap;">Mã thanh toán</th>
+                <th style="white-space:nowrap;">Thời gian tạo</th>
+                <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
+                <th style="white-space:nowrap;">Phương thức thanh toán</th>
+                <th style="white-space:nowrap;">Tên cửa hàng</th>
+                <th style="white-space:nowrap;">Mã cửa hàng</th>
+                <th style="white-space:nowrap; text-align:right; background:#EFF6FF; color:#1E40AF;">Số dư đầu ngày</th>
+                <th style="white-space:nowrap; min-width:210px; background:#F0FDF4; color:#166534;">GD đầu tiên trong ngày</th>
+                <th style="white-space:nowrap; min-width:210px; background:#FFF7ED; color:#9A3412;">GD cuối cùng trong ngày</th>
+                <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả</th>
+                <th style="white-space:nowrap; text-align:right;">Phí giao dịch</th>
+                <th style="white-space:nowrap; text-align:right;">Phí người dùng</th>
+                <th style="white-space:nowrap; text-align:right;">Số tiền hoàn cấn trừ</th>
+                <th style="white-space:nowrap; text-align:right; background:#FDF4FF; color:#86198F;">Số dư cuối ngày</th>
+                <th style="white-space:nowrap;">Mô tả</th>
+                <th style="white-space:nowrap;">Lý do hủy/từ chối</th>
+                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
                 <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
-                <th style="white-space:nowrap; text-align:center;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               ${list.map(item => `
-                <tr onclick="showToast('Chi tiết báo cáo Daily ngày ${item.reportDate} - ${item.storeName}')">
-                  <td><strong style="color:var(--color-primary);">${item.reportDate}</strong></td>
+                <tr>
+                  <td style="text-align:center; font-weight:600;">${item.stt}</td>
+                  <td>
+                    <a href="javascript:void(0)" onclick="openReconcileReportDetailModal('${item.reconcileCode}')" style="font-weight:700; color:#0284C7; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                      ${item.reconcileCode} <i data-lucide="copy" style="width:12px; height:12px; color:#94A3B8;"></i>
+                    </a>
+                  </td>
+                  <td style="font-size:12.5px;">${item.createdAt}</td>
+                  <td style="font-size:12px; color:var(--text-muted);">${item.periodRange}</td>
+                  <td>
+                    <span style="background:#FFF7ED; color:#C2410C; border:1px solid #FFEDD5; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">
+                      ${item.payMethod}
+                    </span>
+                  </td>
                   <td style="font-size:12.5px;">${item.storeName}</td>
-                  <td style="text-align:right; font-weight:700; color:#1E40AF;">${item.openingBalance}</td>
-                  <td style="font-size:12px; color:#166534;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.firstTxn}</td>
-                  <td style="font-size:12px; color:#9A3412;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.lastTxn}</td>
-                  <td style="text-align:right; font-weight:800; color:#10B981; font-size:13px;">${item.totalRevenue}</td>
-                  <td style="text-align:right; font-weight:600; color:#EF4444; font-size:12px;">${item.totalFeeRefund}</td>
-                  <td style="text-align:right; font-weight:800; color:#701A75; font-size:13.5px;">${item.closingBalance}</td>
-                  <td style="text-align:center;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
-                  <td style="text-align:center; white-space:nowrap;">
-                    <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="showToast('Xuất báo cáo Daily Excel ngày ${item.reportDate}...')">Xuất Excel</button>
+                  <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.storeCode}</code></td>
+                  <td style="text-align:right; font-weight:700; color:#1E40AF; background:#F8FAFC;">${item.openingBalance}</td>
+                  <td style="font-size:12px; color:#166534; background:#F8FAFC;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.firstTxn}</td>
+                  <td style="font-size:12px; color:#9A3412; background:#F8FAFC;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.lastTxn}</td>
+                  <td style="text-align:right; font-weight:800; color:#10B981; font-size:13.5px;">${item.totalPayout}</td>
+                  <td style="text-align:right; font-size:12.5px;">${item.txnFee}</td>
+                  <td style="text-align:right; font-size:12.5px;">${item.userFee}</td>
+                  <td style="text-align:right; font-weight:600; color:var(--color-danger); font-size:12.5px;">${item.deductedRefundAmount}</td>
+                  <td style="text-align:right; font-weight:800; color:#701A75; font-size:13.5px; background:#F8FAFC;">${item.closingBalance}</td>
+                  <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description}">${item.description}</td>
+                  <td style="font-size:12px; color:var(--text-muted); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.rejectReason}">${item.rejectReason}</td>
+                  <td style="font-size:12.5px; color:var(--text-muted);">${item.merchantPayTime}</td>
+                  <td style="text-align:center;">
+                    <span class="status-badge ${item.statusClass}">${item.statusText}</span>
                   </td>
                 </tr>
               `).join('')}
