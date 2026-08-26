@@ -48,6 +48,9 @@ const ViewRenderer = {
       case 'reconcile-report':
         html = this.getReconcileEcopayView();
         break;
+      case 'reconcile-report-v1':
+        html = this.getReconcileReportV1View();
+        break;
       case 'reconcile-v2':
       case 'statement':
         html = this.getReconcileV2View();
@@ -1941,6 +1944,166 @@ const ViewRenderer = {
                   <td style="text-align:right; font-weight:600; color:${t.refundAmount !== '0 đ' ? '#EF4444' : 'var(--text-muted)'}; font-size:12.5px;">${t.refundAmount}</td>
                   <td style="text-align:right; font-weight:800; color:#10B981; font-size:13.5px;">${t.settlementAmount}</td>
                   <td style="text-align:center;"><span class="status-badge ${t.statusClass}">${t.statusText}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  },
+
+  /**
+   * Báo Cáo Đối Soát v1 (Chạy Daily Hàng Ngày)
+   * Tự động tổng hợp: Số dư đầu ngày, Giao dịch đầu tiên trong ngày, Giao dịch cuối cùng trong ngày, Số dư cuối ngày
+   */
+  getReconcileReportV1View() {
+    const list = MockData.getReconcileReportV1Data ? MockData.getReconcileReportV1Data() : [];
+
+    return `
+      <div class="subpage-header">
+        <div>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Báo Cáo Đối Soát v1 (Daily)</strong></div>
+          <h1 class="subpage-title">Báo Cáo Đối Soát v1 (Chạy Daily Hàng Ngày)</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tự động tổng hợp số dư đầu ngày, mốc thời gian giao dịch đầu tiên / cuối cùng trong ngày và số dư chốt phiên cuối ngày.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-primary" onclick="showToast('Đang xuất báo cáo Daily dạng PDF...')"><i data-lucide="file-text" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Daily PDF</button>
+          <button class="btn-secondary" onclick="showToast('Đang xuất báo cáo Daily dạng Excel (.xlsx)...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel Daily</button>
+        </div>
+      </div>
+
+      <!-- 4 THẺ CHỈ SỐ HIGHLIGHT THEO ĐÚNG YÊU CẦU DAILY -->
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
+        <!-- Card 1: Số dư đầu ngày -->
+        <div class="stat-card" style="background:linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border:1px solid #BFDBFE; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:13px; font-weight:700; color:#1E40AF;">🌅 SỐ DƯ ĐẦU NGÀY</span>
+            <div style="width:32px; height:32px; border-radius:8px; background:#3B82F6; color:#fff; display:flex; align-items:center; justify-content:center;">
+              <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+            </div>
+          </div>
+          <div style="font-size:20px; font-weight:800; color:#1E3A8A;">120,500,000 đ</div>
+          <div style="font-size:11.5px; color:#3B82F6; margin-top:4px;">Chốt phiên 00:00:00 - Ngày 26/08</div>
+        </div>
+
+        <!-- Card 2: GD đầu tiên trong ngày -->
+        <div class="stat-card" style="background:linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border:1px solid #BBF7D0; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:13px; font-weight:700; color:#166534;">⏱️ GD ĐẦU TIÊN TRONG NGÀY</span>
+            <div style="width:32px; height:32px; border-radius:8px; background:#22C55E; color:#fff; display:flex; align-items:center; justify-content:center;">
+              <i data-lucide="play-circle" style="width:18px; height:18px;"></i>
+            </div>
+          </div>
+          <div style="font-size:15px; font-weight:800; color:#14532D; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">06:15:22 - 15,450,000 đ</div>
+          <div style="font-size:11.5px; color:#15803D; margin-top:4px;">Mã GD: <code style="font-family:monospace; background:rgba(255,255,255,0.6); padding:1px 4px; border-radius:4px;">GD20260826001</code></div>
+        </div>
+
+        <!-- Card 3: GD cuối cùng trong ngày -->
+        <div class="stat-card" style="background:linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); border:1px solid #FED7AA; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:13px; font-weight:700; color:#9A3412;">🏁 GD CUỐI CÙNG TRONG NGÀY</span>
+            <div style="width:32px; height:32px; border-radius:8px; background:#F97316; color:#fff; display:flex; align-items:center; justify-content:center;">
+              <i data-lucide="stop-circle" style="width:18px; height:18px;"></i>
+            </div>
+          </div>
+          <div style="font-size:15px; font-weight:800; color:#7C2D12; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">23:45:10 - 8,800,000 đ</div>
+          <div style="font-size:11.5px; color:#C2410C; margin-top:4px;">Mã GD: <code style="font-family:monospace; background:rgba(255,255,255,0.6); padding:1px 4px; border-radius:4px;">GD20260826088</code></div>
+        </div>
+
+        <!-- Card 4: Số dư cuối ngày -->
+        <div class="stat-card" style="background:linear-gradient(135deg, #FDF4FF 0%, #FAE8FF 100%); border:1px solid #F5D0FE; border-radius:12px; padding:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:13px; font-weight:700; color:#86198F;">🌇 SỐ DƯ CUỐI NGÀY</span>
+            <div style="width:32px; height:32px; border-radius:8px; background:#A855F7; color:#fff; display:flex; align-items:center; justify-content:center;">
+              <i data-lucide="check-circle-2" style="width:18px; height:18px;"></i>
+            </div>
+          </div>
+          <div style="font-size:20px; font-weight:800; color:#701A75;">185,450,000 đ</div>
+          <div style="font-size:11.5px; color:#9333EA; margin-top:4px;">Chốt phiên 23:59:59 - Tăng +64.95 triệu</div>
+        </div>
+      </div>
+
+      <!-- MỤC TÌM KIẾM BÁO CÁO DAILY -->
+      <div class="table-card" style="margin-bottom:20px;">
+        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Báo Cáo Daily
+        </div>
+        <form onsubmit="return false;">
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+            <!-- Ngày báo cáo Daily -->
+            <div class="form-group-field">
+              <label>Ngày báo cáo Daily</label>
+              <input type="date" id="filterV1DailyDate" value="2026-08-26">
+            </div>
+
+            <!-- Cửa hàng -->
+            <div class="form-group-field">
+              <label>Cửa hàng</label>
+              <select id="filterV1Store">
+                <option value="all">Tất cả cửa hàng</option>
+                <option value="ST-Q1-001">Chi nhánh Quận 1 - HCM</option>
+                <option value="ST-HK-002">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                <option value="ST-HC-003">Chi nhánh Hải Châu - Đà Nẵng</option>
+              </select>
+            </div>
+
+            <!-- Trạng thái đối soát -->
+            <div class="form-group-field">
+              <label>Trạng thái đối soát Daily</label>
+              <select id="filterV1Status">
+                <option value="all">Tất cả trạng thái</option>
+                <option value="matched">Khớp 100%</option>
+                <option value="diff">Có chênh lệch</option>
+                <option value="pending">Đang xử lý</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
+            <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc báo cáo v1')">Đặt lại</button>
+            <button type="button" class="btn-primary" onclick="showToast('Đang tra cứu báo cáo đối soát v1...')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tra cứu Daily</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- BẢNG DANH SÁCH BÁO CÁO DAILY -->
+      <div class="table-card">
+        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
+          <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Báo Cáo Đối Soát Daily (${list.length} bản ghi)</span>
+          <span class="status-badge badge-success">Khớp số dư 100%: 6/6 phiên</span>
+        </div>
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="portal-table">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap;">Ngày báo cáo</th>
+                <th style="white-space:nowrap; min-width:220px;">Cửa hàng</th>
+                <th style="white-space:nowrap; text-align:right;">Số dư đầu ngày</th>
+                <th style="white-space:nowrap; min-width:230px;">Giao dịch đầu tiên trong ngày</th>
+                <th style="white-space:nowrap; min-width:230px;">Giao dịch cuối cùng trong ngày</th>
+                <th style="white-space:nowrap; text-align:right;">Doanh thu phát sinh</th>
+                <th style="white-space:nowrap; text-align:right;">Phí & Hoàn tiền</th>
+                <th style="white-space:nowrap; text-align:right;">Số dư cuối ngày</th>
+                <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
+                <th style="white-space:nowrap; text-align:center;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${list.map(item => `
+                <tr onclick="showToast('Chi tiết báo cáo Daily ngày ${item.reportDate} - ${item.storeName}')">
+                  <td><strong style="color:var(--color-primary);">${item.reportDate}</strong></td>
+                  <td style="font-size:12.5px;">${item.storeName}</td>
+                  <td style="text-align:right; font-weight:700; color:#1E40AF;">${item.openingBalance}</td>
+                  <td style="font-size:12px; color:#166534;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.firstTxn}</td>
+                  <td style="font-size:12px; color:#9A3412;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.lastTxn}</td>
+                  <td style="text-align:right; font-weight:800; color:#10B981; font-size:13px;">${item.totalRevenue}</td>
+                  <td style="text-align:right; font-weight:600; color:#EF4444; font-size:12px;">${item.totalFeeRefund}</td>
+                  <td style="text-align:right; font-weight:800; color:#701A75; font-size:13.5px;">${item.closingBalance}</td>
+                  <td style="text-align:center;"><span class="status-badge ${item.statusClass}">${item.statusText}</span></td>
+                  <td style="text-align:center; white-space:nowrap;">
+                    <button class="btn-primary" style="padding:4px 10px; font-size:12px;" onclick="showToast('Xuất báo cáo Daily Excel ngày ${item.reportDate}...')">Xuất Excel</button>
+                  </td>
                 </tr>
               `).join('')}
             </tbody>

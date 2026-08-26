@@ -1904,6 +1904,96 @@ const MockData = {
         statusClass: 'badge-success'
       }
     ];
+  },
+
+  // Báo cáo đối soát v1 (Chạy Daily Hàng Ngày: Số dư đầu ngày, GD đầu tiên, GD cuối cùng, Số dư cuối ngày)
+  getReconcileReportV1Data() {
+    return [
+      {
+        stt: 1,
+        reportDate: '26/08/2026',
+        storeName: 'ST-Q1-001 - Chi nhánh Quận 1 - Hồ Chí Minh',
+        openingBalance: '120,500,000 đ',
+        firstTxn: '06:15:22 (GD20260826001 - 15,450,000 đ)',
+        lastTxn: '23:45:10 (GD20260826088 - 8,800,000 đ)',
+        totalRevenue: '+65,450,000 đ',
+        totalFeeRefund: '-500,000 đ',
+        closingBalance: '185,450,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp 100%',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 2,
+        reportDate: '25/08/2026',
+        storeName: 'ST-Q1-001 - Chi nhánh Quận 1 - Hồ Chí Minh',
+        openingBalance: '95,000,000 đ',
+        firstTxn: '07:05:00 (GD20260825001 - 25,000,000 đ)',
+        lastTxn: '22:30:15 (GD20260825072 - 1,200,000 đ)',
+        totalRevenue: '+25,750,000 đ',
+        totalFeeRefund: '-250,000 đ',
+        closingBalance: '120,500,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp 100%',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 3,
+        reportDate: '26/08/2026',
+        storeName: 'ST-HK-002 - Chi nhánh Hoàn Kiếm - Hà Nội',
+        openingBalance: '150,000,000 đ',
+        firstTxn: '06:30:00 (GD20260826005 - 12,000,000 đ)',
+        lastTxn: '23:10:45 (GD20260826090 - 45,000,000 đ)',
+        totalRevenue: '+57,000,000 đ',
+        totalFeeRefund: '-570,000 đ',
+        closingBalance: '206,430,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp 100%',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 4,
+        reportDate: '25/08/2026',
+        storeName: 'ST-HK-002 - Chi nhánh Hoàn Kiếm - Hà Nội',
+        openingBalance: '110,000,000 đ',
+        firstTxn: '08:00:15 (GD20260825010 - 40,000,000 đ)',
+        lastTxn: '21:50:00 (GD20260825065 - 5,000,000 đ)',
+        totalRevenue: '+40,400,000 đ',
+        totalFeeRefund: '-400,000 đ',
+        closingBalance: '150,000,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp 100%',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 5,
+        reportDate: '26/08/2026',
+        storeName: 'ST-HC-003 - Chi nhánh Hải Châu - Đà Nẵng',
+        openingBalance: '80,000,000 đ',
+        firstTxn: '07:20:10 (GD20260826008 - 8,500,000 đ)',
+        lastTxn: '22:15:00 (GD20260826060 - 3,500,000 đ)',
+        totalRevenue: '+32,000,000 đ',
+        totalFeeRefund: '-320,000 đ',
+        closingBalance: '111,680,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp 100%',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 6,
+        reportDate: '25/08/2026',
+        storeName: 'ST-HC-003 - Chi nhánh Hải Châu - Đà Nẵng',
+        openingBalance: '65,000,000 đ',
+        firstTxn: '08:15:00 (GD20260825012 - 15,000,000 đ)',
+        lastTxn: '20:40:00 (GD20260825050 - 2,000,000 đ)',
+        totalRevenue: '+15,150,000 đ',
+        totalFeeRefund: '-150,000 đ',
+        closingBalance: '80,000,000 đ',
+        diffAmount: '0 đ',
+        statusText: 'Khớp 100%',
+        statusClass: 'badge-success'
+      }
+    ];
   }
 };
 
