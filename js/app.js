@@ -225,16 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderKPIs() {
     const metrics = MockData.getMetrics(AppState.currentStore, AppState.currentPeriod);
 
-    const periodTitles = {
-      today: 'Hôm Nay',
-      thisWeek: 'Tuần Này',
-      thisMonth: 'Tháng Này',
-      custom: 'Kỳ Đã Chọn'
-    };
-    const titleSuffix = periodTitles[AppState.currentPeriod] || 'Kỳ Đã Chọn';
-
     const revTitleEl = document.getElementById('kpiRevenueTitleText');
-    if (revTitleEl) revTitleEl.textContent = `Doanh Thu ${titleSuffix}`;
+    if (revTitleEl) revTitleEl.textContent = 'Doanh Thu';
 
     const revEl = document.getElementById('kpiRevenueVal');
     const revDeltaEl = document.getElementById('kpiRevenueDelta');
@@ -262,9 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
         failDeltaEl.style.display = 'none';
       } else {
         failDeltaEl.style.display = 'inline-flex';
-        const isDecreaseGood = metrics.failedDelta < 0;
-        failDeltaEl.className = `delta-badge ${isDecreaseGood ? 'up-green' : 'down-red'}`;
-        failDeltaEl.innerHTML = `${isDecreaseGood ? '▼ ' : '▲ +'}${metrics.failedDelta}%`;
+        const isUp = metrics.failedDelta >= 0;
+        failDeltaEl.className = `delta-badge ${isUp ? 'up-green' : 'down-red'}`;
+        failDeltaEl.innerHTML = `${isUp ? '▲ +' : '▼ '}${metrics.failedDelta}%`;
       }
     }
 
