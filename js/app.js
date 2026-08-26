@@ -3539,4 +3539,221 @@ document.addEventListener('DOMContentLoaded', () => {
       userPopover.style.display = 'none';
     }
   });
+
+  // ----------------------------------------------------
+  // BẢNG PHÂN QUYỀN THEO VAI TRÒ (EDIT PERMISSIONS BY ROLE - ADMIN MODE)
+  // ----------------------------------------------------
+
+  window.openEditStaffModalBRD = function(staffId) {
+    const list = MockData.getStaffListBRD ? MockData.getStaffListBRD() : [];
+    const staff = list.find(s => s.id === (staffId || 'NV000001')) || list[0] || {
+      id: 'NV000001',
+      name: 'Phạm Văn Minh',
+      role: 'Quản lý Doanh nghiệp',
+      email: 'minh.pham@finviet.com.vn',
+      mobile: '0909 123 456'
+    };
+
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = `Bảng Phân Quyền Theo Vai Trò: ${staff.name} (${staff.role})`;
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px; font-size:13px; text-align:left;">
+          <!-- Card Header Thông tin Nhân sự & Vai trò -->
+          <div style="background:linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%); border:1px solid #BFDBFE; border-radius:10px; padding:16px; display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:48px; height:48px; border-radius:50%; background:#0284C7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">
+                ${staff.name ? staff.name.charAt(0) : 'N'}
+              </div>
+              <div>
+                <div style="font-weight:800; font-size:15px; color:#0F172A;">${staff.name} <span style="font-size:11px; background:#DCFCE7; color:#15803D; padding:2px 8px; border-radius:12px; font-weight:700; margin-left:6px;">Admin Authorized</span></div>
+                <div style="font-size:12px; color:#64748B; margin-top:2px;">Email: <strong>${staff.email || 'minh.pham@finviet.com.vn'}</strong> | SĐT: <strong>${staff.mobile || '0909 123 456'}</strong></div>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
+              <label style="font-size:11.5px; font-weight:700; color:#475569;">CHỈNH SỬA VAI TRÒ CHÍNH:</label>
+              <select id="editRoleSelector" onchange="window.handleRoleChangeInMatrix(this.value)" style="padding:6px 12px; border-radius:6px; border:1px solid #0284C7; font-weight:700; color:#0284C7; background:#fff; cursor:pointer;">
+                <option value="manager" ${staff.role.includes('Quản lý') ? 'selected' : ''}>👑 Quản lý Doanh nghiệp (Full Access)</option>
+                <option value="store_manager" ${staff.role.includes('Cửa hàng trưởng') ? 'selected' : ''}>🏪 Cửa hàng trưởng (Branch Manager)</option>
+                <option value="cashier" ${staff.role.includes('Thu ngân') ? 'selected' : ''}>💳 Thu ngân / Bán hàng (POS Cashier)</option>
+                <option value="inventory" ${staff.role.includes('Kiểm kho') ? 'selected' : ''}>📦 Kiểm kho / Giao nhận (Inventory Specialist)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quick Action Bar -->
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#F1F5F9; padding:8px 12px; border-radius:6px;">
+            <div style="font-weight:700; color:#334155; font-size:13px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="shield-check" style="width:16px; height:16px; color:#0284C7;"></i> Bảng Ma Trận Phân Quyền Chi Tiết Cho Quyền Admin
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn-secondary" style="font-size:11.5px; padding:4px 10px;" onclick="window.checkAllRolePermissions(true)">☑️ Chọn tất cả</button>
+              <button type="button" class="btn-secondary" style="font-size:11.5px; padding:4px 10px;" onclick="window.checkAllRolePermissions(false)">☐ Bỏ chọn tất cả</button>
+            </div>
+          </div>
+
+          <!-- BẢNG PHÂN QUYỀN MATRIX THEO VAI TRÒ -->
+          <div style="max-height:360px; overflow-y:auto; border:1px solid #E2E8F0; border-radius:8px;">
+            <table class="portal-table" style="margin:0;">
+              <thead>
+                <tr style="background:#F8FAFC; sticky:top;">
+                  <th style="font-size:11.5px; font-weight:700; color:#475569; width:220px;">NHÓM TÍNH NĂNG / CHỨC NĂNG</th>
+                  <th style="font-size:11.5px; font-weight:700; color:#475569;">QUYỀN HẠN CHI TIẾT</th>
+                  <th style="font-size:11.5px; font-weight:700; color:#475569; text-align:center; width:120px;">CHO PHÉP (ADMIN)</th>
+                </tr>
+              </thead>
+              <tbody id="permMatrixTbody">
+                <!-- Module 1: Quản trị & Hệ thống -->
+                <tr style="background:#F1F5F9;"><td colspan="3" style="font-weight:800; color:#1E293B; font-size:12.5px;">🛡️ 1. NHÓM QUẢN TRỊ & HỆ THỐNG</td></tr>
+                <tr>
+                  <td><strong>Truy cập Ứng dụng</strong></td>
+                  <td style="color:#64748B;">Đăng nhập và Sử dụng App Web/Mobile portal</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Quyền Quản trị viên</strong></td>
+                  <td style="color:#64748B;">Quản trị toàn bộ chi nhánh, tài khoản và cấu hình hệ thống</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${staff.role.includes('Quản lý') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Yêu cầu Mã PIN</strong></td>
+                  <td style="color:#64748B;">Nhập mã PIN xác thực khi thực hiện thao tác nhạy cảm</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+
+                <!-- Module 2: Quản lý Sản phẩm & Tồn kho -->
+                <tr style="background:#F1F5F9;"><td colspan="3" style="font-weight:800; color:#1E293B; font-size:12.5px;">📦 2. NHÓM SẢN PHẨM & QUẢN LÝ KHO HÀNG</td></tr>
+                <tr>
+                  <td><strong>Quản lý Danh mục SP</strong></td>
+                  <td style="color:#64748B;">Thêm, sửa, xóa Sản phẩm / Dịch vụ và giá niêm yết</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${!staff.role.includes('Thu ngân') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Điều chỉnh Tồn kho</strong></td>
+                  <td style="color:#64748B;">Điều chỉnh số lượng tồn kho (Nhập kho / Kiểm kê / Xuất hủy)</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${!staff.role.includes('Thu ngân') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Xem Báo cáo Kho</strong></td>
+                  <td style="color:#64748B;">Xem tổng quan số lượng và giá trị hàng tồn kho</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+
+                <!-- Module 3: Giá bán & Chiết khấu -->
+                <tr style="background:#F1F5F9;"><td colspan="3" style="font-weight:800; color:#1E293B; font-size:12.5px;">🏷️ 3. NHÓM GIÁ BÁN & CHƯƠNG TRÌNH KHUYẾN MÃI</td></tr>
+                <tr>
+                  <td><strong>Quản lý Chiết khấu</strong></td>
+                  <td style="color:#64748B;">Tạo & cấu hình chương trình khuyến mãi, voucher giảm giá</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${staff.role.includes('Quản lý') || staff.role.includes('Cửa hàng trưởng') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Giảm giá Đơn hàng</strong></td>
+                  <td style="color:#64748B;">Tùy chỉnh áp dụng giảm giá trực tiếp trên Đơn bán hàng</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Điều chỉnh Giá bán</strong></td>
+                  <td style="color:#64748B;">Thay đổi giá niêm yết của mặt hàng trực tiếp khi bán</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${staff.role.includes('Quản lý') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+
+                <!-- Module 4: Thanh toán & Giao dịch -->
+                <tr style="background:#F1F5F9;"><td colspan="3" style="font-weight:800; color:#1E293B; font-size:12.5px;">💳 4. NHÓM THANH TOÁN & GIAO DỊCH ĐƠN HÀNG</td></tr>
+                <tr>
+                  <td><strong>Thanh toán Đơn hàng</strong></td>
+                  <td style="color:#64748B;">Thực hiện thu tiền & hoàn tất đơn hàng qua VietQR / Thẻ / Tiền mặt</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Hủy Đơn hàng</strong></td>
+                  <td style="color:#64748B;">Hủy đơn hàng phát sinh khi khách hàng yêu cầu</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${staff.role.includes('Quản lý') || staff.role.includes('Cửa hàng trưởng') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Xử lý Hoàn tiền (Refund)</strong></td>
+                  <td style="color:#64748B;">Thực hiện giao dịch hoàn tiền trực tiếp cho khách hàng</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" ${staff.role.includes('Quản lý') ? 'checked' : ''} style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Xuất Hóa đơn Điện tử</strong></td>
+                  <td style="color:#64748B;">Phát hành hóa đơn VAT điện tử cho khách hàng doanh nghiệp</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+
+                <!-- Module 5: Két tiền & Đối soát -->
+                <tr style="background:#F1F5F9;"><td colspan="3" style="font-weight:800; color:#1E293B; font-size:12.5px;">💵 5. NHÓM KÉT TIỀN & ĐỐI SOÁT DOANH SỐ</td></tr>
+                <tr>
+                  <td><strong>Mở Ngăn đựng tiền</strong></td>
+                  <td style="color:#64748B;">Bật mở tự động két tiền mặt tại bàn thu ngân</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Thu / Chi Tiền mặt</strong></td>
+                  <td style="color:#64748B;">Lập phiếu Thu / Chi tiền mặt phát sinh trong ca làm việc</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Đối soát Doanh số Ca/Ngày</strong></td>
+                  <td style="color:#64748B;">Chốt sổ kết ca, kiểm đếm tiền mặt & đối soát doanh số ca</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+                <tr>
+                  <td><strong>Xem Báo cáo Doanh số</strong></td>
+                  <td style="color:#64748B;">Xem biểu đồ doanh thu & báo cáo tổng quan cửa hàng</td>
+                  <td style="text-align:center;"><input type="checkbox" class="perm-cb" checked style="width:16px; height:16px; cursor:pointer;"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.textContent = '💾 Lưu Bảng Phân Quyền (Admin)';
+      btnAction.onclick = function() {
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+        if (window.showToast) {
+          window.showToast(`🎉 Đã lưu cập nhật bảng phân quyền theo vai trò cho nhân viên "${staff.name}" thành công!`);
+        }
+        if (window.renderPage) window.renderPage('hr-mgmt');
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
+  window.checkAllRolePermissions = function(isChecked) {
+    const cbs = document.querySelectorAll('#permMatrixTbody .perm-cb');
+    cbs.forEach(cb => { cb.checked = isChecked; });
+    if (window.showToast) window.showToast(isChecked ? '☑️ Đã chọn tất cả quyền hạn' : '☐ Đã bỏ chọn tất cả quyền hạn');
+  };
+
+  window.handleRoleChangeInMatrix = function(roleVal) {
+    const cbs = document.querySelectorAll('#permMatrixTbody .perm-cb');
+    if (roleVal === 'manager') {
+      cbs.forEach(cb => { cb.checked = true; });
+    } else if (roleVal === 'cashier') {
+      cbs.forEach((cb, idx) => {
+        cb.checked = (idx === 0 || idx === 2 || idx === 5 || idx === 7 || idx === 9 || idx === 12 || idx === 13 || idx === 14 || idx === 15 || idx === 16);
+      });
+    } else if (roleVal === 'inventory') {
+      cbs.forEach((cb, idx) => {
+        cb.checked = (idx === 0 || idx === 2 || idx === 3 || idx === 4 || idx === 5);
+      });
+    } else {
+      cbs.forEach((cb, idx) => {
+        cb.checked = (idx !== 1 && idx !== 8 && idx !== 11);
+      });
+    }
+    if (window.showToast) window.showToast('🔄 Đã cập nhật ma trận quyền mặc định theo vai trò chọn!');
+  };
 });
