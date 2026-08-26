@@ -3862,4 +3862,197 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (window.renderPage) window.renderPage('hr-mgmt');
   };
+
+  // ----------------------------------------------------
+  // CHI TIẾT BÁO CÁO ĐỐI SOÁT THANH TOÁN (BRD SECTION 2)
+  // ----------------------------------------------------
+
+  window.openReconcileReportDetailModal = function(reconcileCode) {
+    const code = reconcileCode || 'R_16566_22072025_131523_772';
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = `Chi Tiết Báo Cáo Đối Soát Thanh Toán: ${code}`;
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:16px; font-size:13px; text-align:left;">
+          <!-- Action Header: Top Export Button (Khớp hình BRD) -->
+          <div style="display:flex; justify-content:flex-end; align-items:center; border-bottom:1px solid #E2E8F0; padding-bottom:10px;">
+            <button type="button" class="btn-primary" style="background:#00B4D8; border-color:#00B4D8; font-size:12.5px; padding:6px 14px; display:inline-flex; align-items:center; gap:6px;" onclick="showToast('Đã xuất file báo cáo đối soát thành công!')">
+              <i data-lucide="download" style="width:14px; height:14px;"></i> Xuất dữ liệu
+            </button>
+          </div>
+
+          <!-- 4 TABS NAV (KHỚP BRD MỤC 2) -->
+          <div style="display:flex; border-bottom:2px solid #E2E8F0; gap:4px;" id="reconcileDetailTabsNav">
+            <button type="button" class="recon-tab-btn active" data-tab="tabDvcntt" onclick="window.switchReconcileDetailTab('tabDvcntt')" style="padding:10px 16px; font-weight:700; border:none; background:none; border-bottom:3px solid #00B4D8; color:#00B4D8; cursor:pointer; font-size:13px;">
+              Thông tin DVCNTT
+            </button>
+            <button type="button" class="recon-tab-btn" data-tab="tabReportInfo" onclick="window.switchReconcileDetailTab('tabReportInfo')" style="padding:10px 16px; font-weight:700; border:none; background:none; border-bottom:3px solid transparent; color:#64748B; cursor:pointer; font-size:13px;">
+              Thông tin báo cáo
+            </button>
+            <button type="button" class="recon-tab-btn" data-tab="tabTxnList" onclick="window.switchReconcileDetailTab('tabTxnList')" style="padding:10px 16px; font-weight:700; border:none; background:none; border-bottom:3px solid transparent; color:#64748B; cursor:pointer; font-size:13px;">
+              Danh sách giao dịch
+            </button>
+            <button type="button" class="recon-tab-btn" data-tab="tabHistory" onclick="window.switchReconcileDetailTab('tabHistory')" style="padding:10px 16px; font-weight:700; border:none; background:none; border-bottom:3px solid transparent; color:#64748B; cursor:pointer; font-size:13px;">
+              Lịch sử đối soát
+            </button>
+          </div>
+
+          <!-- TAB 1: THÔNG TIN DVCNTT (KHỚP PAGE 6 BRD) -->
+          <div id="tabDvcntt" class="recon-tab-pane" style="display:block;">
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <!-- 1. Thông tin doanh nghiệp -->
+              <div style="border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+                <div style="background:#F8FAFC; padding:10px 14px; font-weight:700; color:#334155; border-bottom:1px solid #E2E8F0;">
+                  Thông tin doanh nghiệp
+                </div>
+                <table class="portal-table" style="margin:0;">
+                  <tbody>
+                    <tr><td style="width:220px; color:#64748B;">1. Mã doanh nghiệp</td><td style="font-weight:700; color:#0F172A;">SQBROTHERS</td></tr>
+                    <tr><td style="color:#64748B;">2. Tên doanh nghiệp</td><td style="font-weight:700; color:#0F172A;">CÔNG TY TNHH FITNESS SQ BROTHERS</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- 2. Thông tin cửa hàng -->
+              <div style="border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+                <div style="background:#F8FAFC; padding:10px 14px; font-weight:700; color:#334155; border-bottom:1px solid #E2E8F0;">
+                  Thông tin cửa hàng
+                </div>
+                <table class="portal-table" style="margin:0;">
+                  <tbody>
+                    <tr><td style="width:220px; color:#64748B;">1. Mã cửa hàng</td><td style="font-weight:700; color:#0F172A;">SQBROTHERS1</td></tr>
+                    <tr><td style="color:#64748B;">2. Tên cửa hàng</td><td style="font-weight:700; color:#0F172A;">SQ BROTHERS 1</td></tr>
+                    <tr><td style="color:#64748B;">3. Ví ECO</td><td style="color:#64748B;">-</td></tr>
+                    <tr><td style="color:#64748B;">4. Tên chủ tài khoản</td><td style="font-weight:700; color:#0F172A;">FITNESS SQ BROTHERS</td></tr>
+                    <tr><td style="color:#64748B;">5. Số tài khoản</td><td style="font-family:monospace; font-weight:700; color:#0F172A;">666888688688</td></tr>
+                    <tr><td style="color:#64748B;">6. Ngân hàng</td><td style="font-weight:700; color:#0F172A;">MB Bank</td></tr>
+                    <tr><td style="color:#64748B;">7. Chi nhánh</td><td style="font-weight:700; color:#0F172A;">HỒ CHÍ MINH</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: THÔNG TIN BÁO CÁO (KHỚP PAGE 7 BRD - 20 FIELDS) -->
+          <div id="tabReportInfo" class="recon-tab-pane" style="display:none;">
+            <div style="border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; max-height:420px; overflow-y:auto;">
+              <table class="portal-table" style="margin:0;">
+                <tbody>
+                  <tr><td style="width:260px; color:#64748B;">1. Mã thanh toán</td><td style="font-weight:700; color:#0284C7;">${code}</td></tr>
+                  <tr><td style="color:#64748B;">2. Khoảng thời gian giao dịch</td><td style="color:#0F172A;">01-07-2025 08:27 - 23-07-2025 08:27</td></tr>
+                  <tr><td style="color:#64748B;">3. Phương thức thanh toán</td><td><span style="background:#EFF6FF; color:#0284C7; padding:2px 8px; border-radius:4px; font-weight:700;">QR Code</span></td></tr>
+                  <tr><td style="color:#64748B;">4. Tổng số giao dịch</td><td style="font-weight:700;">1</td></tr>
+                  <tr><td style="color:#64748B;">5. Tổng số tiền giao dịch gốc</td><td style="font-weight:700; color:#16A34A;">6.000.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">6. Tổng số tiền đơn hàng</td><td style="font-weight:700; color:#16A34A;">6.000.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">7. Tổng số tiền hoàn</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">8. Phí hoàn</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">9. Phí giao dịch</td><td style="font-weight:700; color:#EF4444;">132.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">10. Phí trả sau áp dụng cho doanh nghiệp</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">11. Phí dịch vụ trả sau áp dụng cho doanh nghiệp</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">12. Phí trả sau áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">13. Phí dịch vụ trả sau áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">14. Phí BNPL áp dụng cho doanh nghiệp</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">15. Phí BNPL áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">16. Phí dịch vụ BNPL áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">17. Số tiền hoàn cấn trừ</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">18. Phí hoàn cấn trừ</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">19. Tổng số tiền phải trả</td><td style="font-weight:800; color:#16A34A; font-size:14px;">5.868.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">20. Phí bổ sung</td><td style="color:#64748B;">-</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 3: DANH SÁCH GIAO DỊCH (KHỚP PAGE 7 BRD) -->
+          <div id="tabTxnList" class="recon-tab-pane" style="display:none;">
+            <div style="border:1px solid #E2E8F0; border-radius:8px; overflow-x:auto;">
+              <table class="portal-table" style="margin:0;">
+                <thead>
+                  <tr style="background:#F8FAFC;">
+                    <th>STT</th>
+                    <th>Mã giao dịch</th>
+                    <th>Mã tham chiếu</th>
+                    <th>Approve Code</th>
+                    <th>Thời gian phát sinh</th>
+                    <th>Phương thức</th>
+                    <th>Thông tin thanh toán</th>
+                    <th style="text-align:right;">Số tiền gốc</th>
+                    <th style="text-align:right;">Phí giao dịch</th>
+                    <th style="text-align:right;">Số tiền hoàn</th>
+                    <th style="text-align:right;">Thực nhận</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td style="font-weight:700; color:#0284C7;">GD20250722001</td>
+                    <td>REF99882211</td>
+                    <td>APP883311</td>
+                    <td style="font-size:12px;">22-07-2025 13:15:23</td>
+                    <td><span style="background:#F0FDF4; color:#16A34A; padding:2px 6px; border-radius:4px; font-weight:700;">VietQR</span></td>
+                    <td style="font-family:monospace; color:#64748B;">9704****1234</td>
+                    <td style="text-align:right; font-weight:700;">6.000.000 đ</td>
+                    <td style="text-align:right; color:#EF4444;">132.000 đ</td>
+                    <td style="text-align:right;">0 đ</td>
+                    <td style="text-align:right; font-weight:800; color:#16A34A;">5.868.000 đ</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 4: LỊCH SỬ ĐỐI SOÁT (KHỚP PAGE 7, 8, 9 BRD) -->
+          <div id="tabHistory" class="recon-tab-pane" style="display:none;">
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:13px; font-weight:700; color:#475569;">Trạng thái:</span>
+                <span style="background:#F0FDF4; color:#16A34A; border:1px solid #BBF7D0; padding:3px 12px; border-radius:12px; font-weight:800; font-size:12.5px;">Đã thanh toán</span>
+              </div>
+
+              <div style="border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
+                <table class="portal-table" style="margin:0;">
+                  <tbody>
+                    <tr><td style="width:260px; color:#64748B;">1. Thời gian thanh toán được tạo</td><td style="font-weight:600; color:#0F172A;">22-07-2025 13:15:23</td></tr>
+                    <tr><td style="color:#64748B;">2. Thời gian thanh toán được duyệt</td><td style="font-weight:600; color:#0F172A;">22-07-2025 16:16:34</td></tr>
+                    <tr><td style="color:#64748B;">3. Thời gian thanh toán được chấp nhận duyệt</td><td style="font-weight:600; color:#0F172A;">22-07-2025 16:16:34</td></tr>
+                    <tr><td style="color:#64748B;">4. Thời gian thanh toán duyệt trả tiền</td><td style="font-weight:600; color:#16A34A;">22-07-2025 16:16:34</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.textContent = 'Đóng';
+      btnAction.onclick = function() {
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay) modalOverlay.classList.remove('show');
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
+  window.switchReconcileDetailTab = function(tabId) {
+    const tabBtns = document.querySelectorAll('#reconcileDetailTabsNav .recon-tab-btn');
+    tabBtns.forEach(btn => {
+      const isTarget = btn.getAttribute('data-tab') === tabId;
+      btn.style.borderBottom = isTarget ? '3px solid #00B4D8' : '3px solid transparent';
+      btn.style.color = isTarget ? '#00B4D8' : '#64748B';
+    });
+
+    const panes = document.querySelectorAll('.recon-tab-pane');
+    panes.forEach(pane => {
+      pane.style.display = pane.id === tabId ? 'block' : 'none';
+    });
+  };
 });
