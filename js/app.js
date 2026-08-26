@@ -3688,4 +3688,178 @@ document.addEventListener('DOMContentLoaded', () => {
     if (roleVal === 'employee') roleName = 'Nhân viên';
     if (window.showToast) window.showToast(`Đã chọn vai trò: ${roleName}`);
   };
+
+  // ----------------------------------------------------
+  // THÊM NHÂN VIÊN MỚI (ADD NEW STAFF MODAL)
+  // ----------------------------------------------------
+
+  window.openAddStaffModalBRD = window.openCreateStaffModalBRD = function() {
+    const modalTitle = document.getElementById('modalTitleText');
+    const modalBody = document.getElementById('modalBodyContent');
+    const btnAction = document.getElementById('btnFooterAction');
+
+    if (modalTitle) modalTitle.textContent = '➕ Thêm Nhân Viên / Tài Khoản Mới';
+
+    window.addStaffSelectedRole = 'store_manager'; // default
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <form id="formAddStaff" onsubmit="window.handleAddStaffSubmit(event)" style="display:flex; flex-direction:column; gap:16px; font-size:13px; text-align:left;">
+          <!-- Section 1: Thông tin cơ bản -->
+          <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:14px;">
+            <div style="font-weight:700; font-size:13.5px; color:#1E293B; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="user-plus" style="width:16px; height:16px; color:#0284C7;"></i> THÔNG TIN NHÂN SỰ CƠ BẢN
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <div>
+                <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">HỌ VÀ TÊN (<span style="color:#EF4444;">*</span>):</label>
+                <input type="text" id="newStaffName" placeholder="Ví dụ: Nguyễn Văn An" required style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid #CBD5E1; font-size:12.5px;">
+              </div>
+              
+              <div>
+                <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">SỐ ĐIỆN THOẠI (<span style="color:#EF4444;">*</span>):</label>
+                <input type="tel" id="newStaffMobile" placeholder="Ví dụ: 0912 345 678" required style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid #CBD5E1; font-size:12.5px;">
+              </div>
+
+              <div>
+                <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">EMAIL TÀI KHOẢN (<span style="color:#EF4444;">*</span>):</label>
+                <input type="email" id="newStaffEmail" placeholder="an.nguyen@finviet.com.vn" required style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid #CBD5E1; font-size:12.5px;">
+              </div>
+
+              <div>
+                <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">CỬA HÀNG PHỤ TRÁCH:</label>
+                <select id="newStaffBranch" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid #CBD5E1; font-size:12.5px; background:#fff;">
+                  <option value="Tất cả chi nhánh">Toàn hệ thống (Tất cả chi nhánh)</option>
+                  <option value="Chi nhánh Quận 1 - HCM">Chi nhánh Quận 1 - Hồ Chí Minh</option>
+                  <option value="Chi nhánh Hoàn Kiếm - Hà Nội">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                  <option value="Chi nhánh Hải Châu - Đà Nẵng">Chi nhánh Hải Châu - Đà Nẵng</option>
+                  <option value="Chi nhánh Hồng Bàng - Hải Phòng">Chi nhánh Hồng Bàng - Hải Phòng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Chọn Vai Trò Phân Quyền -->
+          <div>
+            <label style="font-size:12px; font-weight:800; color:#0F172A; display:block; margin-bottom:8px;">VAI TRÒ PHÂN QUYỀN VẬN HÀNH (<span style="color:#EF4444;">*</span>):</label>
+            
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;" id="addRoleCardPickerGrid">
+              <!-- Card 1: Quản lý cửa hàng -->
+              <div class="add-role-card active" data-role="store_manager" onclick="window.selectAddRoleCard('store_manager')" style="background:#F0F9FF; border:2px solid #0284C7; border-radius:8px; padding:12px; cursor:pointer; position:relative; transition:all 0.2s ease;">
+                <div style="position:absolute; top:8px; right:8px;" class="card-check-icon">
+                  <span style="background:#0284C7; color:#fff; font-size:10.5px; font-weight:800; padding:1px 6px; border-radius:8px;">✓ Chọn</span>
+                </div>
+                <div style="font-size:22px;">👑</div>
+                <div style="font-weight:800; font-size:13px; color:#1E293B; margin-top:4px;">Quản lý cửa hàng</div>
+                <div style="font-size:11px; color:#475569; margin-top:2px;">Store Manager</div>
+              </div>
+
+              <!-- Card 2: Kế toán -->
+              <div class="add-role-card" data-role="accountant" onclick="window.selectAddRoleCard('accountant')" style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:12px; cursor:pointer; position:relative; transition:all 0.2s ease;">
+                <div style="position:absolute; top:8px; right:8px;" class="card-check-icon">
+                  <span style="width:16px; height:16px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>
+                </div>
+                <div style="font-size:22px;">📊</div>
+                <div style="font-weight:800; font-size:13px; color:#1E293B; margin-top:4px;">Kế toán</div>
+                <div style="font-size:11px; color:#475569; margin-top:2px;">Accountant</div>
+              </div>
+
+              <!-- Card 3: Nhân viên -->
+              <div class="add-role-card" data-role="employee" onclick="window.selectAddRoleCard('employee')" style="background:#fff; border:1px solid #E2E8F0; border-radius:8px; padding:12px; cursor:pointer; position:relative; transition:all 0.2s ease;">
+                <div style="position:absolute; top:8px; right:8px;" class="card-check-icon">
+                  <span style="width:16px; height:16px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>
+                </div>
+                <div style="font-size:22px;">👤</div>
+                <div style="font-weight:800; font-size:13px; color:#1E293B; margin-top:4px;">Nhân viên</div>
+                <div style="font-size:11px; color:#475569; margin-top:2px;">Staff / Employee</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Ghi chú khởi tạo -->
+          <div>
+            <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">GHI CHÚ / MÔ TẢ PHÂN CÔNG:</label>
+            <textarea id="newStaffNotes" placeholder="Nhập ghi chú chi tiết công việc hoặc chi nhánh phân công..." rows="2" style="width:100%; padding:8px 12px; border-radius:6px; border:1px solid #CBD5E1; font-size:12.5px; font-family:inherit;"></textarea>
+          </div>
+        </form>
+      `;
+    }
+
+    if (btnAction) {
+      btnAction.textContent = '➕ Thêm Nhân Viên Mới';
+      btnAction.onclick = function() {
+        const form = document.getElementById('formAddStaff');
+        if (form) form.requestSubmit ? form.requestSubmit() : window.handleAddStaffSubmit();
+      };
+    }
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.add('show');
+    if (window.refreshIcons) window.refreshIcons();
+  };
+
+  window.selectAddRoleCard = function(roleVal) {
+    window.addStaffSelectedRole = roleVal;
+    const cards = document.querySelectorAll('#addRoleCardPickerGrid .add-role-card');
+    cards.forEach(card => {
+      const isTarget = card.getAttribute('data-role') === roleVal;
+      card.style.background = isTarget ? '#F0F9FF' : '#fff';
+      card.style.border = isTarget ? '2px solid #0284C7' : '1px solid #E2E8F0';
+      const checkIcon = card.querySelector('.card-check-icon');
+      if (checkIcon) {
+        checkIcon.innerHTML = isTarget ? '<span style="background:#0284C7; color:#fff; font-size:10.5px; font-weight:800; padding:1px 6px; border-radius:8px;">✓ Chọn</span>' : '<span style="width:16px; height:16px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>';
+      }
+    });
+  };
+
+  window.handleAddStaffSubmit = function(e) {
+    if (e) e.preventDefault();
+    const name = document.getElementById('newStaffName')?.value.trim();
+    const mobile = document.getElementById('newStaffMobile')?.value.trim();
+    const email = document.getElementById('newStaffEmail')?.value.trim();
+    const branch = document.getElementById('newStaffBranch')?.value || 'Tất cả chi nhánh';
+    const notes = document.getElementById('newStaffNotes')?.value.trim() || 'Nhân viên mới khởi tạo';
+    const roleVal = window.addStaffSelectedRole || 'store_manager';
+
+    if (!name || !mobile || !email) {
+      if (window.showToast) window.showToast('⚠️ Vui lòng nhập đầy đủ Họ tên, Số điện thoại và Email!');
+      return;
+    }
+
+    let roleText = 'Quản lý cửa hàng';
+    if (roleVal === 'accountant') roleText = 'Kế toán';
+    if (roleVal === 'employee') roleText = 'Nhân viên';
+
+    const staffList = MockData.getStaffListBRD ? MockData.getStaffListBRD() : [];
+    const newId = `NV${String(staffList.length + 1).padStart(6, '0')}`;
+
+    const newStaff = {
+      id: newId,
+      group: roleVal,
+      groupName: roleText,
+      name: name,
+      firstName: name.split(' ').pop() || name,
+      lastName: name.split(' ')[0] || '',
+      role: roleText,
+      email: email,
+      mobile: mobile,
+      notes: notes,
+      branches: [branch],
+      status: 'active',
+      statusText: 'Đang làm việc',
+      statusClass: 'badge-success'
+    };
+
+    staffList.unshift(newStaff);
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (modalOverlay) modalOverlay.classList.remove('show');
+
+    if (window.showToast) {
+      window.showToast(`🎉 Đã thêm thành công nhân viên "${name}" với vai trò ${roleText}!`);
+    }
+
+    if (window.renderPage) window.renderPage('hr-mgmt');
+  };
 });
