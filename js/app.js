@@ -3543,6 +3543,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ----------------------------------------------------
   // BẢNG PHÂN QUYỀN THEO VAI TRÒ (EDIT PERMISSIONS BY ROLE - ADMIN MODE)
   // ----------------------------------------------------
+  // BẢNG PHÂN QUYỀN THEO VAI TRÒ (EDIT ROLE MODAL - 3 CARD SELECTION DESIGN)
+  // ----------------------------------------------------
 
   window.openEditStaffModalBRD = function(staffId) {
     const list = MockData.getStaffListBRD ? MockData.getStaffListBRD() : [];
@@ -3554,19 +3556,21 @@ document.addEventListener('DOMContentLoaded', () => {
       mobile: '0909 123 456'
     };
 
+    let selectedRoleVal = staff.role.includes('Quản lý') ? 'store_manager' : (staff.role.includes('Kế toán') ? 'accountant' : 'employee');
+
     const modalTitle = document.getElementById('modalTitleText');
     const modalBody = document.getElementById('modalBodyContent');
     const btnAction = document.getElementById('btnFooterAction');
 
-    if (modalTitle) modalTitle.textContent = `Bảng Phân Quyền Theo Vai Trò: ${staff.name} (${staff.role})`;
+    if (modalTitle) modalTitle.textContent = `Phân Quyền Vai Trò: ${staff.name}`;
 
     if (modalBody) {
       modalBody.innerHTML = `
-        <div style="display:flex; flex-direction:column; gap:16px; font-size:13px; text-align:left;">
-          <!-- Card Header Thông tin Nhân sự & Chọn Vai Trò (Giống hệt hình ảnh chụp màn hình của User) -->
-          <div style="background:linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%); border:1px solid #BFDBFE; border-radius:10px; padding:16px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; flex-direction:column; gap:20px; font-size:13px; text-align:left;">
+          <!-- Card Header Thông tin Nhân sự -->
+          <div style="background:linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%); border:1px solid #BFDBFE; border-radius:10px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
             <div style="display:flex; align-items:center; gap:14px;">
-              <div style="width:48px; height:48px; border-radius:50%; background:#0284C7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">
+              <div style="width:46px; height:46px; border-radius:50%; background:#0284C7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">
                 ${staff.name ? staff.name.charAt(0) : 'P'}
               </div>
               <div>
@@ -3574,46 +3578,78 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="font-size:12px; color:#64748B; margin-top:2px;">Email: <strong>${staff.email || 'minh.pham@finviet.com.vn'}</strong> | SĐT: <strong>${staff.mobile || '0909 123 456'}</strong></div>
               </div>
             </div>
-
-            <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
-              <label style="font-size:11.5px; font-weight:700; color:#475569;">CHỈNH SỬA VAI TRÒ CHÍNH:</label>
-              <select id="editRoleSelector" onchange="window.handleRoleChangeInMatrix(this.value)" style="padding:7px 14px; border-radius:6px; border:1px solid #0284C7; font-weight:700; color:#0284C7; background:#fff; cursor:pointer; font-size:13px;">
-                <option value="store_manager" ${staff.role.includes('Quản lý') ? 'selected' : ''}>👑 Quản lý cửa hàng (Store Manager)</option>
-                <option value="accountant" ${staff.role.includes('Kế toán') ? 'selected' : ''}>📊 Kế toán (Accountant)</option>
-                <option value="employee" ${staff.role.includes('Nhân viên') ? 'selected' : ''}>👤 Nhân viên (Staff / Employee)</option>
-              </select>
+            <div>
+              <span style="font-size:12px; font-weight:600; color:#475569; background:#fff; padding:4px 12px; border-radius:16px; border:1px solid #CBD5E1;">Vai trò hiện tại: <strong style="color:#0284C7;">${staff.role}</strong></span>
             </div>
           </div>
 
-          <!-- Subtitle Bar -->
-          <div style="background:#F1F5F9; padding:10px 14px; border-radius:8px; font-weight:700; color:#334155; font-size:13.5px; display:flex; align-items:center; gap:8px;">
-            <i data-lucide="shield-check" style="width:18px; height:18px; color:#0284C7;"></i> Bảng Ma Trận Phân Quyền Chi Tiết Cho Quyền Admin
+          <!-- SECTION TITLE -->
+          <div>
+            <div style="font-weight:800; font-size:14px; color:#0F172A; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="shield" style="width:18px; height:18px; color:#0284C7;"></i> Chọn Vai Trò Vận Hành Cho Nhân Viên:
+            </div>
+            <div style="font-size:12px; color:#64748B; margin-top:2px;">Vui lòng nhấp chọn 1 trong 3 vai trò chính bên dưới để gán quyền hạn làm việc.</div>
           </div>
 
-          <!-- Role Summary Box Dynamic -->
-          <div id="roleSummaryBox" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px;">
-            <div id="roleSummaryText">
-              ${staff.role.includes('Quản lý') ? `
-                <div style="font-weight:700; color:#15803D; font-size:14px; margin-bottom:6px;">👑 VAI TRÒ: QUẢN LÝ CỬA HÀNG (STORE MANAGER)</div>
-                <div style="color:#475569; font-size:12.5px; line-height:1.5;">Hệ thống tự động cấp toàn bộ đặc quyền quản trị vận hành chi nhánh: Thêm/Sửa/Xóa sản phẩm, điều chỉnh tồn kho, phê duyệt khuyến mãi & voucher, hủy đơn hàng, xuất hóa đơn VAT, thu/chi két tiền mặt và đối soát doanh số ca/ngày.</div>
-              ` : staff.role.includes('Kế toán') ? `
-                <div style="font-weight:700; color:#0369A1; font-size:14px; margin-bottom:6px;">📊 VAI TRÒ: KẾ TOÁN (ACCOUNTANT)</div>
-                <div style="color:#475569; font-size:12.5px; line-height:1.5;">Hệ thống cấp quyền chuyên trách tài chính - kế toán: Phê duyệt đối soát doanh số ca/ngày, xử lý giao dịch hoàn tiền (Refund), xuất Hóa đơn Điện tử VAT, lập phiếu Thu/Chi tiền mặt và xem báo cáo tài chính real-time.</div>
-              ` : `
-                <div style="font-weight:700; color:#C2410C; font-size:14px; margin-bottom:6px;">👤 VAI TRÒ: NHÂN VIÊN (STAFF / EMPLOYEE)</div>
-                <div style="color:#475569; font-size:12.5px; line-height:1.5;">Hệ thống cấp quyền thu ngân bán hàng điểm bán (POS / SoftPOS): Đăng nhập app, tạo & hoàn tất thanh toán đơn hàng VietQR/thẻ/tiền mặt, tự động bật mở két tiền mặt thu ngân và xem danh mục sản phẩm.</div>
-              `}
+          <!-- 3-CARD INTERACTIVE ROLE PICKER GRID -->
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;" id="roleCardPickerGrid">
+
+            <!-- Card 1: Quản lý cửa hàng -->
+            <div class="role-picker-card ${selectedRoleVal === 'store_manager' ? 'active' : ''}" data-role="store_manager" onclick="window.selectRoleCard('store_manager')" style="background:${selectedRoleVal === 'store_manager' ? '#F0F9FF' : '#fff'}; border:${selectedRoleVal === 'store_manager' ? '2px solid #0284C7' : '1px solid #E2E8F0'}; border-radius:10px; padding:16px; cursor:pointer; position:relative; transition:all 0.2s ease;">
+              <div style="position:absolute; top:12px; right:12px;" class="card-check-icon">
+                ${selectedRoleVal === 'store_manager' ? '<span style="background:#0284C7; color:#fff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px;">✓ Đã chọn</span>' : '<span style="width:18px; height:18px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>'}
+              </div>
+              <div style="font-size:28px; margin-bottom:8px;">👑</div>
+              <div style="font-weight:800; font-size:14px; color:#1E293B;">Quản lý cửa hàng</div>
+              <div style="font-size:11.5px; font-weight:700; color:#16A34A; margin-top:2px;">Store Manager</div>
+              <div style="margin-top:10px; font-size:11.5px; color:#475569; display:flex; flex-direction:column; gap:4px;">
+                <div>✓ Quản trị chi nhánh toàn diện</div>
+                <div>✓ Phê duyệt tồn kho & khuyến mãi</div>
+                <div>✓ Hủy đơn hàng & xuất hóa đơn</div>
+              </div>
             </div>
+
+            <!-- Card 2: Kế toán -->
+            <div class="role-picker-card ${selectedRoleVal === 'accountant' ? 'active' : ''}" data-role="accountant" onclick="window.selectRoleCard('accountant')" style="background:${selectedRoleVal === 'accountant' ? '#F0F9FF' : '#fff'}; border:${selectedRoleVal === 'accountant' ? '2px solid #0284C7' : '1px solid #E2E8F0'}; border-radius:10px; padding:16px; cursor:pointer; position:relative; transition:all 0.2s ease;">
+              <div style="position:absolute; top:12px; right:12px;" class="card-check-icon">
+                ${selectedRoleVal === 'accountant' ? '<span style="background:#0284C7; color:#fff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px;">✓ Đã chọn</span>' : '<span style="width:18px; height:18px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>'}
+              </div>
+              <div style="font-size:28px; margin-bottom:8px;">📊</div>
+              <div style="font-weight:800; font-size:14px; color:#1E293B;">Kế toán</div>
+              <div style="font-size:11.5px; font-weight:700; color:#0284C7; margin-top:2px;">Accountant</div>
+              <div style="margin-top:10px; font-size:11.5px; color:#475569; display:flex; flex-direction:column; gap:4px;">
+                <div>✓ Đối soát doanh số ca/ngày</div>
+                <div>✓ Xử lý giao dịch hoàn tiền</div>
+                <div>✓ Xuất Hóa đơn Điện tử VAT</div>
+              </div>
+            </div>
+
+            <!-- Card 3: Nhân viên -->
+            <div class="role-picker-card ${selectedRoleVal === 'employee' ? 'active' : ''}" data-role="employee" onclick="window.selectRoleCard('employee')" style="background:${selectedRoleVal === 'employee' ? '#F0F9FF' : '#fff'}; border:${selectedRoleVal === 'employee' ? '2px solid #0284C7' : '1px solid #E2E8F0'}; border-radius:10px; padding:16px; cursor:pointer; position:relative; transition:all 0.2s ease;">
+              <div style="position:absolute; top:12px; right:12px;" class="card-check-icon">
+                ${selectedRoleVal === 'employee' ? '<span style="background:#0284C7; color:#fff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px;">✓ Đã chọn</span>' : '<span style="width:18px; height:18px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>'}
+              </div>
+              <div style="font-size:28px; margin-bottom:8px;">👤</div>
+              <div style="font-weight:800; font-size:14px; color:#1E293B;">Nhân viên</div>
+              <div style="font-size:11.5px; font-weight:700; color:#EA580C; margin-top:2px;">Staff / Employee</div>
+              <div style="margin-top:10px; font-size:11.5px; color:#475569; display:flex; flex-direction:column; gap:4px;">
+                <div>✓ Thu ngân bán hàng điểm bán</div>
+                <div>✓ Thanh toán VietQR / Thẻ / Tiền mặt</div>
+                <div>✓ Tự động mở két tiền mặt</div>
+              </div>
+            </div>
+
           </div>
         </div>
       `;
+
+      window.currentSelectedRoleVal = selectedRoleVal;
     }
 
     if (btnAction) {
       btnAction.textContent = '💾 Lưu Thay Đổi Vai Trò';
       btnAction.onclick = function() {
-        const selector = document.getElementById('editRoleSelector');
-        const roleVal = selector ? selector.value : 'store_manager';
+        const roleVal = window.currentSelectedRoleVal || 'store_manager';
         let newRoleText = 'Quản lý cửa hàng';
         if (roleVal === 'accountant') newRoleText = 'Kế toán';
         if (roleVal === 'employee') newRoleText = 'Nhân viên';
@@ -3634,27 +3670,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.refreshIcons) window.refreshIcons();
   };
 
-  window.handleRoleChangeInMatrix = function(roleVal) {
-    const summaryBox = document.getElementById('roleSummaryText');
-    if (!summaryBox) return;
+  window.selectRoleCard = function(roleVal) {
+    window.currentSelectedRoleVal = roleVal;
+    const cards = document.querySelectorAll('#roleCardPickerGrid .role-picker-card');
+    cards.forEach(card => {
+      const isTarget = card.getAttribute('data-role') === roleVal;
+      card.style.background = isTarget ? '#F0F9FF' : '#fff';
+      card.style.border = isTarget ? '2px solid #0284C7' : '1px solid #E2E8F0';
+      const checkIcon = card.querySelector('.card-check-icon');
+      if (checkIcon) {
+        checkIcon.innerHTML = isTarget ? '<span style="background:#0284C7; color:#fff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px;">✓ Đã chọn</span>' : '<span style="width:18px; height:18px; border-radius:50%; border:2px solid #CBD5E1; display:inline-block;"></span>';
+      }
+    });
 
-    if (roleVal === 'store_manager') {
-      summaryBox.innerHTML = `
-        <div style="font-weight:700; color:#15803D; font-size:14px; margin-bottom:6px;">👑 VAI TRÒ: QUẢN LÝ CỬA HÀNG (STORE MANAGER)</div>
-        <div style="color:#475569; font-size:12.5px; line-height:1.5;">Hệ thống tự động cấp toàn bộ đặc quyền quản trị vận hành chi nhánh: Thêm/Sửa/Xóa sản phẩm, điều chỉnh tồn kho, phê duyệt khuyến mãi & voucher, hủy đơn hàng, xuất hóa đơn VAT, thu/chi két tiền mặt và đối soát doanh số ca/ngày.</div>
-      `;
-    } else if (roleVal === 'accountant') {
-      summaryBox.innerHTML = `
-        <div style="font-weight:700; color:#0369A1; font-size:14px; margin-bottom:6px;">📊 VAI TRÒ: KẾ TOÁN (ACCOUNTANT)</div>
-        <div style="color:#475569; font-size:12.5px; line-height:1.5;">Hệ thống cấp quyền chuyên trách tài chính - kế toán: Phê duyệt đối soát doanh số ca/ngày, xử lý giao dịch hoàn tiền (Refund), xuất Hóa đơn Điện tử VAT, lập phiếu Thu/Chi tiền mặt và xem báo cáo tài chính real-time.</div>
-      `;
-    } else {
-      summaryBox.innerHTML = `
-        <div style="font-weight:700; color:#C2410C; font-size:14px; margin-bottom:6px;">👤 VAI TRÒ: NHÂN VIÊN (STAFF / EMPLOYEE)</div>
-        <div style="color:#475569; font-size:12.5px; line-height:1.5;">Hệ thống cấp quyền thu ngân bán hàng điểm bán (POS / SoftPOS): Đăng nhập app, tạo & hoàn tất thanh toán đơn hàng VietQR/thẻ/tiền mặt, tự động bật mở két tiền mặt thu ngân và xem danh mục sản phẩm.</div>
-      `;
-    }
-
-    if (window.showToast) window.showToast('🔄 Đã chọn vai trò mới!');
+    let roleName = 'Quản lý cửa hàng';
+    if (roleVal === 'accountant') roleName = 'Kế toán';
+    if (roleVal === 'employee') roleName = 'Nhân viên';
+    if (window.showToast) window.showToast(`Đã chọn vai trò: ${roleName}`);
   };
 });
