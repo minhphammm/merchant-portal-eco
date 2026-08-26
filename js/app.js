@@ -4073,4 +4073,22 @@ document.addEventListener('DOMContentLoaded', () => {
       pane.style.display = pane.id === tabId ? 'block' : 'none';
     });
   };
+
+  window.switchV1ReportTab = function(mode) {
+    const btnWithDash = document.getElementById('v1TabWithDashBtn');
+    const btnNoDash = document.getElementById('v1TabNoDashBtn');
+    const dashCards = document.getElementById('v1DashboardCardsRow');
+
+    if (mode === 'noDashboard') {
+      if (dashCards) dashCards.style.display = 'none';
+      if (btnWithDash) btnWithDash.classList.remove('active');
+      if (btnNoDash) btnNoDash.classList.add('active');
+      if (window.showToast) window.showToast('Chuyển sang chế độ xem Bảng danh sách (Không có Dashboard)');
+    } else {
+      if (dashCards) dashCards.style.display = 'grid';
+      if (btnWithDash) btnWithDash.classList.add('active');
+      if (btnNoDash) btnNoDash.classList.remove('active');
+      if (window.showToast) window.showToast('Chuyển sang chế độ xem Báo cáo tổng quan (Có Dashboard)');
+    }
+  };
 });

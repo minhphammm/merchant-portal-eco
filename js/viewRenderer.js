@@ -1919,8 +1919,18 @@ const ViewRenderer = {
         </div>
       </div>
 
-      <!-- 4 THẺ CHỈ SỐ HIGHLIGHT -->
-      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
+      <!-- 2 TABS CHUYỂN ĐỔI CHẾ ĐỘ XEM: CÓ DASHBOARD & KHÔNG DASHBOARD -->
+      <div class="enterprise-tabs-nav" style="margin-bottom:20px;">
+        <button class="ent-tab-btn active" id="v1TabWithDashBtn" onclick="switchV1ReportTab('withDashboard')">
+          <i data-lucide="bar-chart-2" style="width:15px; height:15px; margin-right:4px;"></i> Báo cáo tổng quan (Có Dashboard)
+        </button>
+        <button class="ent-tab-btn" id="v1TabNoDashBtn" onclick="switchV1ReportTab('noDashboard')">
+          <i data-lucide="table" style="width:15px; height:15px; margin-right:4px;"></i> Bảng danh sách (Không Dashboard)
+        </button>
+      </div>
+
+      <!-- 4 THẺ CHỈ SỐ HIGHLIGHT (ẨN KHI CHỌN TAB KHÔNG DASHBOARD) -->
+      <div id="v1DashboardCardsRow" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
         <!-- Card 1: Số dư đầu ngày -->
         <div class="stat-card" style="background:linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border:1px solid #BFDBFE; border-radius:12px; padding:16px;">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
