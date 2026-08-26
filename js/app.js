@@ -3868,7 +3868,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // ----------------------------------------------------
 
   window.openReconcileReportDetailModal = function(reconcileCode) {
-    const code = reconcileCode || 'R_16566_22072025_131523_772';
+    const list = MockData.getReconcileReportV1Data ? MockData.getReconcileReportV1Data() : [];
+    const item = list.find(r => r.reconcileCode === (reconcileCode || 'R_16566_22072025_131523_772')) || list[0] || {
+      reconcileCode: reconcileCode || 'R_16566_22072025_131523_772',
+      payMethod: 'VietQR',
+      storeName: 'Chi nhánh Quận 1 - Hồ Chí Minh',
+      storeCode: 'ST-Q1-001',
+      periodRange: '26/08/2026 00:00:00 - 26/08/2026 23:59:59',
+      totalPayout: '185,450,000 đ',
+      txnFee: '500,000 đ',
+      statusText: 'Đã phê duyệt',
+      statusClass: 'badge-success'
+    };
+
+    const code = item.reconcileCode;
     const modalTitle = document.getElementById('modalTitleText');
     const modalBody = document.getElementById('modalBodyContent');
     const btnAction = document.getElementById('btnFooterAction');
@@ -3911,8 +3924,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <table class="portal-table" style="margin:0;">
                   <tbody>
-                    <tr><td style="width:220px; color:#64748B;">1. Mã doanh nghiệp</td><td style="font-weight:700; color:#0F172A;">SQBROTHERS</td></tr>
-                    <tr><td style="color:#64748B;">2. Tên doanh nghiệp</td><td style="font-weight:700; color:#0F172A;">CÔNG TY TNHH FITNESS SQ BROTHERS</td></tr>
+                    <tr><td style="width:220px; color:#64748B;">1. Mã doanh nghiệp</td><td style="font-weight:700; color:#0F172A;">FINVIET_ECO</td></tr>
+                    <tr><td style="color:#64748B;">2. Tên doanh nghiệp</td><td style="font-weight:700; color:#0F172A;">CÔNG TY TNHH ABC (ECOPAY MERCHANT)</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -3924,10 +3937,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <table class="portal-table" style="margin:0;">
                   <tbody>
-                    <tr><td style="width:220px; color:#64748B;">1. Mã cửa hàng</td><td style="font-weight:700; color:#0F172A;">SQBROTHERS1</td></tr>
-                    <tr><td style="color:#64748B;">2. Tên cửa hàng</td><td style="font-weight:700; color:#0F172A;">SQ BROTHERS 1</td></tr>
+                    <tr><td style="width:220px; color:#64748B;">1. Mã cửa hàng</td><td style="font-weight:700; color:#0F172A;">${item.storeCode || 'ST-Q1-001'}</td></tr>
+                    <tr><td style="color:#64748B;">2. Tên cửa hàng</td><td style="font-weight:700; color:#0F172A;">${item.storeName || 'Chi nhánh Quận 1'}</td></tr>
                     <tr><td style="color:#64748B;">3. Ví ECO</td><td style="color:#64748B;">-</td></tr>
-                    <tr><td style="color:#64748B;">4. Tên chủ tài khoản</td><td style="font-weight:700; color:#0F172A;">FITNESS SQ BROTHERS</td></tr>
+                    <tr><td style="color:#64748B;">4. Tên chủ tài khoản</td><td style="font-weight:700; color:#0F172A;">PHẠM VĂN MINH</td></tr>
                     <tr><td style="color:#64748B;">5. Số tài khoản</td><td style="font-family:monospace; font-weight:700; color:#0F172A;">666888688688</td></tr>
                     <tr><td style="color:#64748B;">6. Ngân hàng</td><td style="font-weight:700; color:#0F172A;">MB Bank</td></tr>
                     <tr><td style="color:#64748B;">7. Chi nhánh</td><td style="font-weight:700; color:#0F172A;">HỒ CHÍ MINH</td></tr>
@@ -3937,20 +3950,20 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <!-- TAB 2: THÔNG TIN BÁO CÁO (KHỚP PAGE 7 BRD - 20 FIELDS) -->
+          <!-- TAB 2: THÔNG TIN BÁO CÁO (KHỚP PAGE 7 BRD - 20 FIELDS - 1 PHƯƠNG THỨC THANH TOÁN) -->
           <div id="tabReportInfo" class="recon-tab-pane" style="display:none;">
             <div style="border:1px solid #E2E8F0; border-radius:8px; overflow:hidden; max-height:420px; overflow-y:auto;">
               <table class="portal-table" style="margin:0;">
                 <tbody>
                   <tr><td style="width:260px; color:#64748B;">1. Mã thanh toán</td><td style="font-weight:700; color:#0284C7;">${code}</td></tr>
-                  <tr><td style="color:#64748B;">2. Khoảng thời gian giao dịch</td><td style="color:#0F172A;">01-07-2025 08:27 - 23-07-2025 08:27</td></tr>
-                  <tr><td style="color:#64748B;">3. Phương thức thanh toán</td><td><span style="background:#EFF6FF; color:#0284C7; padding:2px 8px; border-radius:4px; font-weight:700;">QR Code</span></td></tr>
-                  <tr><td style="color:#64748B;">4. Tổng số giao dịch</td><td style="font-weight:700;">1</td></tr>
-                  <tr><td style="color:#64748B;">5. Tổng số tiền giao dịch gốc</td><td style="font-weight:700; color:#16A34A;">6.000.000 đ</td></tr>
-                  <tr><td style="color:#64748B;">6. Tổng số tiền đơn hàng</td><td style="font-weight:700; color:#16A34A;">6.000.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">2. Khoảng thời gian giao dịch</td><td style="color:#0F172A;">${item.periodRange || '26/08/2026 00:00:00 - 26/08/2026 23:59:59'}</td></tr>
+                  <tr><td style="color:#64748B;">3. Phương thức thanh toán</td><td><span style="background:#EFF6FF; color:#0284C7; padding:3px 10px; border-radius:4px; font-weight:800; border:1px solid #BFDBFE;">${item.payMethod}</span></td></tr>
+                  <tr><td style="color:#64748B;">4. Tổng số giao dịch</td><td style="font-weight:700;">88</td></tr>
+                  <tr><td style="color:#64748B;">5. Tổng số tiền giao dịch gốc</td><td style="font-weight:700; color:#16A34A;">${item.totalPayout || '185,450,000 đ'}</td></tr>
+                  <tr><td style="color:#64748B;">6. Tổng số tiền đơn hàng</td><td style="font-weight:700; color:#16A34A;">${item.totalPayout || '185,450,000 đ'}</td></tr>
                   <tr><td style="color:#64748B;">7. Tổng số tiền hoàn</td><td style="color:#64748B;">0 đ</td></tr>
                   <tr><td style="color:#64748B;">8. Phí hoàn</td><td style="color:#64748B;">0 đ</td></tr>
-                  <tr><td style="color:#64748B;">9. Phí giao dịch</td><td style="font-weight:700; color:#EF4444;">132.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">9. Phí giao dịch</td><td style="font-weight:700; color:#EF4444;">${item.txnFee || '500,000 đ'}</td></tr>
                   <tr><td style="color:#64748B;">10. Phí trả sau áp dụng cho doanh nghiệp</td><td style="color:#64748B;">0 đ</td></tr>
                   <tr><td style="color:#64748B;">11. Phí dịch vụ trả sau áp dụng cho doanh nghiệp</td><td style="color:#64748B;">0 đ</td></tr>
                   <tr><td style="color:#64748B;">12. Phí trả sau áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
@@ -3958,16 +3971,16 @@ document.addEventListener('DOMContentLoaded', () => {
                   <tr><td style="color:#64748B;">14. Phí BNPL áp dụng cho doanh nghiệp</td><td style="color:#64748B;">0 đ</td></tr>
                   <tr><td style="color:#64748B;">15. Phí BNPL áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
                   <tr><td style="color:#64748B;">16. Phí dịch vụ BNPL áp dụng cho người dùng</td><td style="color:#64748B;">0 đ</td></tr>
-                  <tr><td style="color:#64748B;">17. Số tiền hoàn cấn trừ</td><td style="color:#64748B;">0 đ</td></tr>
+                  <tr><td style="color:#64748B;">17. Số tiền hoàn cấn trừ</td><td style="color:#64748B;">${item.deductedRefundAmount || '0 đ'}</td></tr>
                   <tr><td style="color:#64748B;">18. Phí hoàn cấn trừ</td><td style="color:#64748B;">0 đ</td></tr>
-                  <tr><td style="color:#64748B;">19. Tổng số tiền phải trả</td><td style="font-weight:800; color:#16A34A; font-size:14px;">5.868.000 đ</td></tr>
+                  <tr><td style="color:#64748B;">19. Tổng số tiền phải trả</td><td style="font-weight:800; color:#16A34A; font-size:14px;">${item.closingBalance || item.totalPayout}</td></tr>
                   <tr><td style="color:#64748B;">20. Phí bổ sung</td><td style="color:#64748B;">-</td></tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <!-- TAB 3: DANH SÁCH GIAO DỊCH (KHỚP PAGE 7 BRD) -->
+          <!-- TAB 3: DANH SÁCH GIAO DỊCH (KHỚP PAGE 7 BRD - SINGLE PAY METHOD) -->
           <div id="tabTxnList" class="recon-tab-pane" style="display:none;">
             <div style="border:1px solid #E2E8F0; border-radius:8px; overflow-x:auto;">
               <table class="portal-table" style="margin:0;">
@@ -3989,16 +4002,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td style="font-weight:700; color:#0284C7;">GD20250722001</td>
+                    <td style="font-weight:700; color:#0284C7;">GD20260826001</td>
                     <td>REF99882211</td>
                     <td>APP883311</td>
-                    <td style="font-size:12px;">22-07-2025 13:15:23</td>
-                    <td><span style="background:#F0FDF4; color:#16A34A; padding:2px 6px; border-radius:4px; font-weight:700;">VietQR</span></td>
+                    <td style="font-size:12px;">26/08/2026 06:15:22</td>
+                    <td><span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-weight:700;">${item.payMethod}</span></td>
                     <td style="font-family:monospace; color:#64748B;">9704****1234</td>
-                    <td style="text-align:right; font-weight:700;">6.000.000 đ</td>
-                    <td style="text-align:right; color:#EF4444;">132.000 đ</td>
+                    <td style="text-align:right; font-weight:700;">15.450.000 đ</td>
+                    <td style="text-align:right; color:#EF4444;">45.000 đ</td>
                     <td style="text-align:right;">0 đ</td>
-                    <td style="text-align:right; font-weight:800; color:#16A34A;">5.868.000 đ</td>
+                    <td style="text-align:right; font-weight:800; color:#16A34A;">15.405.000 đ</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td style="font-weight:700; color:#0284C7;">GD20260826002</td>
+                    <td>REF99882212</td>
+                    <td>APP883312</td>
+                    <td style="font-size:12px;">26/08/2026 09:30:15</td>
+                    <td><span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-weight:700;">${item.payMethod}</span></td>
+                    <td style="font-family:monospace; color:#64748B;">9704****5678</td>
+                    <td style="text-align:right; font-weight:700;">8.200.000 đ</td>
+                    <td style="text-align:right; color:#EF4444;">24.000 đ</td>
+                    <td style="text-align:right;">0 đ</td>
+                    <td style="text-align:right; font-weight:800; color:#16A34A;">8.176.000 đ</td>
                   </tr>
                 </tbody>
               </table>
@@ -4009,17 +4035,17 @@ document.addEventListener('DOMContentLoaded', () => {
           <div id="tabHistory" class="recon-tab-pane" style="display:none;">
             <div style="display:flex; flex-direction:column; gap:12px;">
               <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:13px; font-weight:700; color:#475569;">Trạng thái:</span>
-                <span style="background:#F0FDF4; color:#16A34A; border:1px solid #BBF7D0; padding:3px 12px; border-radius:12px; font-weight:800; font-size:12.5px;">Đã thanh toán</span>
+                <span style="font-size:13px; font-weight:700; color:#475569;">Trạng thái hiện tại:</span>
+                <span class="status-badge ${item.statusClass}">${item.statusText}</span>
               </div>
 
               <div style="border:1px solid #E2E8F0; border-radius:8px; overflow:hidden;">
                 <table class="portal-table" style="margin:0;">
                   <tbody>
-                    <tr><td style="width:260px; color:#64748B;">1. Thời gian thanh toán được tạo</td><td style="font-weight:600; color:#0F172A;">22-07-2025 13:15:23</td></tr>
-                    <tr><td style="color:#64748B;">2. Thời gian thanh toán được duyệt</td><td style="font-weight:600; color:#0F172A;">22-07-2025 16:16:34</td></tr>
-                    <tr><td style="color:#64748B;">3. Thời gian thanh toán được chấp nhận duyệt</td><td style="font-weight:600; color:#0F172A;">22-07-2025 16:16:34</td></tr>
-                    <tr><td style="color:#64748B;">4. Thời gian thanh toán duyệt trả tiền</td><td style="font-weight:600; color:#16A34A;">22-07-2025 16:16:34</td></tr>
+                    <tr><td style="width:260px; color:#64748B;">1. Thời gian thanh toán được tạo</td><td style="font-weight:600; color:#0F172A;">${item.createdAt || '26/08/2026 00:05:00'}</td></tr>
+                    <tr><td style="color:#64748B;">2. Thời gian thanh toán được duyệt</td><td style="font-weight:600; color:#0F172A;">${item.merchantPayTime || '26/08/2026 12:00:00'}</td></tr>
+                    <tr><td style="color:#64748B;">3. Thời gian thanh toán được chấp nhận duyệt</td><td style="font-weight:600; color:#0F172A;">${item.merchantPayTime || '26/08/2026 12:00:00'}</td></tr>
+                    <tr><td style="color:#64748B;">4. Thời gian thanh toán duyệt trả tiền</td><td style="font-weight:600; color:#16A34A;">${item.merchantPayTime || '26/08/2026 23:59:59'}</td></tr>
                   </tbody>
                 </table>
               </div>
