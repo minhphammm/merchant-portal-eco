@@ -4077,18 +4077,21 @@ document.addEventListener('DOMContentLoaded', () => {
   window.switchV1ReportTab = function(mode) {
     const btnWithDash = document.getElementById('v1TabWithDashBtn');
     const btnNoDash = document.getElementById('v1TabNoDashBtn');
-    const dashCards = document.getElementById('v1DashboardCardsRow');
+    const contentWithDash = document.getElementById('v1TabWithDashContent');
+    const contentNoDash = document.getElementById('v1TabNoDashContent');
 
     if (mode === 'noDashboard') {
-      if (dashCards) dashCards.style.display = 'none';
+      if (contentWithDash) contentWithDash.style.display = 'none';
+      if (contentNoDash) contentNoDash.style.display = 'block';
       if (btnWithDash) btnWithDash.classList.remove('active');
       if (btnNoDash) btnNoDash.classList.add('active');
-      if (window.showToast) window.showToast('Chuyển sang chế độ xem Bảng danh sách (Không có Dashboard)');
+      if (window.showToast) window.showToast('Chuyển sang Bảng danh sách (Bộ lọc theo Mã thanh toán & Cửa hàng)');
     } else {
-      if (dashCards) dashCards.style.display = 'grid';
+      if (contentWithDash) contentWithDash.style.display = 'block';
+      if (contentNoDash) contentNoDash.style.display = 'none';
       if (btnWithDash) btnWithDash.classList.add('active');
       if (btnNoDash) btnNoDash.classList.remove('active');
-      if (window.showToast) window.showToast('Chuyển sang chế độ xem Báo cáo tổng quan (Có Dashboard)');
+      if (window.showToast) window.showToast('Chuyển sang Báo cáo tổng quan (Hiển thị Chi tiết Các Giao dịch trong ngày)');
     }
   };
 });

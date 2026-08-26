@@ -1905,6 +1905,7 @@ const ViewRenderer = {
    */
   getReconcileReportV1View() {
     const list = MockData.getReconcileReportV1Data ? MockData.getReconcileReportV1Data() : [];
+    const dailyTxns = MockData.getDailyTransactionsV1Data ? MockData.getDailyTransactionsV1Data() : [];
 
     return `
       <div class="subpage-header">
@@ -1929,175 +1930,270 @@ const ViewRenderer = {
         </button>
       </div>
 
-      <!-- 4 THẺ CHỈ SỐ HIGHLIGHT (ẨN KHI CHỌN TAB KHÔNG DASHBOARD) -->
-      <div id="v1DashboardCardsRow" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
-        <!-- Card 1: Số dư đầu ngày -->
-        <div class="stat-card" style="background:linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border:1px solid #BFDBFE; border-radius:12px; padding:16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <span style="font-size:13px; font-weight:700; color:#1E40AF;">🌅 SỐ DƯ ĐẦU NGÀY</span>
-            <div style="width:32px; height:32px; border-radius:8px; background:#3B82F6; color:#fff; display:flex; align-items:center; justify-content:center;">
-              <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+      <!-- ==================================================== -->
+      <!-- TAB 1: BÁO CÁO TỔNG QUAN (CÓ DASHBOARD + CÁC GIAO DỊCH TRONG NGÀY) -->
+      <!-- ==================================================== -->
+      <div id="v1TabWithDashContent" style="display:block;">
+        <!-- 4 THẺ CHỈ SỐ HIGHLIGHT -->
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
+          <!-- Card 1: Số dư đầu ngày -->
+          <div class="stat-card" style="background:linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border:1px solid #BFDBFE; border-radius:12px; padding:16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <span style="font-size:13px; font-weight:700; color:#1E40AF;">🌅 SỐ DƯ ĐẦU NGÀY</span>
+              <div style="width:32px; height:32px; border-radius:8px; background:#3B82F6; color:#fff; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="wallet" style="width:18px; height:18px;"></i>
+              </div>
             </div>
-          </div>
-          <div style="font-size:20px; font-weight:800; color:#1E3A8A;">120,500,000 đ</div>
-          <div style="font-size:11.5px; color:#3B82F6; margin-top:4px;">Chốt phiên 00:00:00 - Ngày 26/08</div>
-        </div>
-
-        <!-- Card 2: GD đầu tiên trong ngày -->
-        <div class="stat-card" style="background:linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border:1px solid #BBF7D0; border-radius:12px; padding:16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <span style="font-size:13px; font-weight:700; color:#166534;">⏱️ GD ĐẦU TIÊN TRONG NGÀY</span>
-            <div style="width:32px; height:32px; border-radius:8px; background:#22C55E; color:#fff; display:flex; align-items:center; justify-content:center;">
-              <i data-lucide="play-circle" style="width:18px; height:18px;"></i>
-            </div>
-          </div>
-          <div style="font-size:15px; font-weight:800; color:#14532D; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">06:15:22 - 15,450,000 đ</div>
-          <div style="font-size:11.5px; color:#15803D; margin-top:4px;">Mã GD: <code style="font-family:monospace; background:rgba(255,255,255,0.6); padding:1px 4px; border-radius:4px;">GD20260826001</code></div>
-        </div>
-
-        <!-- Card 3: GD cuối cùng trong ngày -->
-        <div class="stat-card" style="background:linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); border:1px solid #FED7AA; border-radius:12px; padding:16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <span style="font-size:13px; font-weight:700; color:#9A3412;">🏁 GD CUỐI CÙNG TRONG NGÀY</span>
-            <div style="width:32px; height:32px; border-radius:8px; background:#F97316; color:#fff; display:flex; align-items:center; justify-content:center;">
-              <i data-lucide="stop-circle" style="width:18px; height:18px;"></i>
-            </div>
-          </div>
-          <div style="font-size:15px; font-weight:800; color:#7C2D12; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">23:45:10 - 8,800,000 đ</div>
-          <div style="font-size:11.5px; color:#C2410C; margin-top:4px;">Mã GD: <code style="font-family:monospace; background:rgba(255,255,255,0.6); padding:1px 4px; border-radius:4px;">GD20260826088</code></div>
-        </div>
-
-        <!-- Card 4: Số dư cuối ngày -->
-        <div class="stat-card" style="background:linear-gradient(135deg, #FDF4FF 0%, #FAE8FF 100%); border:1px solid #F5D0FE; border-radius:12px; padding:16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-            <span style="font-size:13px; font-weight:700; color:#86198F;">🌇 SỐ DƯ CUỐI NGÀY</span>
-            <div style="width:32px; height:32px; border-radius:8px; background:#A855F7; color:#fff; display:flex; align-items:center; justify-content:center;">
-              <i data-lucide="check-circle-2" style="width:18px; height:18px;"></i>
-            </div>
-          </div>
-          <div style="font-size:20px; font-weight:800; color:#701A75;">185,450,000 đ</div>
-          <div style="font-size:11.5px; color:#9333EA; margin-top:4px;">Chốt phiên 23:59:59 - Tăng +64.95 triệu</div>
-        </div>
-      </div>
-
-      <!-- MỤC TÌM KIẾM BÁO CÁO -->
-      <div class="table-card" style="margin-bottom:20px;">
-        <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Báo Cáo
-        </div>
-        <form onsubmit="return false;">
-          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
-            <!-- Ngày báo cáo -->
-            <div class="form-group-field">
-              <label>Ngày báo cáo</label>
-              <input type="date" id="filterV1DailyDate" value="2026-08-26">
-            </div>
-
-            <!-- Cửa hàng -->
-            <div class="form-group-field">
-              <label>Cửa hàng</label>
-              <select id="filterV1Store">
-                <option value="all">Tất cả cửa hàng</option>
-                <option value="ST-Q1-001">Chi nhánh Quận 1 - HCM</option>
-                <option value="ST-HK-002">Chi nhánh Hoàn Kiếm - Hà Nội</option>
-                <option value="ST-HC-003">Chi nhánh Hải Châu - Đà Nẵng</option>
-              </select>
-            </div>
-
-            <!-- Trạng thái đối soát -->
-            <div class="form-group-field">
-              <label>Trạng thái đối soát</label>
-              <select id="filterV1Status">
-                <option value="all">Tất cả trạng thái</option>
-                <option value="matched">Khớp 100%</option>
-                <option value="diff">Có chênh lệch</option>
-                <option value="pending">Đang xử lý</option>
-              </select>
-            </div>
+            <div style="font-size:20px; font-weight:800; color:#1E3A8A;">120,500,000 đ</div>
+            <div style="font-size:11.5px; color:#3B82F6; margin-top:4px;">Chốt phiên 00:00:00 - Ngày 26/08</div>
           </div>
 
-          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
-            <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc báo cáo v1')">Đặt lại</button>
-            <button type="button" class="btn-primary" onclick="showToast('Đang tra cứu báo cáo đối soát v1...')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tra cứu</button>
+          <!-- Card 2: GD đầu tiên trong ngày -->
+          <div class="stat-card" style="background:linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border:1px solid #BBF7D0; border-radius:12px; padding:16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <span style="font-size:13px; font-weight:700; color:#166534;">⏱️ GD ĐẦU TIÊN TRONG NGÀY</span>
+              <div style="width:32px; height:32px; border-radius:8px; background:#22C55E; color:#fff; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="play-circle" style="width:18px; height:18px;"></i>
+              </div>
+            </div>
+            <div style="font-size:15px; font-weight:800; color:#14532D; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">06:15:22 - 15,450,000 đ</div>
+            <div style="font-size:11.5px; color:#15803D; margin-top:4px;">Mã GD: <code style="font-family:monospace; background:rgba(255,255,255,0.6); padding:1px 4px; border-radius:4px;">GD20260826001</code></div>
           </div>
-        </form>
-      </div>
 
-      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN V1 -->
-      <div class="table-card">
-        <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
-          <div>
-            <span style="font-weight:800; font-size:14px; color:var(--text-main);">Danh sách báo cáo đối soát thanh toán v1</span>
-            <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">(Hiển thị <strong>${list.length}</strong> báo cáo)</span>
+          <!-- Card 3: GD cuối cùng trong ngày -->
+          <div class="stat-card" style="background:linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%); border:1px solid #FED7AA; border-radius:12px; padding:16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <span style="font-size:13px; font-weight:700; color:#9A3412;">🏁 GD CUỐI CÙNG TRONG NGÀY</span>
+              <div style="width:32px; height:32px; border-radius:8px; background:#F97316; color:#fff; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="stop-circle" style="width:18px; height:18px;"></i>
+              </div>
+            </div>
+            <div style="font-size:15px; font-weight:800; color:#7C2D12; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">23:45:10 - 8,800,000 đ</div>
+            <div style="font-size:11.5px; color:#C2410C; margin-top:4px;">Mã GD: <code style="font-family:monospace; background:rgba(255,255,255,0.6); padding:1px 4px; border-radius:4px;">GD20260826088</code></div>
           </div>
-          <div style="display:flex; align-items:center; gap:16px;">
-            <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="showToast('Đang xuất danh sách đối soát thanh toán v1...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát v1</button>
+
+          <!-- Card 4: Số dư cuối ngày -->
+          <div class="stat-card" style="background:linear-gradient(135deg, #FDF4FF 0%, #FAE8FF 100%); border:1px solid #F5D0FE; border-radius:12px; padding:16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <span style="font-size:13px; font-weight:700; color:#86198F;">🌇 SỐ DƯ CUỐI NGÀY</span>
+              <div style="width:32px; height:32px; border-radius:8px; background:#A855F7; color:#fff; display:flex; align-items:center; justify-content:center;">
+                <i data-lucide="check-circle-2" style="width:18px; height:18px;"></i>
+              </div>
+            </div>
+            <div style="font-size:20px; font-weight:800; color:#701A75;">185,450,000 đ</div>
+            <div style="font-size:11.5px; color:#9333EA; margin-top:4px;">Chốt phiên 23:59:59 - Tăng +64.95 triệu</div>
           </div>
         </div>
 
-        <div class="table-responsive" style="overflow-x:auto;">
-          <table class="portal-table">
-            <thead>
-              <tr>
-                <th style="white-space:nowrap; text-align:center; width:50px;">STT</th>
-                <th style="white-space:nowrap;">Mã thanh toán</th>
-                <th style="white-space:nowrap;">Thời gian tạo</th>
-                <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
-                <th style="white-space:nowrap;">Phương thức thanh toán</th>
-                <th style="white-space:nowrap;">Tên cửa hàng</th>
-                <th style="white-space:nowrap;">Mã cửa hàng</th>
-                <th style="white-space:nowrap; text-align:right; background:#EFF6FF; color:#1E40AF;">Số dư đầu ngày</th>
-                <th style="white-space:nowrap; min-width:210px; background:#F0FDF4; color:#166534;">GD đầu tiên trong ngày</th>
-                <th style="white-space:nowrap; min-width:210px; background:#FFF7ED; color:#9A3412;">GD cuối cùng trong ngày</th>
-                <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả</th>
-                <th style="white-space:nowrap; text-align:right;">Phí giao dịch</th>
-                <th style="white-space:nowrap; text-align:right;">Phí người dùng</th>
-                <th style="white-space:nowrap; text-align:right;">Số tiền hoàn cấn trừ</th>
-                <th style="white-space:nowrap; text-align:right; background:#FDF4FF; color:#86198F;">Số dư cuối ngày</th>
-                <th style="white-space:nowrap;">Mô tả</th>
-                <th style="white-space:nowrap;">Lý do hủy/từ chối</th>
-                <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
-                <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${list.map(item => `
+        <!-- MỤC TÌM KIẾM BÁO CÁO -->
+        <div class="table-card" style="margin-bottom:20px;">
+          <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+            <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Tra Cứu Giao Dịch
+          </div>
+          <form onsubmit="return false;">
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+              <div class="form-group-field">
+                <label>Ngày báo cáo</label>
+                <input type="date" id="filterV1DailyDate" value="2026-08-26">
+              </div>
+              <div class="form-group-field">
+                <label>Cửa hàng</label>
+                <select id="filterV1Store">
+                  <option value="all">Tất cả cửa hàng</option>
+                  <option value="ST-Q1-001">Chi nhánh Quận 1 - HCM</option>
+                  <option value="ST-HK-002">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                  <option value="ST-HC-003">Chi nhánh Hải Châu - Đà Nẵng</option>
+                </select>
+              </div>
+              <div class="form-group-field">
+                <label>Trạng thái đối soát</label>
+                <select id="filterV1Status">
+                  <option value="all">Tất cả trạng thái</option>
+                  <option value="matched">Khớp 100%</option>
+                  <option value="diff">Có chênh lệch</option>
+                  <option value="pending">Đang xử lý</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
+              <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc')">Đặt lại</button>
+              <button type="button" class="btn-primary" onclick="showToast('Đang tra cứu các giao dịch trong ngày...')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tra cứu</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- BẢNG CHI TIẾT CÁC GIAO DỊCH TRONG NGÀY HÔM ĐÓ -->
+        <div class="table-card">
+          <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
+            <div>
+              <span style="font-weight:800; font-size:14px; color:var(--text-main);">Chi tiết Các Giao dịch trong ngày hôm đó (26/08/2026)</span>
+              <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">(Tổng <strong>${dailyTxns.length}</strong> giao dịch)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px;">
+              <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="showToast('Đang xuất danh sách giao dịch trong ngày...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách giao dịch</button>
+            </div>
+          </div>
+
+          <div class="table-responsive" style="overflow-x:auto;">
+            <table class="portal-table">
+              <thead>
                 <tr>
-                  <td style="text-align:center; font-weight:600;">${item.stt}</td>
-                  <td>
-                    <a href="javascript:void(0)" onclick="openReconcileReportDetailModal('${item.reconcileCode}')" style="font-weight:700; color:#0284C7; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
-                      ${item.reconcileCode} <i data-lucide="copy" style="width:12px; height:12px; color:#94A3B8;"></i>
-                    </a>
-                  </td>
-                  <td style="font-size:12.5px;">${item.createdAt}</td>
-                  <td style="font-size:12px; color:var(--text-muted);">${item.periodRange}</td>
-                  <td>
-                    <span style="background:#FFF7ED; color:#C2410C; border:1px solid #FFEDD5; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">
-                      ${item.payMethod}
-                    </span>
-                  </td>
-                  <td style="font-size:12.5px;">${item.storeName}</td>
-                  <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.storeCode}</code></td>
-                  <td style="text-align:right; font-weight:700; color:#1E40AF; background:#F8FAFC;">${item.openingBalance}</td>
-                  <td style="font-size:12px; color:#166534; background:#F8FAFC;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.firstTxn}</td>
-                  <td style="font-size:12px; color:#9A3412; background:#F8FAFC;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.lastTxn}</td>
-                  <td style="text-align:right; font-weight:800; color:#10B981; font-size:13.5px;">${item.totalPayout}</td>
-                  <td style="text-align:right; font-size:12.5px;">${item.txnFee}</td>
-                  <td style="text-align:right; font-size:12.5px;">${item.userFee}</td>
-                  <td style="text-align:right; font-weight:600; color:var(--color-danger); font-size:12.5px;">${item.deductedRefundAmount}</td>
-                  <td style="text-align:right; font-weight:800; color:#701A75; font-size:13.5px; background:#F8FAFC;">${item.closingBalance}</td>
-                  <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description}">${item.description}</td>
-                  <td style="font-size:12px; color:var(--text-muted); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.rejectReason}">${item.rejectReason}</td>
-                  <td style="font-size:12.5px; color:var(--text-muted);">${item.merchantPayTime}</td>
-                  <td style="text-align:center;">
-                    <span class="status-badge ${item.statusClass}">${item.statusText}</span>
-                  </td>
+                  <th style="white-space:nowrap; text-align:center; width:50px;">STT</th>
+                  <th style="white-space:nowrap;">Mã giao dịch</th>
+                  <th style="white-space:nowrap;">Mã tham chiếu</th>
+                  <th style="white-space:nowrap;">Approve Code</th>
+                  <th style="white-space:nowrap;">Thời gian phát sinh</th>
+                  <th style="white-space:nowrap;">Phương thức thanh toán</th>
+                  <th style="white-space:nowrap;">Cửa hàng</th>
+                  <th style="white-space:nowrap; text-align:right;">Số tiền gốc</th>
+                  <th style="white-space:nowrap; text-align:right;">Phí giao dịch</th>
+                  <th style="white-space:nowrap; text-align:right;">Số tiền hoàn/hủy</th>
+                  <th style="white-space:nowrap; text-align:right;">Thực nhận</th>
+                  <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
                 </tr>
-              `).join('')}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                ${dailyTxns.map(t => `
+                  <tr>
+                    <td style="text-align:center; font-weight:600;">${t.stt}</td>
+                    <td style="font-weight:700; color:#0284C7;">${t.txnCode}</td>
+                    <td style="font-size:12px; color:var(--text-muted);">${t.refCode}</td>
+                    <td style="font-size:12px; color:var(--text-muted);">${t.approveCode}</td>
+                    <td style="font-size:12.5px;">${t.txnTime}</td>
+                    <td>
+                      <span style="background:#F0FDF4; color:#16A34A; border:1px solid #BBF7D0; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:700;">
+                        ${t.payMethod}
+                      </span>
+                    </td>
+                    <td style="font-size:12.5px;">${t.storeName}</td>
+                    <td style="text-align:right; font-weight:700; color:#0F172A;">${t.originalAmount}</td>
+                    <td style="text-align:right; color:#EF4444; font-size:12.5px;">${t.fee}</td>
+                    <td style="text-align:right; color:var(--text-muted); font-size:12.5px;">${t.refundAmount}</td>
+                    <td style="text-align:right; font-weight:800; color:#16A34A; font-size:13.5px;">${t.netAmount}</td>
+                    <td style="text-align:center;">
+                      <span class="status-badge ${t.statusClass}">${t.statusText}</span>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================== -->
+      <!-- TAB 2: BẢNG DANH SÁCH (KHÔNG DASHBOARD - LỌC THEO MÃ THANH TOÁN & CỬA HÀNG) -->
+      <!-- ==================================================== -->
+      <div id="v1TabNoDashContent" style="display:none;">
+        <!-- MỤC TÌM KIẾM BÁO CÁO (LỌC THEO MÃ THANH TOÁN & CỬA HÀNG) -->
+        <div class="table-card" style="margin-bottom:20px;">
+          <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+            <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Báo Cáo Đối Soát
+          </div>
+          <form onsubmit="return false;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <!-- Mã thanh toán -->
+              <div class="form-group-field">
+                <label>Mã thanh toán</label>
+                <input type="text" id="filterV1CodeInput" placeholder="Ví dụ: R_16566_22072025_131523_772">
+              </div>
+
+              <!-- Cửa hàng -->
+              <div class="form-group-field">
+                <label>Cửa hàng</label>
+                <select id="filterV1StoreNoDash">
+                  <option value="all">Tất cả cửa hàng</option>
+                  <option value="ST-Q1-001">Chi nhánh Quận 1 - HCM</option>
+                  <option value="ST-HK-002">Chi nhánh Hoàn Kiếm - Hà Nội</option>
+                  <option value="ST-HC-003">Chi nhánh Hải Châu - Đà Nẵng</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
+              <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc')">Đặt lại</button>
+              <button type="button" class="btn-primary" onclick="showToast('Đang tìm kiếm theo Mã thanh toán & Cửa hàng...')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tra cứu</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN V1 -->
+        <div class="table-card">
+          <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
+            <div>
+              <span style="font-weight:800; font-size:14px; color:var(--text-main);">Danh sách báo cáo đối soát thanh toán v1</span>
+              <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">(Hiển thị <strong>${list.length}</strong> báo cáo)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px;">
+              <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="showToast('Đang xuất danh sách đối soát thanh toán v1...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát v1</button>
+            </div>
+          </div>
+
+          <div class="table-responsive" style="overflow-x:auto;">
+            <table class="portal-table">
+              <thead>
+                <tr>
+                  <th style="white-space:nowrap; text-align:center; width:50px;">STT</th>
+                  <th style="white-space:nowrap;">Mã thanh toán</th>
+                  <th style="white-space:nowrap;">Thời gian tạo</th>
+                  <th style="white-space:nowrap;">Khoảng thời gian giao dịch</th>
+                  <th style="white-space:nowrap;">Phương thức thanh toán</th>
+                  <th style="white-space:nowrap;">Tên cửa hàng</th>
+                  <th style="white-space:nowrap;">Mã cửa hàng</th>
+                  <th style="white-space:nowrap; text-align:right; background:#EFF6FF; color:#1E40AF;">Số dư đầu ngày</th>
+                  <th style="white-space:nowrap; min-width:210px; background:#F0FDF4; color:#166534;">GD đầu tiên trong ngày</th>
+                  <th style="white-space:nowrap; min-width:210px; background:#FFF7ED; color:#9A3412;">GD cuối cùng trong ngày</th>
+                  <th style="white-space:nowrap; text-align:right;">Tổng số tiền phải trả</th>
+                  <th style="white-space:nowrap; text-align:right;">Phí giao dịch</th>
+                  <th style="white-space:nowrap; text-align:right;">Phí người dùng</th>
+                  <th style="white-space:nowrap; text-align:right;">Số tiền hoàn cấn trừ</th>
+                  <th style="white-space:nowrap; text-align:right; background:#FDF4FF; color:#86198F;">Số dư cuối ngày</th>
+                  <th style="white-space:nowrap;">Mô tả</th>
+                  <th style="white-space:nowrap;">Lý do hủy/từ chối</th>
+                  <th style="white-space:nowrap;">Thời gian thanh toán doanh nghiệp</th>
+                  <th style="white-space:nowrap; text-align:center;">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${list.map(item => `
+                  <tr>
+                    <td style="text-align:center; font-weight:600;">${item.stt}</td>
+                    <td>
+                      <a href="javascript:void(0)" onclick="openReconcileReportDetailModal('${item.reconcileCode}')" style="font-weight:700; color:#0284C7; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        ${item.reconcileCode} <i data-lucide="copy" style="width:12px; height:12px; color:#94A3B8;"></i>
+                      </a>
+                    </td>
+                    <td style="font-size:12.5px;">${item.createdAt}</td>
+                    <td style="font-size:12px; color:var(--text-muted);">${item.periodRange}</td>
+                    <td>
+                      <span style="background:#FFF7ED; color:#C2410C; border:1px solid #FFEDD5; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">
+                        ${item.payMethod}
+                      </span>
+                    </td>
+                    <td style="font-size:12.5px;">${item.storeName}</td>
+                    <td><code style="font-size:11.5px; background:#F1F5F9; padding:2px 6px; border-radius:4px; color:#475569;">${item.storeCode}</code></td>
+                    <td style="text-align:right; font-weight:700; color:#1E40AF; background:#F8FAFC;">${item.openingBalance}</td>
+                    <td style="font-size:12px; color:#166534; background:#F8FAFC;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.firstTxn}</td>
+                    <td style="font-size:12px; color:#9A3412; background:#F8FAFC;"><i data-lucide="clock" style="width:12px; height:12px; margin-right:2px;"></i> ${item.lastTxn}</td>
+                    <td style="text-align:right; font-weight:800; color:#10B981; font-size:13.5px;">${item.totalPayout}</td>
+                    <td style="text-align:right; font-size:12.5px;">${item.txnFee}</td>
+                    <td style="text-align:right; font-size:12.5px;">${item.userFee}</td>
+                    <td style="text-align:right; font-weight:600; color:var(--color-danger); font-size:12.5px;">${item.deductedRefundAmount}</td>
+                    <td style="text-align:right; font-weight:800; color:#701A75; font-size:13.5px; background:#F8FAFC;">${item.closingBalance}</td>
+                    <td style="font-size:12px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.description}">${item.description}</td>
+                    <td style="font-size:12px; color:var(--text-muted); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.rejectReason}">${item.rejectReason}</td>
+                    <td style="font-size:12.5px; color:var(--text-muted);">${item.merchantPayTime}</td>
+                    <td style="text-align:center;">
+                      <span class="status-badge ${item.statusClass}">${item.statusText}</span>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     `;
   }
+
 };

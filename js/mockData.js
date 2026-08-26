@@ -2131,6 +2131,132 @@ const MockData = {
         statusClass: 'badge-success'
       }
     ];
+  },
+
+  // Danh sách các Giao dịch trong ngày (Dành cho Tab Báo cáo tổng quan v1)
+  getDailyTransactionsV1Data() {
+    return [
+      {
+        stt: 1,
+        txnCode: 'GD20260826001',
+        refCode: 'REF99882211',
+        approveCode: 'APP883311',
+        txnTime: '26/08/2026 06:15:22',
+        payMethod: 'VietQR',
+        storeName: 'Chi nhánh Quận 1 - Hồ Chí Minh',
+        originalAmount: '15,450,000 đ',
+        fee: '45,000 đ',
+        refundAmount: '0 đ',
+        netAmount: '15,405,000 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 2,
+        txnCode: 'GD20260826002',
+        refCode: 'REF99882212',
+        approveCode: 'APP883312',
+        txnTime: '26/08/2026 08:30:15',
+        payMethod: 'Thẻ Napas',
+        storeName: 'Chi nhánh Quận 1 - Hồ Chí Minh',
+        originalAmount: '8,200,000 đ',
+        fee: '24,000 đ',
+        refundAmount: '0 đ',
+        netAmount: '8,176,000 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 3,
+        txnCode: 'GD20260826003',
+        refCode: 'REF99882213',
+        approveCode: 'APP883313',
+        txnTime: '26/08/2026 10:12:44',
+        payMethod: 'Ví MoMo',
+        storeName: 'Chi nhánh Hoàn Kiếm - Hà Nội',
+        originalAmount: '12,500,000 đ',
+        fee: '37,500 đ',
+        refundAmount: '0 đ',
+        netAmount: '12,462,500 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 4,
+        txnCode: 'GD20260826004',
+        refCode: 'REF99882214',
+        approveCode: 'APP883314',
+        txnTime: '26/08/2026 11:45:00',
+        payMethod: 'Thẻ Visa',
+        storeName: 'Chi nhánh Hoàn Kiếm - Hà Nội',
+        originalAmount: '25,000,000 đ',
+        fee: '150,000 đ',
+        refundAmount: '0 đ',
+        netAmount: '24,850,000 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 5,
+        txnCode: 'GD20260826005',
+        refCode: 'REF99882215',
+        approveCode: 'APP883315',
+        txnTime: '26/08/2026 14:20:10',
+        payMethod: 'SoftPOS',
+        storeName: 'Chi nhánh Hải Châu - Đà Nẵng',
+        originalAmount: '6,800,000 đ',
+        fee: '20,400 đ',
+        refundAmount: '0 đ',
+        netAmount: '6,779,600 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 6,
+        txnCode: 'GD20260826006',
+        refCode: 'REF99882216',
+        approveCode: 'APP883316',
+        txnTime: '26/08/2026 16:05:30',
+        payMethod: 'Ví ZaloPay',
+        storeName: 'Chi nhánh Hồng Bàng - Hải Phòng',
+        originalAmount: '4,500,000 đ',
+        fee: '13,500 đ',
+        refundAmount: '0 đ',
+        netAmount: '4,486,500 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 7,
+        txnCode: 'GD20260826007',
+        refCode: 'REF99882217',
+        approveCode: 'APP883317',
+        txnTime: '26/08/2026 19:15:00',
+        payMethod: 'VietQR',
+        storeName: 'Chi nhánh Ninh Kiều - Cần Thơ',
+        originalAmount: '3,200,000 đ',
+        fee: '9,600 đ',
+        refundAmount: '0 đ',
+        netAmount: '3,190,400 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      },
+      {
+        stt: 8,
+        txnCode: 'GD20260826088',
+        refCode: 'REF99882288',
+        approveCode: 'APP883388',
+        txnTime: '26/08/2026 23:45:10',
+        payMethod: 'VietQR',
+        storeName: 'Chi nhánh Quận 1 - Hồ Chí Minh',
+        originalAmount: '8,800,000 đ',
+        fee: '26,400 đ',
+        refundAmount: '0 đ',
+        netAmount: '8,773,600 đ',
+        statusText: 'Thành công',
+        statusClass: 'badge-success'
+      }
+    ];
   }
 };
 
