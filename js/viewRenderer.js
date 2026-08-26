@@ -1909,17 +1909,17 @@ const ViewRenderer = {
     return `
       <div class="subpage-header">
         <div>
-          <div class="subpage-breadcrumb">Đối soát / <strong>Báo Cáo Đối Soát v1 (Daily)</strong></div>
-          <h1 class="subpage-title">Báo Cáo Đối Soát v1 (Chạy Daily Hàng Ngày)</h1>
+          <div class="subpage-breadcrumb">Đối soát / <strong>Báo Cáo Đối Soát v1</strong></div>
+          <h1 class="subpage-title">Báo Cáo Đối Soát v1</h1>
           <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Tự động tổng hợp số dư đầu ngày, mốc thời gian giao dịch đầu tiên / cuối cùng trong ngày và số dư chốt phiên cuối ngày.</p>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-primary" onclick="showToast('Đang xuất báo cáo Daily dạng PDF...')"><i data-lucide="file-text" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Daily PDF</button>
-          <button class="btn-secondary" onclick="showToast('Đang xuất báo cáo Daily dạng Excel (.xlsx)...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel Daily</button>
+          <button class="btn-primary" onclick="showToast('Đang xuất báo cáo dạng PDF...')"><i data-lucide="file-text" style="width:15px; height:15px; margin-right:4px;"></i> Xuất PDF</button>
+          <button class="btn-secondary" onclick="showToast('Đang xuất báo cáo dạng Excel (.xlsx)...')"><i data-lucide="download" style="width:15px; height:15px; margin-right:4px;"></i> Xuất Excel</button>
         </div>
       </div>
 
-      <!-- 4 THẺ CHỈ SỐ HIGHLIGHT THEO ĐÚNG YÊU CẦU DAILY -->
+      <!-- 4 THẺ CHỈ SỐ HIGHLIGHT -->
       <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
         <!-- Card 1: Số dư đầu ngày -->
         <div class="stat-card" style="background:linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); border:1px solid #BFDBFE; border-radius:12px; padding:16px;">
@@ -1970,16 +1970,16 @@ const ViewRenderer = {
         </div>
       </div>
 
-      <!-- MỤC TÌM KIẾM BÁO CÁO DAILY -->
+      <!-- MỤC TÌM KIẾM BÁO CÁO -->
       <div class="table-card" style="margin-bottom:20px;">
         <div style="font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Báo Cáo Daily
+          <i data-lucide="search" style="width:16px; height:16px; color:var(--color-primary);"></i> Bộ Lọc Báo Cáo
         </div>
         <form onsubmit="return false;">
           <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
-            <!-- Ngày báo cáo Daily -->
+            <!-- Ngày báo cáo -->
             <div class="form-group-field">
-              <label>Ngày báo cáo Daily</label>
+              <label>Ngày báo cáo</label>
               <input type="date" id="filterV1DailyDate" value="2026-08-26">
             </div>
 
@@ -1996,7 +1996,7 @@ const ViewRenderer = {
 
             <!-- Trạng thái đối soát -->
             <div class="form-group-field">
-              <label>Trạng thái đối soát Daily</label>
+              <label>Trạng thái đối soát</label>
               <select id="filterV1Status">
                 <option value="all">Tất cả trạng thái</option>
                 <option value="matched">Khớp 100%</option>
@@ -2008,23 +2008,20 @@ const ViewRenderer = {
 
           <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-color);">
             <button type="button" class="btn-secondary" onclick="showToast('Đã làm lại bộ lọc báo cáo v1')">Đặt lại</button>
-            <button type="button" class="btn-primary" onclick="showToast('Đang tra cứu báo cáo đối soát v1...')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tra cứu Daily</button>
+            <button type="button" class="btn-primary" onclick="showToast('Đang tra cứu báo cáo đối soát v1...')"><i data-lucide="search" style="width:14px; height:14px; margin-right:4px;"></i> Tra cứu</button>
           </div>
         </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN DAILY V1 (GIỮ NGUYÊN FORMAT GỐC + 4 TRƯỜNG DAILY) -->
+      <!-- BẢNG DANH SÁCH BÁO CÁO ĐỐI SOÁT THANH TOÁN V1 -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); background:var(--bg-card-subtle, #F8FAFC);">
           <div>
-            <span style="font-weight:800; font-size:14px; color:var(--text-main);">Danh sách báo cáo đối soát thanh toán v1 (Daily)</span>
+            <span style="font-weight:800; font-size:14px; color:var(--text-main);">Danh sách báo cáo đối soát thanh toán v1</span>
             <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">(Hiển thị <strong>${list.length}</strong> báo cáo)</span>
           </div>
           <div style="display:flex; align-items:center; gap:16px;">
-            <div style="font-size:13px; color:var(--text-muted);">
-              Tổng giá trị thanh toán cuối ngày: <strong style="font-size:15px; color:#10B981; font-weight:800; margin-left:4px;">773,880,000 đ</strong>
-            </div>
-            <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="showToast('Đang xuất danh sách đối soát thanh toán Daily v1...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát v1</button>
+            <button class="btn-primary" style="font-size:12px; padding:6px 12px;" onclick="showToast('Đang xuất danh sách đối soát thanh toán v1...')"><i data-lucide="download" style="width:14px; height:14px; margin-right:4px;"></i> Xuất danh sách đối soát v1</button>
           </div>
         </div>
 
