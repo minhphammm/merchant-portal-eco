@@ -3387,4 +3387,156 @@ document.addEventListener('DOMContentLoaded', () => {
       menu.style.display = 'none';
     }
   });
+
+  // ==========================================
+  // AUTHENTICATION & LOGIN FLOW LOGIC
+  // ==========================================
+  window.checkAuthStatus = function() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const loginContainer = document.getElementById('loginViewContainer');
+    if (loginContainer) {
+      if (isLoggedIn === 'true') {
+        loginContainer.style.display = 'none';
+      } else {
+        loginContainer.style.display = 'flex';
+        if (window.refreshIcons) window.refreshIcons();
+      }
+    }
+  };
+
+  // Run initial Auth Check
+  checkAuthStatus();
+
+  window.fillDemoAccount = function() {
+    const phoneInput = document.getElementById('loginPhoneInput');
+    const pwdInput = document.getElementById('loginPasswordInput');
+    if (phoneInput) phoneInput.value = '0909123456';
+    if (pwdInput) pwdInput.value = '123456';
+    if (window.showToast) window.showToast('🚀 Đã điền tự động tài khoản Demo: 0909123456 / 123456');
+  };
+
+  window.handleLoginSubmit = function(e) {
+    if (e) e.preventDefault();
+    const btn = document.getElementById('btnLoginSubmit');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="spin-animation" style="width:18px; height:18px;"></i> Đang xác thực...`;
+      if (window.refreshIcons) window.refreshIcons();
+    }
+
+    setTimeout(() => {
+      localStorage.setItem('isLoggedIn', 'true');
+      const loginContainer = document.getElementById('loginViewContainer');
+      if (loginContainer) loginContainer.style.display = 'none';
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="log-in" style="width:18px; height:18px;"></i> Đăng Nhập Hệ Thống`;
+      }
+
+      if (window.showToast) {
+        window.showToast('🎉 Đăng nhập thành công! Chào mừng Nguyễn Văn Minh đến với FinViet Ecopay Merchant Portal.');
+      }
+      if (window.refreshIcons) window.refreshIcons();
+    }, 800);
+  };
+
+  window.handleLogout = function() {
+    localStorage.setItem('isLoggedIn', 'false');
+    const popover = document.getElementById('userProfilePopover');
+    if (popover) popover.style.display = 'none';
+
+    const loginContainer = document.getElementById('loginViewContainer');
+    if (loginContainer) {
+      loginContainer.style.display = 'flex';
+      if (window.refreshIcons) window.refreshIcons();
+    }
+
+    if (window.showToast) {
+      window.showToast('🔒 Đã đăng xuất khỏi tài khoản an toàn thành công!');
+    }
+  };
+
+  window.togglePasswordVisibility = function(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input) {
+      const isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      if (btn) {
+        btn.innerHTML = isPwd ? `<i data-lucide="eye-off" style="width:16px; height:16px;"></i>` : `<i data-lucide="eye" style="width:16px; height:16px;"></i>`;
+        if (window.refreshIcons) window.refreshIcons();
+      }
+    }
+  };
+
+  window.toggleUserProfileMenu = function(e) {
+    if (e) e.stopPropagation();
+    const popover = document.getElementById('userProfilePopover');
+    if (popover) {
+      const isVisible = popover.style.display === 'block';
+      popover.style.display = isVisible ? 'none' : 'block';
+      if (!isVisible && window.refreshIcons) window.refreshIcons();
+    }
+  };
+
+  window.openForgotPasswordModal = function() {
+    const modal = document.getElementById('forgotPasswordModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      if (window.refreshIcons) window.refreshIcons();
+    }
+  };
+
+  window.closeForgotPasswordModal = function() {
+    const modal = document.getElementById('forgotPasswordModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleForgotPasswordSubmit = function(e) {
+    if (e) e.preventDefault();
+    closeForgotPasswordModal();
+    if (window.showToast) {
+      window.showToast('✅ Đã đặt lại mật khẩu mới thành công! Vui lòng đăng nhập lại.');
+    }
+  };
+
+  window.openRegisterMerchantModal = function() {
+    const modal = document.getElementById('registerMerchantModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      if (window.refreshIcons) window.refreshIcons();
+    }
+  };
+
+  window.closeRegisterMerchantModal = function() {
+    const modal = document.getElementById('registerMerchantModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.handleRegisterMerchantSubmit = function(e) {
+    if (e) e.preventDefault();
+    closeRegisterMerchantModal();
+    if (window.showToast) {
+      window.showToast('🎉 Đăng ký Merchant thành công! Chào mừng Doanh nghiệp mới gia nhập FinViet Ecopay.');
+    }
+  };
+
+  window.handleQuickAuth = function(method) {
+    if (window.showToast) {
+      window.showToast(`Đang kết nối phương thức ${method}... Đăng nhập thành công!`);
+    }
+    setTimeout(() => {
+      localStorage.setItem('isLoggedIn', 'true');
+      const loginContainer = document.getElementById('loginViewContainer');
+      if (loginContainer) loginContainer.style.display = 'none';
+      if (window.refreshIcons) window.refreshIcons();
+    }, 600);
+  };
+
+  document.addEventListener('click', function(e) {
+    const userPopover = document.getElementById('userProfilePopover');
+    if (userPopover && !e.target.closest('.topbar-user-profile')) {
+      userPopover.style.display = 'none';
+    }
+  });
 });

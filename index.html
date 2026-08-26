@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=8.6">
+  <link rel="stylesheet" href="css/style.css?v=9.0">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -225,6 +225,31 @@
               <div class="noti-popover-footer">
                 <a href="javascript:void(0)" onclick="showToast('Mở trang xem toàn bộ lịch sử thông báo hệ thống')">Xem tất cả thông báo ></a>
               </div>
+            </div>
+          </div>
+
+          <!-- User Profile Dropdown -->
+          <div class="topbar-user-profile" onclick="toggleUserProfileMenu(event)" title="Tài khoản cá nhân">
+            <div class="user-avatar-circle">NM</div>
+            <div class="user-info-text">
+              <span class="user-name-title">Nguyễn Văn Minh</span>
+              <span class="user-role-sub">Quản trị viên (Admin)</span>
+            </div>
+            <i data-lucide="chevron-down" style="width:14px; height:14px; color:#64748B; margin-left:2px;"></i>
+
+            <div id="userProfilePopover" class="user-profile-popover">
+              <a href="javascript:void(0)" onclick="showToast('Xem thông tin hồ sơ tài khoản Admin...')">
+                <i data-lucide="user" style="width:16px; height:16px; color:#0284C7;"></i> Thông tin tài khoản
+              </a>
+              <a href="javascript:void(0)" onclick="showToast('Mở trang đổi mật khẩu bảo mật...')">
+                <i data-lucide="key-round" style="width:16px; height:16px; color:#10B981;"></i> Đổi mật khẩu
+              </a>
+              <a href="javascript:void(0)" onclick="showToast('Cấu hình tham số bảo mật API / Secret Key...')">
+                <i data-lucide="shield-check" style="width:16px; height:16px; color:#F59E0B;"></i> Bảo mật & API Key
+              </a>
+              <a href="javascript:void(0)" class="logout-link" onclick="handleLogout()">
+                <i data-lucide="log-out" style="width:16px; height:16px;"></i> Đăng xuất hệ thống
+              </a>
             </div>
           </div>
         </div>
@@ -545,6 +570,199 @@
       </div>
       <div class="modal-footer" style="padding:12px 18px; justify-content:flex-end;">
         <button onclick="closeContactModal()" class="btn-secondary">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN PAGE OVERLAY (HIỂN THỊ KHI CHƯA ĐĂNG NHẬP HOẶC ĐĂNG XUẤT) -->
+  <div id="loginViewContainer" class="login-page-wrapper" style="display:none;">
+    <div class="login-container-card">
+      <!-- Left Banner Side -->
+      <div class="login-banner-side">
+        <div class="login-brand-logo">
+          <div class="fv-badge">FV</div>
+          <div>
+            <h2 class="brand-heading">FinViet Platform</h2>
+            <p class="brand-subheading">Ecopay Merchant Portal</p>
+          </div>
+        </div>
+
+        <div class="login-banner-content">
+          <h3>Quản Lý Thanh Toán & Quyết Toán Doanh Nghiệp Toàn Diện</h3>
+          <p>Hệ sinh thái Ecopay kết nối hơn 35+ ngân hàng, ví điện tử, VietQR và cổng thanh toán quốc tế với tốc độ xử lý siêu tốc.</p>
+          
+          <div class="login-features-list">
+            <div class="feature-badge-item">
+              <i data-lucide="shield-check"></i>
+              <span>Bảo mật chuẩn PCI-DSS Level 1 & SSL 256-bit</span>
+            </div>
+            <div class="feature-badge-item">
+              <i data-lucide="zap"></i>
+              <span>Quyết toán tự động T+0 / T+1 linh hoạt</span>
+            </div>
+            <div class="feature-badge-item">
+              <i data-lucide="bar-chart-3"></i>
+              <span>Báo cáo doanh thu & đối soát theo thời gian thực</span>
+            </div>
+          </div>
+
+          <div class="login-banner-footer">
+            <span>Hotline hỗ trợ Merchant: <strong>1900 636 652</strong> (24/7)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Form Side -->
+      <div class="login-form-side">
+        <div class="login-form-header">
+          <h2 id="loginFormTitle">Đăng Nhập Portal</h2>
+          <p id="loginFormSub">Vui lòng nhập tài khoản và mật khẩu để truy cập hệ thống</p>
+        </div>
+
+        <!-- Quick Demo Login Bar -->
+        <div class="quick-demo-login-box" onclick="fillDemoAccount()" title="Bấm vào đây để tự động điền tài khoản Demo">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:18px;">🚀</span>
+            <div>
+              <div style="font-weight:700; font-size:12px; color:#0284C7;">Tài khoản Demo dùng thử</div>
+              <div style="font-size:11.5px; color:#64748B;">SĐT: <code>0909123456</code> | MK: <code>123456</code></div>
+            </div>
+          </div>
+          <span class="btn-quick-fill">Điền ngay</span>
+        </div>
+
+        <form id="loginMainForm" onsubmit="handleLoginSubmit(event)">
+          <!-- Phone / Email Field -->
+          <div class="form-group-field" style="margin-bottom:16px;">
+            <label>Số điện thoại / Email đăng nhập <span style="color:#EF4444;">*</span></label>
+            <div class="input-icon-group">
+              <i data-lucide="phone-call" class="field-icon"></i>
+              <input type="text" id="loginPhoneInput" placeholder="Ví dụ: 0909 123 456" required autocomplete="username" value="0909123456">
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group-field" style="margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label style="margin-bottom:0;">Mật khẩu <span style="color:#EF4444;">*</span></label>
+              <a href="javascript:void(0)" onclick="openForgotPasswordModal()" style="font-size:12px; color:var(--color-primary); font-weight:600; text-decoration:none;">Quên mật khẩu?</a>
+            </div>
+            <div class="input-icon-group">
+              <i data-lucide="lock" class="field-icon"></i>
+              <input type="password" id="loginPasswordInput" placeholder="Nhập mật khẩu" required autocomplete="current-password" value="123456">
+              <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('loginPasswordInput', this)" title="Ẩn/Hiện mật khẩu">
+                <i data-lucide="eye" style="width:16px; height:16px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Remember Me Checkbox -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12.5px; color:#475569; user-select:none;">
+              <input type="checkbox" id="rememberMeCheckbox" checked style="width:15px; height:15px; accent-color:var(--color-primary);">
+              <span>Ghi nhớ phiên đăng nhập (30 ngày)</span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="btnLoginSubmit" class="btn-login-primary">
+            <i data-lucide="log-in" style="width:18px; height:18px;"></i> Đăng Nhập Hệ Thống
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="login-divider">
+          <span>Hoặc đăng nhập nhanh</span>
+        </div>
+
+        <!-- Quick Auth Methods -->
+        <div class="quick-auth-grid">
+          <button type="button" class="btn-quick-auth" onclick="handleQuickAuth('VietQR Smart OTP')">
+            <i data-lucide="qr-code" style="width:16px; height:16px; color:#0284C7;"></i> VietQR OTP
+          </button>
+          <button type="button" class="btn-quick-auth" onclick="handleQuickAuth('FaceID / Sinh trắc học')">
+            <i data-lucide="scan-face" style="width:16px; height:16px; color:#10B981;"></i> Sinh trắc học
+          </button>
+        </div>
+
+        <!-- Register Merchant Prompt -->
+        <div class="login-footer-register">
+          Chưa có tài khoản Ecopay? 
+          <a href="javascript:void(0)" onclick="openRegisterMerchantModal()" style="color:var(--color-primary); font-weight:700; text-decoration:none;">Đăng ký Cửa hàng mới</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD MODAL -->
+  <div id="forgotPasswordModal" class="modal-backdrop" style="display:none;">
+    <div class="modal-content" style="max-width:440px;">
+      <div class="modal-header">
+        <div class="modal-title"><i data-lucide="key-round" style="width:18px; height:18px; color:var(--color-primary);"></i> Quên Mật Khẩu Portal</div>
+        <button onclick="closeForgotPasswordModal()" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:20px;">
+        <p style="font-size:13px; color:#64748B; margin-bottom:16px;">Vui lòng nhập số điện thoại đăng ký tài khoản để nhận mã OTP xác thực đổi mật khẩu.</p>
+        <form onsubmit="handleForgotPasswordSubmit(event)">
+          <div class="form-group-field" style="margin-bottom:14px;">
+            <label>Số điện thoại xác thực</label>
+            <input type="text" id="forgotPhoneInput" placeholder="Ví dụ: 0909 123 456" required value="0909123456">
+          </div>
+          <div class="form-group-field" style="margin-bottom:14px;">
+            <label>Mã OTP (Nhập 123456 để thử)</label>
+            <input type="text" id="forgotOtpInput" placeholder="Nhập 6 chữ số OTP" required value="123456">
+          </div>
+          <div class="form-group-field" style="margin-bottom:16px;">
+            <label>Mật khẩu mới</label>
+            <input type="password" id="forgotNewPasswordInput" placeholder="Nhập mật khẩu mới" required value="654321">
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn-secondary" onclick="closeForgotPasswordModal()">Hủy</button>
+            <button type="submit" class="btn-primary">Đặt lại mật khẩu</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER MERCHANT MODAL -->
+  <div id="registerMerchantModal" class="modal-backdrop" style="display:none;">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <div class="modal-title"><i data-lucide="building" style="width:18px; height:18px; color:var(--color-primary);"></i> Đăng Ký Tài Khoản Merchant Ecopay</div>
+        <button onclick="closeRegisterMerchantModal()" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:20px;">
+        <form onsubmit="handleRegisterMerchantSubmit(event)">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group-field" style="margin-bottom:12px;">
+              <label>Tên Doanh nghiệp / Cửa hàng</label>
+              <input type="text" id="regStoreName" placeholder="Ví dụ: Chuỗi Siêu Thị ECO" required value="Chuỗi Siêu Thị ECO">
+            </div>
+            <div class="form-group-field" style="margin-bottom:12px;">
+              <label>Tên người đại diện</label>
+              <input type="text" id="regOwnerName" placeholder="Ví dụ: Nguyễn Văn Minh" required value="Nguyễn Văn Minh">
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="form-group-field" style="margin-bottom:12px;">
+              <label>Số điện thoại đăng nhập</label>
+              <input type="text" id="regPhone" placeholder="0909 888 999" required value="0909888999">
+            </div>
+            <div class="form-group-field" style="margin-bottom:12px;">
+              <label>Mã số thuế (MST)</label>
+              <input type="text" id="regTaxId" placeholder="0312998811" required value="0312998811">
+            </div>
+          </div>
+          <div class="form-group-field" style="margin-bottom:16px;">
+            <label>Mật khẩu khởi tạo</label>
+            <input type="password" id="regPassword" placeholder="Nhập mật khẩu từ 6 ký tự" required value="123456">
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button type="button" class="btn-secondary" onclick="closeRegisterMerchantModal()">Hủy</button>
+            <button type="submit" class="btn-primary">Tạo tài khoản ngay</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
