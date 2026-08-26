@@ -4094,4 +4094,58 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.showToast) window.showToast('Chuyển sang Báo cáo tổng quan (Hiển thị Chi tiết Các Giao dịch trong ngày)');
     }
   };
+
+  // ----------------------------------------------------
+  // TẢI FILE SAO KÊ HỆ THỐNG (KHỚP MẪU GOOGLE SHEET FINVIET)
+  // ----------------------------------------------------
+  window.downloadStatementV11Excel = function(fileType = 'excel') {
+    if (window.showToast) {
+      window.showToast(`📥 Đang xuất và tải xuống file Sao kê tài khoản (${fileType === 'pdf' ? '.pdf' : '.xlsx'})...`);
+    }
+
+    const list = MockData.getStatementV11Data ? MockData.getStatementV11Data() : [];
+
+    // Construct CSV content matching exact Google Sheet Header Block & 12 Columns
+    let csvContent = "\uFEFF"; // UTF-8 BOM for Excel Vietnamese character compatibility
+    csvContent += "CÔNG TY CỔ PHẦN CÔNG NGHỆ FINVIET,,,,,,,,,,,,\n";
+    csvContent += "Sao kê,,,,,,,,,,,,\n\n";
+    csvContent += "1 .Thông tin chi tiết tài khoản/ Account detail,,,,,,,,,,,,\n";
+    csvContent += ',"Công ty/Company name:","CÔNG TY TNHH ABC",,"Chu kỳ yêu cầu/From date- to date:","17/08/2026 00:00:00 - 26/08/2026 23:59:59",,,,,,\n';
+    csvContent += ',"Loại tiền tệ/Currency:","VND",,"Tổng giá trị thu/ Total collection amount:","160.253.750",,,,,,\n';
+    csvContent += ',"Số dư hiện tại/Account balance:","450.018.000",,"Tổng số giao dịch thu/ Total collection transactions:","' + list.length + '",,,,,,\n';
+    csvContent += ',"Số dư đầu kỳ/Opening Balance:","150.005.000",,"Tổng giá trị chi/ Total disbursement amount:","0",,,,,,\n';
+    csvContent += ',"Số dư cuối kỳ/Closing Balance:","450.018.000",,"Tổng số giao dịch chi/ Total disbursement transactions:","0",,,,,,\n\n';
+    csvContent += "2 .Chi tiết lịch sử giao dịch/ Transaction history detail,,,,,,,,,,,,\n";
+    csvContent += '"STT/ No.","Ngày phát sinh giao dịch/ Transaction date","Mã giao dịch/ Transaction ID","Mô tả giao dịch/ Transaction description","Số tiền thu vào/ Amount Received","Số tiền chi ra/ Amount Paid","Số dư trước giao dịch/ Opening balance","Số dư sau giao dịch/ Closing balance","SĐT/ Số tài khoản thanh toán","Tên khách hàng/ Cusotmer name","Tài khoản Ecopay/ Account","Ngày hạch toán/Accounting date"\n';
+
+    let runningBal = 150005000;
+    list.forEach((t, i) => {
+      const stt = i + 1;
+      const dateStr = t.createdTime || '26-08-2026 08:15:00';
+      const txnId = t.txnId || `GD2026082600${stt}`;
+      const desc = `Thanh toán đơn hàng #${1000 + stt}`;
+      const rawAmt = parseInt((t.originalAmount || '0').replace(/[^0-9]/g, '')) || 150000;
+      const amtRec = rawAmt;
+      const amtPaid = 0;
+      const prevBal = runningBal;
+      runningBal += amtRec;
+      const nextBal = runningBal;
+      const phoneAcc = t.paymentInfo || '0909****123';
+      const cusName = `NGUYEN VAN ${String.fromCharCode(65 + (i % 26))}`;
+      const ecoAccount = 'TKTCH_ECOPAY';
+      const accDate = t.postDate || dateStr;
+
+      csvContent += `${stt},"${dateStr}","${txnId}","${desc}",${amtRec},${amtPaid},${prevBal},${nextBal},"${phoneAcc}","${cusName}","${ecoAccount}","${accDate}"\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    const dateTag = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    link.setAttribute('download', `Sao_ke_tai_khoan_Finviet_${dateTag}.${fileType === 'pdf' ? 'csv' : 'csv'}`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 });

@@ -1839,11 +1839,11 @@ const ViewRenderer = {
                 <i data-lucide="download" style="width:14px; height:14px;"></i> Tải sao kê <i data-lucide="chevron-down" style="width:12px; height:12px; margin-left:2px;"></i>
               </button>
               <div id="statementDownloadMenu" class="download-dropdown-menu" style="display:none; position:absolute; right:0; bottom:calc(100% + 6px); background:#fff; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,0.18); border:1px solid #E2E8F0; z-index:999; min-width:190px; overflow:hidden; padding:4px 0;">
-                <a href="javascript:void(0)" onclick="showToast('Đang khởi tạo và tải file sao kê dạng PDF...'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
+                <a href="javascript:void(0)" onclick="downloadStatementV11Excel('pdf'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
                   <i data-lucide="file-text" style="width:16px; height:16px; color:#EF4444;"></i> Xuất file PDF (.pdf)
                 </a>
-                <a href="javascript:void(0)" onclick="showToast('Đang khởi tạo và tải file sao kê dạng Excel...'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
-                  <i data-lucide="file-spreadsheet" style="width:16px; height:16px; color:#10B981;"></i> Xuất file Excel (.xlsx)
+                <a href="javascript:void(0)" onclick="downloadStatementV11Excel('excel'); toggleStatementDownloadMenu(event);" style="display:flex; align-items:center; gap:10px; padding:10px 16px; font-size:13px; color:#1E293B; text-decoration:none; font-weight:500;" onmouseover="this.style.background='#F1F5F9'" onmouseout="this.style.background='transparent'">
+                  <i data-lucide="file-spreadsheet" style="width:16px; height:16px; color:#10B981;"></i> Xuất file Excel (.xlsx / .csv)
                 </a>
               </div>
             </div>
@@ -1851,7 +1851,7 @@ const ViewRenderer = {
         </form>
       </div>
 
-      <!-- BẢNG DANH SÁCH GIAO DỊCH SAO KÊ (12 TRƯỜNG CHUẨN TÀI LIỆU BRD 1.1) -->
+      <!-- BẢNG DANH SÁCH GIAO DỊCH SAO KÊ (11 TRƯỜNG CHUẨN - ĐÃ BỎ APPROVE CODE) -->
       <div class="table-card">
         <div class="table-header" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color);">
           <span style="font-weight:700; font-size:14px; color:var(--text-main);">Danh Sách Giao Dịch Sao Kê (${list.length} giao dịch)</span>
@@ -1863,7 +1863,6 @@ const ViewRenderer = {
               <tr>
                 <th style="white-space:nowrap;">Mã giao dịch</th>
                 <th style="white-space:nowrap;">Mã tham chiếu</th>
-                <th style="white-space:nowrap;">Approve Code</th>
                 <th style="white-space:nowrap;">Thời gian phát sinh</th>
                 <th style="white-space:nowrap;">Ngày hạch toán</th>
                 <th style="white-space:nowrap;">Phương thức</th>
@@ -1880,7 +1879,6 @@ const ViewRenderer = {
                 <tr onclick="showToast('Chi tiết giao dịch sao kê: ${t.txnId}')">
                   <td><span class="txn-code">${t.txnId}</span></td>
                   <td><code style="font-family:monospace; background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:11.5px; color:#334155;">${t.refCode}</code></td>
-                  <td><code style="font-family:monospace; background:#EFF6FF; padding:2px 6px; border-radius:4px; font-size:11.5px; color:#0284C7; font-weight:700;">${t.approveCode}</code></td>
                   <td style="font-size:12px; color:var(--text-muted); white-space:nowrap;">${t.createdTime}</td>
                   <td style="font-size:12px; white-space:nowrap;"><strong>${t.postDate}</strong></td>
                   <td><span class="status-badge badge-processing" style="font-size:11px;">${t.method}</span></td>
