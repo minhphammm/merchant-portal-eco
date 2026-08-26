@@ -341,50 +341,48 @@ const ViewRenderer = {
   getHrMgmtView() {
     const staffList = MockData.getStaffListBRD ? MockData.getStaffListBRD() : [];
     const accountsList = MockData.getAccountsBRD ? MockData.getAccountsBRD() : [];
-    const activitiesList = MockData.getStaffActivitiesBRD ? MockData.getStaffActivitiesBRD() : [];
 
-    const managers = staffList.filter(s => s.group === 'manager');
-    const staffMembers = staffList.filter(s => s.group === 'staff');
+    const storeManagers = staffList.filter(s => s.role.includes('Quản lý'));
+    const accountants = staffList.filter(s => s.role.includes('Kế toán'));
+    const employees = staffList.filter(s => s.role.includes('Nhân viên'));
 
     return `
       <div class="subpage-header">
         <div>
           <div class="subpage-breadcrumb">Doanh nghiệp / <strong>Quản trị Nhân lực</strong></div>
-          <h1 class="subpage-title">Quản Trị Nhân Lực</h1>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Quản lý hợp nhất Tài khoản truy cập hệ thống và Danh sách Nhân viên phụ trách các cửa hàng.</p>
+          <h1 class="subpage-title">Quản Trị Nhân Lực & Phân Quyền Theo Vai Trò</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Phân quyền theo các vai trò: Quản lý cửa hàng, Kế toán, Nhân viên.</p>
         </div>
         <div style="display:flex; gap:10px;">
-          <button class="btn-primary" onclick="openCreateStaffModalBRD()">+ Thêm Nhân Viên / Tài Khoản Mới</button>
+          <button class="btn-primary" onclick="openAddStaffModalBRD()">+ Thêm Nhân Viên Mới</button>
         </div>
       </div>
 
-      <!-- PHẦN TỔNG QUAN NHÂN SỰ (4 KPI STATS BAR) -->
-      <div class="enterprise-cards-grid" style="margin-bottom:20px; display:grid; grid-template-columns: repeat(4, 1fr); gap:16px;">
-        <div class="table-card" style="padding:16px; border-left:4px solid #0284C7;">
-          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">👥 TỔNG SỐ TÀI KHOẢN</div>
-          <div style="font-size:24px; font-weight:800; color:#0284C7; margin-top:4px;">12 <span style="font-size:13px; font-weight:500; color:var(--text-muted);">tài khoản</span></div>
-        </div>
-
+      <!-- PHẦN TỔNG QUAN PHÂN QUYỀN VAI TRÒ (3 KPI STATS BAR) -->
+      <div class="enterprise-cards-grid" style="margin-bottom:20px; display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
         <div class="table-card" style="padding:16px; border-left:4px solid #16A34A;">
-          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">👑 QUẢN LÝ DOANH NGHIỆP</div>
-          <div style="font-size:24px; font-weight:800; color:#16A34A; margin-top:4px;">2 <span style="font-size:13px; font-weight:500; color:var(--text-muted);">tài khoản</span></div>
+          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">👑 QUẢN LÝ CỬA HÀNG</div>
+          <div style="font-size:24px; font-weight:800; color:#16A34A; margin-top:4px;">${storeManagers.length} <span style="font-size:13px; font-weight:500; color:var(--text-muted);">nhân sự</span></div>
+          <div style="font-size:11.5px; color:#15803D; margin-top:4px;">Toàn quyền vận hành & duyệt đơn chi nhánh</div>
         </div>
 
-        <div class="table-card" style="padding:16px; border-left:4px solid #CA8A04;">
-          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">🏪 CỬA HÀNG TRƯỞNG</div>
-          <div style="font-size:24px; font-weight:800; color:#CA8A04; margin-top:4px;">3 <span style="font-size:13px; font-weight:500; color:var(--text-muted);">nhân sự</span></div>
+        <div class="table-card" style="padding:16px; border-left:4px solid #0284C7;">
+          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">📊 KẾ TOÁN (ACCOUNTANT)</div>
+          <div style="font-size:24px; font-weight:800; color:#0284C7; margin-top:4px;">${accountants.length} <span style="font-size:13px; font-weight:500; color:var(--text-muted);">nhân sự</span></div>
+          <div style="font-size:11.5px; color:#0369A1; margin-top:4px;">Quyền đối soát doanh số, hóa đơn & thu chi</div>
         </div>
 
         <div class="table-card" style="padding:16px; border-left:4px solid #EA580C;">
-          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">💳 THU NGÂN / NHÂN VIÊN</div>
-          <div style="font-size:24px; font-weight:800; color:#EA580C; margin-top:4px;">7 <span style="font-size:13px; font-weight:500; color:var(--text-muted);">nhân sự</span></div>
+          <div style="font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase;">👤 NHÂN VIÊN (STAFF / POS)</div>
+          <div style="font-size:24px; font-weight:800; color:#EA580C; margin-top:4px;">${employees.length} <span style="font-size:13px; font-weight:500; color:var(--text-muted);">nhân sự</span></div>
+          <div style="font-size:11.5px; color:#C2410C; margin-top:4px;">Quyền thu ngân bán hàng POS & mở két tiền</div>
         </div>
       </div>
 
-      <!-- BẢNG DANH SÁCH TÀI KHOẢN & NHÂN VIÊN TRONG HỆ THỐNG (EXACT MATCH USER SCREENSHOT) -->
+      <!-- BẢNG DANH SÁCH TÀI KHOẢN & NHÂN VIÊN TRONG HỆ THỐNG -->
       <div class="table-card" style="margin-bottom:24px;">
         <div class="table-header" style="padding:16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #F1F5F9;">
-          <h3 style="font-size:15px; font-weight:700; color:var(--text-main); margin:0;">Danh Sách Tài Khoản & Nhân Viên Trong Hệ Thống</h3>
+          <h3 style="font-size:15px; font-weight:700; color:var(--text-main); margin:0;">Danh Sách Tài Khoản & Phân Quyền Vai Trò</h3>
           <div style="position:relative;">
             <input type="text" id="searchStaffOverviewInput" placeholder="Tìm kiếm theo tên, email, sĐT..." oninput="filterStaffOverviewTable()" style="padding:7px 14px; border-radius:6px; border:1px solid #E2E8F0; font-size:12.5px; width:260px; color:var(--text-muted);">
           </div>
@@ -400,85 +398,33 @@ const ViewRenderer = {
                 <th style="font-size:11.5px; font-weight:700; color:#64748B; padding:10px 16px;">VAI TRÒ PHÂN QUYỀN</th>
                 <th style="font-size:11.5px; font-weight:700; color:#64748B; padding:10px 16px;">CỬA HÀNG PHỤ TRÁCH</th>
                 <th style="font-size:11.5px; font-weight:700; color:#64748B; padding:10px 16px;">TRẠNG THÁI</th>
-                <th style="font-size:11.5px; font-weight:700; color:#64748B; padding:10px 16px;">THAO TÁC</th>
+                <th style="font-size:11.5px; font-weight:700; color:#64748B; padding:10px 16px; text-align:center;">THAO TÁC</th>
               </tr>
             </thead>
             <tbody id="tbodyStaffOverview">
-              <tr>
-                <td style="padding:12px 16px;"><strong>Phạm Văn Minh</strong></td>
-                <td style="padding:12px 16px; color:#64748B;">minh.pham@finviet.com.vn</td>
-                <td style="padding:12px 16px; font-family:monospace; color:#334155;">0909 123 456</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#DCFCE7; color:#15803D; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">Quản lý DN</span>
-                </td>
-                <td style="padding:12px 16px; color:#334155;">Toàn hệ thống (3 Chi nhánh)</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">Kích hoạt</span>
-                </td>
-                <td style="padding:12px 16px;">
-                  <a href="javascript:void(0)" onclick="openEditStaffModalBRD('NV000001')" style="color:#0284C7; font-weight:600; font-size:12.5px; text-decoration:none;">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;"><strong>Nguyễn Thị Hoa</strong></td>
-                <td style="padding:12px 16px; color:#64748B;">hoa.nguyen@finviet.com.vn</td>
-                <td style="padding:12px 16px; font-family:monospace; color:#334155;">0918 887 766</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#FEF9C3; color:#A16207; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">Cửa hàng trưởng</span>
-                </td>
-                <td style="padding:12px 16px; color:#334155;">Chi nhánh Quận 1 - Hồ Chí Minh</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">Kích hoạt</span>
-                </td>
-                <td style="padding:12px 16px;">
-                  <a href="javascript:void(0)" onclick="openEditStaffModalBRD('NV000002')" style="color:#0284C7; font-weight:600; font-size:12.5px; text-decoration:none;">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;"><strong>Trần Văn Nam</strong></td>
-                <td style="padding:12px 16px; color:#64748B;">nam.tran@finviet.com.vn</td>
-                <td style="padding:12px 16px; font-family:monospace; color:#334155;">0933 112 233</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#FEF9C3; color:#A16207; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">Cửa hàng trưởng</span>
-                </td>
-                <td style="padding:12px 16px; color:#334155;">Chi nhánh Hoàn Kiếm - Hà Nội</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">Kích hoạt</span>
-                </td>
-                <td style="padding:12px 16px;">
-                  <a href="javascript:void(0)" onclick="openEditStaffModalBRD('NV000003')" style="color:#0284C7; font-weight:600; font-size:12.5px; text-decoration:none;">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;"><strong>Lê Thị Mai</strong></td>
-                <td style="padding:12px 16px; color:#64748B;">mai.le@finviet.com.vn</td>
-                <td style="padding:12px 16px; font-family:monospace; color:#334155;">0977 445 566</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#FFEDD5; color:#C2410C; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">Thu ngân / Nhân viên</span>
-                </td>
-                <td style="padding:12px 16px; color:#334155;">Chi nhánh Hải Châu - Đà Nẵng</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">Kích hoạt</span>
-                </td>
-                <td style="padding:12px 16px;">
-                  <a href="javascript:void(0)" onclick="openEditStaffModalBRD('NV000004')" style="color:#0284C7; font-weight:600; font-size:12.5px; text-decoration:none;">Sửa</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:12px 16px;"><strong>Hoàng Văn Dũng</strong></td>
-                <td style="padding:12px 16px; color:#64748B;">dung.hoang@finviet.com.vn</td>
-                <td style="padding:12px 16px; font-family:monospace; color:#334155;">0988 334 455</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#E0F2FE; color:#0369A1; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">Kiểm kho / Giao nhận</span>
-                </td>
-                <td style="padding:12px 16px; color:#334155;">Chi nhánh Hồng Bàng - Hải Phòng</td>
-                <td style="padding:12px 16px;">
-                  <span style="background:#F0FDF4; color:#16A34A; padding:2px 8px; border-radius:4px; font-size:11.5px; font-weight:600; display:inline-block;">Kích hoạt</span>
-                </td>
-                <td style="padding:12px 16px;">
-                  <a href="javascript:void(0)" onclick="openEditStaffModalBRD('NV000005')" style="color:#0284C7; font-weight:600; font-size:12.5px; text-decoration:none;">Sửa</a>
-                </td>
-              </tr>
+              ${staffList.map(s => `
+                <tr>
+                  <td style="padding:12px 16px;"><strong>${s.name}</strong></td>
+                  <td style="padding:12px 16px; color:#64748B;">${s.email}</td>
+                  <td style="padding:12px 16px; font-family:monospace; color:#334155;">${s.mobile}</td>
+                  <td style="padding:12px 16px;">
+                    ${s.role.includes('Quản lý') ? `
+                      <span style="background:#DCFCE7; color:#15803D; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">👑 Quản lý cửa hàng</span>
+                    ` : s.role.includes('Kế toán') ? `
+                      <span style="background:#E0F2FE; color:#0369A1; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">📊 Kế toán</span>
+                    ` : `
+                      <span style="background:#FFEDD5; color:#C2410C; padding:3px 10px; border-radius:12px; font-size:11.5px; font-weight:700; display:inline-block;">👤 Nhân viên</span>
+                    `}
+                  </td>
+                  <td style="padding:12px 16px; color:#334155;">${(s.branches || []).join(', ')}</td>
+                  <td style="padding:12px 16px;">
+                    <span class="status-badge ${s.statusClass}">${s.statusText}</span>
+                  </td>
+                  <td style="padding:12px 16px; text-align:center;">
+                    <a href="javascript:void(0)" onclick="openEditStaffModalBRD('${s.id}')" style="color:#0284C7; font-weight:700; font-size:12.5px; text-decoration:none; padding:4px 8px; border:1px solid #BFDBFE; border-radius:4px; background:#EFF6FF;">Sửa Quyền</a>
+                  </td>
+                </tr>
+              `).join('')}
             </tbody>
           </table>
         </div>
