@@ -3449,6 +3449,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  window.showLoginScreen = function() {
+    const loginContainer = document.getElementById('loginViewContainer');
+    if (loginContainer) {
+      loginContainer.style.display = 'flex';
+      if (window.refreshIcons) window.refreshIcons();
+    }
+    if (window.showToast) {
+      window.showToast('🔐 Đã hiển thị Màn hình Đăng Nhập Merchant Service.');
+    }
+  };
+
   window.togglePasswordVisibility = function(inputId, btn) {
     const input = document.getElementById(inputId);
     if (input) {
