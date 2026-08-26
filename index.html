@@ -7,7 +7,7 @@
   <meta name="description" content="Portal quản lý tổng quan cho Doanh nghiệp / Cửa hàng - Hệ sinh thái Ecopay FinViet">
   <!-- Ant Design CSS Library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.15/antd.min.css">
-  <link rel="stylesheet" href="css/style.css?v=9.9">
+  <link rel="stylesheet" href="css/style.css?v=10.0">
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Lucide Icons Library -->
@@ -575,121 +575,85 @@
     </div>
   </div>
 
-  <!-- LOGIN PAGE OVERLAY (HIỂN THỊ KHI CHƯA ĐĂNG NHẬP HOẶC ĐĂNG XUẤT) -->
-  <div id="loginViewContainer" class="login-page-wrapper" style="display:none;">
-    <div class="login-container-card">
-      <!-- Left Banner Side -->
-      <div class="login-banner-side">
-        <div class="login-brand-logo">
-          <div class="fv-badge">FV</div>
-          <div>
-            <h2 class="brand-heading">FinViet Platform</h2>
-            <p class="brand-subheading">Ecopay Merchant Portal</p>
-          </div>
+  <!-- LOGIN PAGE OVERLAY (MATCHING FINVIET MERCHANT SERVICE LOGIN DESIGN) -->
+  <div id="loginViewContainer" class="finviet-login-wrapper" style="display:none;">
+    <div class="finviet-login-card">
+      <!-- Top Finviet Logo & Brand Subtitle -->
+      <div class="finviet-brand-row">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="34" height="28" viewBox="0 0 100 80" fill="none">
+            <polygon points="0,0 100,0 70,80" fill="#EAB308"/>
+            <polygon points="35,0 100,0 70,80" fill="#F59E0B"/>
+          </svg>
+          <span style="font-weight:900; font-size:24px; color:#1E293B; letter-spacing:-0.5px;">fin<span style="color:#F59E0B;">viet</span></span>
         </div>
-
-        <div class="login-banner-content">
-          <h3>Quản Lý Thanh Toán & Quyết Toán Doanh Nghiệp Toàn Diện</h3>
-          <p>Hệ sinh thái Ecopay kết nối hơn 35+ ngân hàng, ví điện tử, VietQR và cổng thanh toán quốc tế với tốc độ xử lý siêu tốc.</p>
-          
-          <div class="login-features-list">
-            <div class="feature-badge-item">
-              <i data-lucide="shield-check"></i>
-              <span>Bảo mật chuẩn PCI-DSS Level 1 & SSL 256-bit</span>
-            </div>
-            <div class="feature-badge-item">
-              <i data-lucide="zap"></i>
-              <span>Quyết toán tự động T+0 / T+1 linh hoạt</span>
-            </div>
-            <div class="feature-badge-item">
-              <i data-lucide="bar-chart-3"></i>
-              <span>Báo cáo doanh thu & đối soát theo thời gian thực</span>
-            </div>
-          </div>
-
-          <div class="login-banner-footer">
-            <span>Hotline hỗ trợ Merchant: <strong>1900 636 652</strong> (24/7)</span>
-          </div>
-        </div>
+        <div style="font-size:12.5px; color:#64748B; margin-top:10px;">Quản trị tài khoản cho hệ sinh thái Finviet</div>
+        <h1 style="font-size:20px; font-weight:800; color:#0F172A; margin-top:14px; letter-spacing:-0.3px;">Merchant Service</h1>
+        <div style="height:1px; background:#E2E8F0; margin:16px 0 22px 0;"></div>
       </div>
 
-      <!-- Right Form Side -->
-      <div class="login-form-side">
-        <div class="login-form-header">
-          <h2 id="loginFormTitle">Đăng Nhập Portal</h2>
-          <p id="loginFormSub">Vui lòng nhập tài khoản và mật khẩu để truy cập hệ thống</p>
+      <!-- Login Header Title -->
+      <h2 style="font-size:17px; font-weight:800; color:#0F172A; margin-bottom:20px;">Đăng nhập</h2>
+
+      <!-- Main Login Form -->
+      <form id="loginMainForm" onsubmit="handleLoginSubmit(event)" style="display:flex; flex-direction:column; gap:16px;">
+        <!-- Email / Phone Input Field -->
+        <div>
+          <label style="font-size:12.5px; font-weight:600; color:#0F172A; display:block; margin-bottom:6px;">
+            <span style="color:#EF4444;">*</span> Email hoặc số điện thoại
+          </label>
+          <div class="finviet-input-box">
+            <i data-lucide="user" style="width:16px; height:16px; color:#64748B; flex-shrink:0;"></i>
+            <input type="text" id="loginPhoneInput" placeholder="minh.pham@finviet.com.vn" required autocomplete="username" value="minh.pham@finviet.com.vn">
+          </div>
         </div>
 
-        <!-- Quick Demo Login Bar -->
-        <div class="quick-demo-login-box" onclick="fillDemoAccount()" title="Bấm vào đây để tự động điền tài khoản Demo">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:18px;">🚀</span>
-            <div>
-              <div style="font-weight:700; font-size:12px; color:#0284C7;">Tài khoản Demo dùng thử</div>
-              <div style="font-size:11.5px; color:#64748B;">SĐT: <code>0909123456</code> | MK: <code>123456</code></div>
-            </div>
+        <!-- Password Input Field -->
+        <div>
+          <label style="font-size:12.5px; font-weight:600; color:#0F172A; display:block; margin-bottom:6px;">
+            <span style="color:#EF4444;">*</span> Mật khẩu
+          </label>
+          <div class="finviet-input-box">
+            <i data-lucide="lock" style="width:16px; height:16px; color:#64748B; flex-shrink:0;"></i>
+            <input type="password" id="loginPasswordInput" placeholder="••••••••••" required autocomplete="current-password" value="123456">
+            <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('loginPasswordInput', this)" title="Ẩn/Hiện mật khẩu" style="background:none; border:none; cursor:pointer; color:#64748B; padding:0;">
+              <i data-lucide="eye" style="width:16px; height:16px;"></i>
+            </button>
           </div>
-          <span class="btn-quick-fill">Điền ngay</span>
         </div>
 
-        <form id="loginMainForm" onsubmit="handleLoginSubmit(event)">
-          <!-- Phone / Email Field -->
-          <div class="form-group-field" style="margin-bottom:16px;">
-            <label>Số điện thoại / Email đăng nhập <span style="color:#EF4444;">*</span></label>
-            <div class="input-icon-group">
-              <i data-lucide="phone-call" class="field-icon"></i>
-              <input type="text" id="loginPhoneInput" placeholder="Ví dụ: 0909 123 456" required autocomplete="username" value="0909123456">
-            </div>
-          </div>
-
-          <!-- Password Field -->
-          <div class="form-group-field" style="margin-bottom:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <label style="margin-bottom:0;">Mật khẩu <span style="color:#EF4444;">*</span></label>
-              <a href="javascript:void(0)" onclick="openForgotPasswordModal()" style="font-size:12px; color:var(--color-primary); font-weight:600; text-decoration:none;">Quên mật khẩu?</a>
-            </div>
-            <div class="input-icon-group">
-              <i data-lucide="lock" class="field-icon"></i>
-              <input type="password" id="loginPasswordInput" placeholder="Nhập mật khẩu" required autocomplete="current-password" value="123456">
-              <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('loginPasswordInput', this)" title="Ẩn/Hiện mật khẩu">
-                <i data-lucide="eye" style="width:16px; height:16px;"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Remember Me Checkbox -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12.5px; color:#475569; user-select:none;">
-              <input type="checkbox" id="rememberMeCheckbox" checked style="width:15px; height:15px; accent-color:var(--color-primary);">
-              <span>Ghi nhớ phiên đăng nhập (30 ngày)</span>
-            </label>
-          </div>
-
-          <!-- Submit Button -->
-          <button type="submit" id="btnLoginSubmit" class="btn-login-primary">
-            <i data-lucide="log-in" style="width:18px; height:18px;"></i> Đăng Nhập Hệ Thống
-          </button>
-        </form>
-
-        <!-- Divider -->
-        <div class="login-divider">
-          <span>Hoặc đăng nhập nhanh</span>
+        <!-- Forgot Password Link -->
+        <div style="text-align:left; margin-top:-4px;">
+          <a href="javascript:void(0)" onclick="openForgotPasswordModal()" style="font-size:12.5px; color:#0284C7; font-weight:600; text-decoration:none;">Quên mật khẩu?</a>
         </div>
 
-        <!-- Quick Auth Methods -->
-        <div class="quick-auth-grid">
-          <button type="button" class="btn-quick-auth" onclick="handleQuickAuth('VietQR Smart OTP')">
-            <i data-lucide="qr-code" style="width:16px; height:16px; color:#0284C7;"></i> VietQR OTP
-          </button>
-          <button type="button" class="btn-quick-auth" onclick="handleQuickAuth('FaceID / Sinh trắc học')">
-            <i data-lucide="scan-face" style="width:16px; height:16px; color:#10B981;"></i> Sinh trắc học
-          </button>
-        </div>
+        <!-- Submit Button (Dark Navy) -->
+        <button type="submit" id="btnLoginSubmit" class="btn-finviet-dark-submit">
+          Đăng nhập
+        </button>
+      </form>
 
-        <!-- Register Merchant Prompt -->
-        <div class="login-footer-register">
-          Chưa có tài khoản Ecopay? 
-          <a href="javascript:void(0)" onclick="openRegisterMerchantModal()" style="color:var(--color-primary); font-weight:700; text-decoration:none;">Đăng ký Cửa hàng mới</a>
+      <!-- SSO Divider -->
+      <div class="sso-divider-row">
+        <span>Hoặc đăng nhập bằng</span>
+      </div>
+
+      <!-- Single SSO Google Pill Button (Matching exact screenshot) -->
+      <div class="sso-google-pill" onclick="fillDemoAccount()" title="Đăng nhập nhanh Google / Account Demo">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:24px; height:24px; border-radius:50%; background:#0284C7; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px;">M</div>
+          <div style="font-size:11.5px; font-weight:700; color:#334155;">
+            Đăng nhập với tên Minh <span style="font-weight:400; color:#64748B;">minh.pham@finviet.com.vn</span>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <i data-lucide="chevron-down" style="width:12px; height:12px; color:#64748B;"></i>
         </div>
       </div>
     </div>
